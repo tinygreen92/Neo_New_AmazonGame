@@ -87,13 +87,12 @@ public class QuestManager : MonoBehaviour
                 transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
                 /// 일퀘 미션 모두 완료 한 칸 올려
                 ListModel.Instance.DAYlist_Update(0);
-                //
+                /// 새로 고침
                 C5.GetChild(i).GetComponent<MissionItem>().UpdateMission();
             }
-
         }
-
-
+        /// 0번 인덱스 새로고침
+        C5.GetChild(0).GetComponent<MissionItem>().UpdateMission();
         /// 레드닷 끄기
         RedDotManager.instance.RedDot[5].SetActive(false);
     }
@@ -112,9 +111,15 @@ public class QuestManager : MonoBehaviour
                 ListModel.Instance.ALLlist_Max_Update(i);
                 /// 보상 지급
                 PlayerInventory.Money_Dia += int.Parse(ListModel.Instance.missionALLlist[i].reword);
-                /// 새로고침
-                C17.GetChild(i).GetComponent<MissionItem>().UpdateMission();
+                /// 모두 받을 때까지 루프
+                if(i > 0) i--;
             }
+        }
+
+        for (int i = 0; i < C17.childCount; i++)
+        {
+            /// 새로고침
+            C17.GetChild(i).GetComponent<MissionItem>().UpdateMission();
         }
         /// 레드닷 끄기
         RedDotManager.instance.RedDot[5].SetActive(false);

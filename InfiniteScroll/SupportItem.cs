@@ -106,7 +106,22 @@ public class SupportItem : MonoBehaviour
         //else if (muti == 10 && _MultiLv > 1000) _MultiLv = 1000;
         //else if (muti == 100 && _MultiLv > 1000) _MultiLv = 1000;
 
-        if (_MultiLv > 1) _MultiResult *= Math.Pow(1.12d, (_MultiLv -1));
+        //if (_MultiLv > 1)
+        //{
+        //    _MultiResult *= Math.Pow(1.12d, (_MultiLv - 1));
+        //}
+
+        /// 골드 소모량
+        if (_MultiLv > 1)
+        {
+            double tmpMuti = 0;
+            for (int i = thisLevel + 1; i < thisLevel + muti + 1; i++)
+            {
+                tmpMuti += Math.Pow(1.12d, i);
+            }
+            //_MultiResult *= Math.Pow(1.12d, (_MultiLv - 1));
+            _MultiResult *= tmpMuti;
+        }
 
         return Math.Truncate(_MultiResult);
     }
@@ -116,17 +131,18 @@ public class SupportItem : MonoBehaviour
     /// </summary>
     public void RefreshMutiple()
     {
-        for (int i = 0; i < sm.upgrageMutiple; i++)
-        {
-            mutiple = i + 1;
-            // 돈 안 충분하다.
-            if (!IsPurchaseable())
-            {
-                if (mutiple == 1) break;
-                mutiple -= 1;
-                break;
-            }
-        }
+        //for (int i = 0; i < sm.upgrageMutiple; i++)
+        //{
+        //    mutiple = i + 1;
+        //    // 돈 안 충분하다.
+        //    if (!IsPurchaseable())
+        //    {
+        //        if (mutiple == 1) break;
+        //        mutiple -= 1;
+        //        break;
+        //    }
+        //}
+        mutiple = sm.upgrageMutiple;
 
         /// 만렙 예외 처리 1000레벨 고정
         if (mutiple == 10 && thisLevel >= 991) mutiple = (1000 - thisLevel);
@@ -150,18 +166,19 @@ public class SupportItem : MonoBehaviour
         /// 인덱스 설정 -> 이 스크립트 전체
         _index = cnt;
 
-        for (int i = 0; i < sm.upgrageMutiple; i++)
-        {
-            mutiple = i + 1;
+        //for (int i = 0; i < sm.upgrageMutiple; i++)
+        //{
+        //    mutiple = i + 1;
 
-            // 돈 안 충분하다.
-            if (!IsPurchaseable())
-            {
-                if (mutiple == 1) break;
-                mutiple -= 1;
-                break;
-            }
-        }
+        //    // 돈 안 충분하다.
+        //    if (!IsPurchaseable())
+        //    {
+        //        if (mutiple == 1) break;
+        //        mutiple -= 1;
+        //        break;
+        //    }
+        //}
+        mutiple = sm.upgrageMutiple;
 
         /// 만렙 예외 처리 1000레벨 고정
         if (mutiple == 10 && thisLevel >= 991) mutiple = (1000 - thisLevel);

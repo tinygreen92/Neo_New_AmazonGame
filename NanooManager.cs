@@ -10,6 +10,9 @@ using CodeStage.AntiCheat.Storage;
 
 public class NanooManager : MonoBehaviour
 {
+    [Header("- 플레이어 닉네임 표기")]
+    public Text outterNameText;
+    public Text innerNameText;
     [Header("- 선물함 관련")]
     public GameObject IncorectPanel;
     public GameObject GetPanel;
@@ -103,14 +106,39 @@ public class NanooManager : MonoBehaviour
         plugin = Plugin.GetInstance();
         plugin.SetUUID(userID);
         plugin.SetNickname(_name);
-        plugin.SetLanguage(Configure.PN_LANG_KO);
+        /// 언어셋팅
+        if (Lean.Localization.LeanLocalization.CurrentLanguage == "Korean")
+        {
+            plugin.SetLanguage(Configure.PN_LANG_KO);
+        }
+        else
+        {
+            plugin.SetLanguage(Configure.PN_LANG_EN);
+        }
         /// 배너 오픈
         OpenBanner();
-        /// 개인 랭킹 갱신
-        ShowRankingPersonal();
+        /// 개인 기록 관련
+        StartCoroutine(MyRankiner());
+        /// 텍스트 갱신
+        outterNameText.text = _name;
+        innerNameText.text = _name;
     }
 
+    IEnumerator MyRankiner()
+    {
+        while (!PlayerPrefsManager.isJObjectLoad)
+        {
+            yield return new WaitForFixedUpdate();
+        }
 
+        if (PlayerInventory.RecentDistance > 0)
+        {
+            /// 랭킹 기록
+            RecordRankDistance(Mathf.RoundToInt((float)PlayerInventory.RecentDistance) - 1);
+            /// 개인 랭킹 갱신
+            Invoke(nameof(ShowRankingPersonal), 2.0f);
+        }
+    }
 
 
     /// <summary>
@@ -571,7 +599,6 @@ public class NanooManager : MonoBehaviour
     /// </summary>
     public void ShowRankDistance()
     {
-
         /// 개인 기록 보여줌
         ShowRankingPersonal();
         

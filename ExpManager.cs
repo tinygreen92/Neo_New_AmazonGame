@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class ExpManager : MonoBehaviour
 {
     public Transform expParent;
-
+    [Header("- 외부캐릭터 정보창")]
+    public Text lvText;
 
 
     private static string LEVEL_TEXT = "Lv. ";
@@ -29,7 +30,8 @@ public class ExpManager : MonoBehaviour
         float calv = PlayerInventory.CurrentAmaLV;
 
         expParent.GetChild(0).GetComponent<Image>().fillAmount = PlayerInventory.CurrentAmaValue / ((calv+1f) * 100f * (float)PlayerInventory.AmazonPoint_Cost);
-        expParent.GetChild(1).GetComponent<Text>().text = LEVEL_TEXT + calv.ToString("F0");
+        //expParent.GetChild(1).GetComponent<Text>().text = LEVEL_TEXT + calv.ToString("F0");
+        lvText.text = LEVEL_TEXT + calv.ToString("N0");
     }
     /// <summary>
     /// 테스트 버튼에 달라붙음

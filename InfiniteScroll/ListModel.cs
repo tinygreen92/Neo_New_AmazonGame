@@ -538,7 +538,7 @@ public class ListModel : MonoBehaviour
             case "골드 획득량": PlayerInventory.RuneStat[5] += _StatValue; break;
             case "나뭇잎 획득량": PlayerInventory.RuneStat[6] += _StatValue; break;
             case "강화석 획득량": PlayerInventory.RuneStat[7] += _StatValue; break;
-            case "퀘스트 보상": PlayerInventory.RuneStat[8] += _StatValue; break;
+            case "수집 보상": PlayerInventory.RuneStat[8] += _StatValue; break;
             case "체력": PlayerInventory.RuneStat[9] += _StatValue; break;
             case "보유무기 공격력": PlayerInventory.RuneStat[10] += _StatValue; break;
             case "오프라인 보상": PlayerInventory.RuneStat[11] += _StatValue; break;
@@ -589,10 +589,10 @@ public class ListModel : MonoBehaviour
         sc.rank = _rank;
         sc.imgIndex = i1.ToString();
 
-        sc.desc_1 = invisibleruneList[i1].desc.ToString();
-        sc.desc_2 = invisibleruneList[i2].desc.ToString();
-        sc.desc_3 = invisibleruneList[i3].desc.ToString();
-        sc.desc_4 = invisibleruneList[i4].desc.ToString();
+        sc.desc_1 = invisibleruneList[i1].desc;
+        sc.desc_2 = invisibleruneList[i2].desc;
+        sc.desc_3 = invisibleruneList[i3].desc;
+        sc.desc_4 = invisibleruneList[i4].desc;
 
         sc.main_1 = random1;
         sc.main_2 = random2;
@@ -615,9 +615,9 @@ public class ListModel : MonoBehaviour
         sc.rank = _rank;
         sc.imgIndex = i1.ToString();
 
-        sc.desc_1 = invisibleruneList[i1].desc.ToString();
-        sc.desc_2 = invisibleruneList[i2].desc.ToString();
-        sc.desc_3 = invisibleruneList[i3].desc.ToString();
+        sc.desc_1 = invisibleruneList[i1].desc;
+        sc.desc_2 = invisibleruneList[i2].desc;
+        sc.desc_3 = invisibleruneList[i3].desc;
         sc.desc_4 = null;
 
         sc.main_1 = random1;
@@ -639,8 +639,8 @@ public class ListModel : MonoBehaviour
         sc.rank = _rank;
         sc.imgIndex = i1.ToString();
 
-        sc.desc_1 = invisibleruneList[i1].desc.ToString();
-        sc.desc_2 = invisibleruneList[i2].desc.ToString();
+        sc.desc_1 = invisibleruneList[i1].desc;
+        sc.desc_2 = invisibleruneList[i2].desc;
         sc.desc_3 = null;
         sc.desc_4 = null;
 
@@ -665,7 +665,7 @@ public class ListModel : MonoBehaviour
         sc.rank = _rank;
         sc.imgIndex = i1.ToString();
 
-        sc.desc_1 = invisibleruneList[i1].desc.ToString();
+        sc.desc_1 = invisibleruneList[i1].desc;
         sc.desc_2 = null;
         sc.desc_3 = null;
         sc.desc_4 = null;
@@ -769,6 +769,7 @@ public class ListModel : MonoBehaviour
     /// 얻을 수 있는 유물 목록 30개 (눈에 안보임)
     /// </summary>
     public List<HeartContent> invisibleheartList = new List<HeartContent>();
+
 
     #region HeartContent 유물(Heart) 수집 heartList
 

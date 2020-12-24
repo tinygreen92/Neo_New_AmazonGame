@@ -74,17 +74,18 @@ public class CharactorItem : MonoBehaviour
 
         spriteBox.sprite = icons[_index];
 
-        for (int i = 0; i < PlayerPrefsManager.charaUpgrageMutiple; i++)
-        {
-            mutiple = i + 1;
+        //for (int i = 0; i < PlayerPrefsManager.charaUpgrageMutiple; i++)
+        //{
+        //    mutiple = i + 1;
 
-            // 돈 안 충분하다.
-            if (!IsPurchaseable())
-            {
-                if (mutiple == 1) break;
-                mutiple -= 1;       break;
-            }
-        }
+        //    // 돈 안 충분하다.
+        //    if (!IsPurchaseable())
+        //    {
+        //        if (mutiple == 1) break;
+        //        mutiple -= 1;       break;
+        //    }
+        //}
+        mutiple = PlayerPrefsManager.charaUpgrageMutiple;
 
         /// 만렙 예외 처리 1000레벨 고정
         if (mutiple == 10 && thisLevel >= 9990) mutiple = (9999 - thisLevel);
@@ -279,17 +280,18 @@ public class CharactorItem : MonoBehaviour
     /// </summary>
     public void RefreshMutiple()
     {
-        for (int i = 0; i < sm.upgrageMutiple; i++)
-        {
-            mutiple = i + 1;
-            // 돈 안 충분하다.
-            if (!IsPurchaseable())
-            {
-                if (mutiple == 1) break;
-                mutiple -= 1;
-                break;
-            }
-        }
+        //for (int i = 0; i < sm.upgrageMutiple; i++)
+        //{
+        //    mutiple = i + 1;
+        //    // 돈 안 충분하다.
+        //    if (!IsPurchaseable())
+        //    {
+        //        if (mutiple == 1) break;
+        //        mutiple -= 1;
+        //        break;
+        //    }
+        //}
+        mutiple = sm.upgrageMutiple;
 
         if (_index == 4)
         {
@@ -399,12 +401,26 @@ public class CharactorItem : MonoBehaviour
             if (_MultiLv > 9998) _MultiLv = 9999;
         }
 
+        /// 골드 소모일때
         if (_index == 0)
         {
             /// 레벨 0일때 예외처리
-            if (_MultiLv == 1) _MultiResult = ListModel.Instance.charatorList[_index].nextUpgradeCost;
-            else _MultiResult *= Math.Pow(1.1d, (_MultiLv - 1));
+            if (_MultiLv == 1)
+            {
+                _MultiResult = ListModel.Instance.charatorList[_index].nextUpgradeCost;
+            }
+            else
+            {
+                double tmpMuti = 0;
+                for (int i = thisLevel + 1; i < thisLevel + muti + 1; i++)
+                {
+                    tmpMuti += Math.Pow(1.1d, i);
+                }
+                //_MultiResult *= Math.Pow(1.1d, (_MultiLv - 1));
+                _MultiResult *= tmpMuti;
+            }
         }
+        /// 엘릭서 소모일때
         else
         {
             int tmpMuti = 0;

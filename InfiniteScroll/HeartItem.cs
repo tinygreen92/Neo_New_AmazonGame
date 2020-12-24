@@ -110,9 +110,14 @@ public class HeartItem : MonoBehaviour
         /// 나뭇잎 소모량
         if (_MultiLv != 1)
         {
-            _MultiResult *= ListModel.Instance.heartList[_index - 1].leafToLvUP * (_MultiLv - 1);
+            double tmpMuti = 0;
+            for (int i = thisLevel + 1; i < thisLevel + muti + 1; i++)
+            {
+                tmpMuti += (ListModel.Instance.heartList[_index - 1].leafToLvUP * i );
+            }
+            //_MultiResult *= ListModel.Instance.heartList[_index - 1].leafToLvUP * (_MultiLv - 1);
+            _MultiResult *= tmpMuti;
         }
-
 
         return Math.Truncate(_MultiResult);
     }
@@ -159,18 +164,20 @@ public class HeartItem : MonoBehaviour
         GetHeartGatcha(false);
         buttonParent.GetComponent<Button>().targetGraphic = buttonParent.GetChild(0).GetComponent<Image>();
 
-        for (int i = 0; i < PlayerPrefsManager.heartUpgrageMutiple; i++)
-        {
-            mutiple = i + 1;
+        //for (int i = 0; i < PlayerPrefsManager.heartUpgrageMutiple; i++)
+        //{
+        //    mutiple = i + 1;
 
-            // 돈 안 충분하다.
-            if (!IsPurchaseable())
-            {
-                if (mutiple == 1) break;
-                mutiple -= 1;
-                break;
-            }
-        }
+        //    // 돈 안 충분하다.
+        //    if (!IsPurchaseable())
+        //    {
+        //        if (mutiple == 1) break;
+        //        mutiple -= 1;
+        //        break;
+        //    }
+        //}
+        mutiple = PlayerPrefsManager.heartUpgrageMutiple;
+
         /// 만렙 예외 처리 
         if (mutiple == 10 && thisLevel >= _MaxLv -9) mutiple = (_MaxLv - thisLevel);
         else if (mutiple == 100 && thisLevel >= _MaxLv -99) mutiple = (_MaxLv - thisLevel);

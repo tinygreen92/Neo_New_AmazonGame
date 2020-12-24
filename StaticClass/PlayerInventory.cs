@@ -150,7 +150,7 @@ public static class PlayerInventory
     public static ObscuredInt heart_equiped_fever_kill_cost
     {
         get { return heartIndexs[21] != 0 ? (ObscuredInt)ListModel.Instance.heartList[heartIndexs[21] - 1].powerToLvUP * Heart_lv(21) : 0; }
-    }                                                 //  유물 피버 요구 처치수 감소
+    }                                                 //  유물 피버 게이지 감소
     public static ObscuredDouble heart_equiped_fever_power
     {
         get { return heartIndexs[22] != 0 ? ListModel.Instance.heartList[heartIndexs[22] - 1].powerToLvUP * Heart_lv(22) * 0.01d : 0; }
@@ -747,7 +747,7 @@ public static class PlayerInventory
 
     /// <summary>
     /// 23. 피버타임 게이지 감소	
-    /// 시작값 몬스터 500회 처치 - 유물 피버타임 요구 처치수 감소
+    /// 시작값 몬스터 1000회 처치 - 유물 피버타임 요구 처치수 감소
     /// </summary>
     public static ObscuredFloat Kill_Cost
     {

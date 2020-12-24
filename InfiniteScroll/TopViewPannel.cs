@@ -269,8 +269,7 @@ public class TopViewPannel : MonoBehaviour
     /// </summary>
     public void SetHeartRefresh()
     {
-        Debug.LogWarning(" 유물 업그레이드 하면 유물 새로고침");
-
+        //Debug.LogWarning(" 유물 업그레이드 하면 유물 새로고침");
         /// 지금 활성화된 자식만큼 배수 적용해줌. -> 배수 적용된 뒤에 새로고침.
         for (int i = 2; i < Heart_INFINITI.childCount; i++)
         {

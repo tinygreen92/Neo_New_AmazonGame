@@ -98,13 +98,6 @@ public class WeaponItem : MonoBehaviour
     {
         if (sm.ModeName == 1)          /// 강화
         {
-            //// 만렙 찍으면  MAX 
-            //if (thisLevel >= 100)
-            //{
-            //    thisLevel = 100;
-            //    return 0;
-            //}
-
             _MultiResult = thisLevel > 1 ? ListModel.Instance.weaponList[_index].nextUpgradeCost * 1.09d * thisLevel : ListModel.Instance.weaponList[_index].nextUpgradeCost;
 
             return Math.Truncate(_MultiResult);
@@ -176,7 +169,7 @@ public class WeaponItem : MonoBehaviour
         Desc3Box.text = thisLevel < 100 ? (ListModel.Instance.weaponList[_index].startPassFail).ToString("F2") + "%" : (ListModel.Instance.weaponList[_index].startPassFail - (ListModel.Instance.weaponList[_index].passFailPer * (thisLevel - 100))).ToString("F2") + "%";
 
         /// <다음_업그레이드비용> 배수 곱하기 해서 텍스트 뿌려주기.
-        UpgradeBox.text = PlayerPrefsManager.instance.DoubleToStringNumber(PlayerInventory.EnchantStone_Cost * GetUpgradeNeed());
+        UpgradeBox.text = PlayerPrefsManager.instance.DoubleToStringNumber(GetUpgradeNeed());
         /// <상승량> 배수 곱하기 해서 텍스트 뿌려주기.
         EarnGoldBox.text = T_PLUS + ListModel.Instance.weaponList[_index].increedPower.ToString("F2") + "%";
         /// 2개 짜리 파렛트
@@ -288,7 +281,7 @@ public class WeaponItem : MonoBehaviour
             if (DisableImage.sprite == BtnSprite[0] || MaxButton.activeSelf) return;
 
             /// 소숫점 아래 버림
-            PlayerInventory.Money_EnchantStone -= Mathf.CeilToInt((float)(PlayerInventory.EnchantStone_Cost * GetUpgradeNeed()));
+            PlayerInventory.Money_EnchantStone -= Mathf.CeilToInt((float)(GetUpgradeNeed()));
 
             thisLevel++;
             
@@ -324,7 +317,7 @@ public class WeaponItem : MonoBehaviour
             /// 돈 없으면 강화 안되게 막는 역할 || 맥스버튼이면 리턴
             if (DisableImage.sprite == BtnSprite[0] || MaxButton.activeSelf) return;
             /// 강화석 소모 소숫점 아래 버림
-            PlayerInventory.Money_EnchantStone -= Mathf.CeilToInt((float)(PlayerInventory.EnchantStone_Cost * GetUpgradeNeed()));
+            PlayerInventory.Money_EnchantStone -= Mathf.CeilToInt((float)(GetUpgradeNeed()));
             /// 강화 성공/실패 계산
             float temp = Time.time * 525f;
             UnityEngine.Random.InitState((int)temp);
@@ -376,8 +369,14 @@ public class WeaponItem : MonoBehaviour
     /// </summary>
     bool IsPurchaseable()
     {
-        if (PlayerInventory.Money_EnchantStone >= GetUpgradeNeed()) return true;
-        else return false;
+        if (PlayerInventory.Money_EnchantStone >= (PlayerInventory.EnchantStone_Cost * GetUpgradeNeed()))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 

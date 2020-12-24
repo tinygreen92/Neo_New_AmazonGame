@@ -51,7 +51,7 @@ public class DamageController : MonoBehaviour
         if (isCriticalHit)
         {
             transform.DOScale((Vector3.one *1.5f), 0.5f);
-            transform.GetComponent<Text>().material.DOFade(0, 1f).SetEase(Ease.InBack);
+            transform.GetComponent<Text>().material.DOFade(0, 1).SetEase(Ease.InBack);
             transform.DOMove(transform.parent.GetChild(0).position, 0.9f).OnComplete(CallBackEnemyAttack);
             /// 카메라 쉐이크
             if (tfPosition.GetComponent<CameraShaker>().isShake) return;
@@ -61,12 +61,14 @@ public class DamageController : MonoBehaviour
         }
         else
         {
-            transform.DOScale((Vector3.one), 0.5f);
-            transform.GetComponent<Text>().material.DOFade(0, 1f).SetEase(Ease.InBack);
+            transform.DOScale((Vector3.one), 0.3f);
+            transform.GetComponent<Text>().material.DOFade(0, 1).SetEase(Ease.InBack);
             transform.DOMove(transform.parent.GetChild(0).position, 0.9f).OnComplete(CallBackEnemyAttack);
+            //transform.DOJump(transform.parent.GetChild(0).position, 1f, 1, 0.5f);
             /// 카메라 쉐이크
             if (tfPosition.GetComponent<CameraShaker>().isShake) return;
             tfPosition.GetComponent<CameraShaker>().isShake = true;
+            tfPosition.GetComponent<CameraShaker>().monsterCanvas.DOShakeScale(0.2f, 0.05f, 1).OnComplete(CallBackShake);
             //tfPosition.GetComponent<CameraShaker>().monsterCanvas.DOShakePosition(0.3f, 0.6f, 10, 90f, false, false);
             //tfPosition.GetComponent<CameraShaker>().battleCanvas.DOShakePosition(0.35f, 0.6f, 10, 90f, false, false).OnComplete(CallBackShake);
         }
