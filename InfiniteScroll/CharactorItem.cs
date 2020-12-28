@@ -333,7 +333,7 @@ public class CharactorItem : MonoBehaviour
     {
         if (_index == 0)            /// 골드
         {
-            if (PlayerInventory.Money_Gold >= GetMutipleUpgrade(mutiple, thisLevel)) return true;
+            if (PlayerInventory.Money_Gold >= PlayerInventory.Gold_Cost * GetMutipleUpgrade(mutiple, thisLevel)) return true;
             else return false;
         }
         else                                /// 엘릭서는 한개씩 소모한다고

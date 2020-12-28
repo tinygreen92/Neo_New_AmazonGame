@@ -270,6 +270,8 @@ public class MineManager : MonoBehaviour
 
     public void InvoMineEnter()
     {
+        /// 멈춰!!
+        anim.StopPlayback();
         // 공격 애니메이션 정지
         PlayerPrefsManager.isEnterTheMine = true;
         // 게임 오브젝트 덮기

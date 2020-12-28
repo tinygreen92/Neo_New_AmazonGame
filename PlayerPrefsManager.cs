@@ -171,6 +171,7 @@ public class PlayerPrefsManager : MonoBehaviour
     public static ObscuredBool isJObjectLoad;                   // json 로딩 완료
     public static ObscuredBool isEnterTheMine;                            // 혹시 광산에 입장했니?
     public static ObscuredBool isEnterTheSwamp;                            // 혹시 늪지에 입장했니?
+    public static ObscuredBool isGoldposOnAir;                            // 늪지 있을때는 돈 안 떨구기 나가면 돈 떨구기
     public static ObscuredBool isBossBtnAlive;                           // 화면 전환 후 배틀 캔버스에 보스 도전버튼 표기 되어야함
     public static ObscuredBool isIdleModeOn;                   // 지금 방치모드 켜져있니?
 

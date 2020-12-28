@@ -58,8 +58,13 @@ public class CaveManager : MonoBehaviour
     public Text clearAdsDesc;
     public GameObject[] BtnLayoutTo;
 
+
     /// <summary>
-    /// 최종 클리어 단계 몇? (30 마리 잡고 완클이면 다음 버튼색 노랑 / 아니면 회색)
+    /// 10마리 잡으면 다음층 해금
+    /// </summary>
+    private const int CLEAR_KILL = 10;
+    /// <summary>
+    /// 최종 클리어 단계 몇? (10 마리 잡고 완클이면 다음 버튼색 노랑 / 아니면 회색)
     /// </summary>
     private int currentMyDan;
     /// <summary>
@@ -67,9 +72,6 @@ public class CaveManager : MonoBehaviour
     /// </summary>
     public void AddCaveRunCount()
     {
-        /// 배틀 씬에서 골드/대미지 없애주기
-        GoldDropPos.SetActive(false);
-        DamegeDropPos.SetActive(false);
         /// 가장 높은 스테이지  currentMyDan 세팅
         GetCurrentTryStage();
         /// 이전 다음 버튼 세팅 + 팝업 내용물 세팅
@@ -87,7 +89,6 @@ public class CaveManager : MonoBehaviour
     {
         /// 배틀 씬에서 골드/대미지 다시 보여주기
         DamegeDropPos.SetActive(true);
-        GoldDropPos.SetActive(true);
         BugFixer();
         PopUpManager.instance.HidePopUP(21);
     }
@@ -109,9 +110,9 @@ public class CaveManager : MonoBehaviour
         ///
         for (int i = 0; i < scd.Count; i++)
         {
-            if (int.Parse(scd[i].killCount) < 30)
+            if (int.Parse(scd[i].killCount) < CLEAR_KILL)
             {
-                if (i >0 && int.Parse(scd[i-1].killCount) >= 30)
+                if (i >0 && int.Parse(scd[i-1].killCount) >= CLEAR_KILL)
                 {
                     currentMyDan = i + 1;
                     return;
@@ -151,7 +152,7 @@ public class CaveManager : MonoBehaviour
         else
         {
             BtnImgs[0].sprite = _index == 1 ? BtnSprs[0] : BtnSprs[1];
-            BtnImgs[1].sprite = GetKillMonsterCount(_index, "") < 30 ? BtnSprs[0] : BtnSprs[1];
+            BtnImgs[1].sprite = GetKillMonsterCount(_index, "") < CLEAR_KILL ? BtnSprs[0] : BtnSprs[1];
         }
 
         /// 숨겨진 늪지 x 단계
@@ -180,7 +181,7 @@ public class CaveManager : MonoBehaviour
     /// </summary>
     public void RefleshCurrentKill(int _kc)
     {
-        //if (_kc >= 30) ListModel.Instance.swampCaveData[currentMyDan - 1].killCount = "30";
+        //if (_kc >= CLEAR_KILL) ListModel.Instance.swampCaveData[currentMyDan - 1].killCount = "CLEAR_KILL";
         currentKillCount.text = _kc + LeanLocalization.GetTranslationText("Cave_Mari");
         currentLeaf.text = "x " + PlayerPrefsManager.instance.DoubleToStringNumber(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordLeaf * (_kc * 1.0f * (float)PlayerInventory.Player_Leaf_Earned));
         currentEnchant.text = "x " + PlayerPrefsManager.instance.DoubleToStringNumber(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordEnchant * (_kc * 1.0f * (float)PlayerInventory.EnchantStone_Earned));
@@ -238,13 +239,12 @@ public class CaveManager : MonoBehaviour
     /// </summary>
     void ClickedEnterSwamp()
     {
-        PlayerPrefsManager.isEnterTheSwamp = false;
         /// 팝업 꺼줌
         EasySunDaPop.SetActive(false);
-        SystemPopUp.instance.StopLoopLoading();
-        /// 배틀 씬에서 골드/대미지 다시 보여주기
-        GoldDropPos.SetActive(true);
-        DamegeDropPos.SetActive(true);
+        //SystemPopUp.instance.StopLoopLoading();
+        /// 배틀 씬에서 대미지 다시 보여주기
+        //GoldDropPos.SetActive(true);
+        //DamegeDropPos.SetActive(true);
         /// 보스 코루틴 꺼줌.
         PlayerPrefsManager.isEnterTheMine = false;
         HBM.CheatGetOut();
@@ -259,11 +259,6 @@ public class CaveManager : MonoBehaviour
         /// 현재 스테이지 킬 카운터 초기화
         PlayerPrefsManager.swampMonKillCount = 0;
         RefleshCurrentKill(0);
-        /// 타이머 트리거 초기화
-        PlayerPrefsManager.isSwampTimeOver = false;
-        /// 현재 몬스터 날리고 늪지 몬스터 소환
-        PlayerPrefsManager.currentMyStage = currentMyDan-1;
-        DistanceManager.instance.SwampStart();
         /// 입장권 새로고침
         RefreshMoney();
         /// 배경 그림 바꿔주기
@@ -295,15 +290,36 @@ public class CaveManager : MonoBehaviour
                                         + " " + currentMyDan 
                                         + LeanLocalization.GetTranslationText("Cave_Enter_Tiltle_2");
         swampText.transform.parent.gameObject.SetActive(true);
+        /// 배틀 씬에서 골드/대미지 없애주기
+        GoldDropPos.SetActive(false);
+        PlayerPrefsManager.isGoldposOnAir = true;
+        DamegeDropPos.SetActive(false);
+        /// 입장 팝업 꺼주고 입장
+        x_Btn.SetActive(true);
+        PopUpManager.instance.HidePopUP(21);
+        /// 현재 몬스터 날리고 늪지 몬스터 소환
+        PlayerPrefsManager.currentMyStage = currentMyDan - 1;
+        DistanceManager.instance.SwampDelay();
+        /// 타이머 켜주고 늪지 전투 시작
+        Invoke(nameof(InvoEnterCave), 1.2f);
+    }
+
+    void InvoEnterCave()
+    {
+        PlayerPrefsManager.isEnterTheSwamp = false;
+        // 대미지 보여쥼
+        DamegeDropPos.SetActive(true);
+        /// 타이머 트리거 초기화
+        PlayerPrefsManager.isSwampTimeOver = false;
         /// 타이머 세팅
         swampTimeBar.SetActive(true);
-        x_Btn.SetActive(true);
         TimeFill.fillAmount = 1.0f;
         /// 타이머 코루틴 시작
         c_time = StartCoroutine(CaveTimer());
-        /// 입장 팝업 꺼주고 입장
-        PopUpManager.instance.HidePopUP(21);
+        /// 몹 등장
+        DistanceManager.instance.SwampStart();
     }
+
 
     /// <summary>
     /// [소탕] 입장할래 토벌할래 팝업에서 [소탕] 누르면 작동
@@ -459,8 +475,6 @@ public class CaveManager : MonoBehaviour
         GetClearReword(false);
         /// 보급상자 다시 켜준다
         SupplyBoxPos.SetActive(true);
-        /// 배틀 씬에서 골드/대미지 다시 보여주기
-        DamegeDropPos.SetActive(true);
         Debug.LogWarning("늪지 나가면 현재거리" + PlayerInventory.RecentDistance);
     }
 
@@ -565,6 +579,9 @@ public class CaveManager : MonoBehaviour
             ///  강화석 업적 카운트 올리기
             ListModel.Instance.ALLlist_Update(5, tmpES);
         }
+        /// 배틀 씬에서 골드/대미지 다시 보여주기
+        DamegeDropPos.SetActive(true);
+        PlayerPrefsManager.isGoldposOnAir = false;
     }
     /// <summary>
     /// 재화 더해주는 메서드 (광고 보면 2배 지급 / 안보면 1배 )
@@ -601,7 +618,7 @@ public class CaveManager : MonoBehaviour
     float currentTime;
     IEnumerator CaveTimer()
     {
-        yield return null;
+        yield return new WaitForSeconds(1f / PlayerInventory.Player_Move_Speed);
 
         float Maxcnt = (float)PlayerInventory.Cave_Time;
         currentTime = Maxcnt;

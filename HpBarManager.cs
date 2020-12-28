@@ -149,7 +149,6 @@ public class HpBarManager : MonoBehaviour
         /// 타임오버라면? 보스 증발 시킴
         PlayerInventory.RecentDistance--;
         Debug.LogWarning("타임 오버 보스 증발 : " + PlayerInventory.RecentDistance);
-        
         EnableBossColor(false);
         /// 현재 에너미 날려버림 && 내부에서 새 에너미 생성까지
         DistanceManager.instance.StopPlayer();
@@ -178,6 +177,7 @@ public class HpBarManager : MonoBehaviour
             //
             PlayerInventory.RecentDistance--;
             Debug.LogWarning("포기 이미지 클릭 : " + PlayerInventory.RecentDistance);
+            SetHpBarFill(1);
             EnableBossColor(false);
             Invoke(nameof(InvoReFight), 0.25f);
         }

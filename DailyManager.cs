@@ -74,11 +74,8 @@ public class DailyManager : MonoBehaviour
         else
         {
             /// 출석판 키면 레드닷 OFF
-            if (!RedDotManager.instance.RedDot[1].activeSelf)
-            {
-                RedDotManager.instance.RedDot[2].SetActive(false);
-            }
             RedDotManager.instance.RedDot[4].SetActive(false);
+            RedDotManager.instance.RedDot[7].SetActive(false);
         }
         /// ------------------------- 출석체크 -------------------------------
         //아직 출석 안함 - >  1. 출석창 호출 안함 2. 출석 회색처리
@@ -86,6 +83,9 @@ public class DailyManager : MonoBehaviour
         {
             /// 출석판 캔버스 드러내기.
             PopUpManager.instance.ShowPopUP(3);
+            RedDotManager.instance.RedDot[4].SetActive(false);
+            RedDotManager.instance.RedDot[7].SetActive(false);
+
             /// 클릭 버튼 활성화.
             invisibleDragon.SetActive(true);
         }
@@ -256,7 +256,13 @@ public class DailyManager : MonoBehaviour
     public void ClickedGetPopOk()
     {
         /// 두번째 아이템까지 받았으면 꺼져
-        if (isGetMainItem) getPopUp.SetActive(false);
+        if (isGetMainItem)
+        {
+            getPopUp.SetActive(false);
+            /// 레드닷 꺼줘
+            RedDotManager.instance.RedDot[4].SetActive(false);
+            RedDotManager.instance.RedDot[7].SetActive(false);
+        }
         //
         iconImg.sprite = mainSprs[0];
         getItemAmount.text = GetItemAmountTxt(PlayerPrefsManager.DailyCount_Cheak - 1)[1];
@@ -321,7 +327,7 @@ public class DailyManager : MonoBehaviour
         PlayerPrefsManager.isDailyCheak = false;
         ObscuredPrefs.Save();
         /// 날짜 지나면 레드닷 활성화
-        RedDotManager.instance.RedDot[2].SetActive(true);
+        RedDotManager.instance.RedDot[7].SetActive(true);
         RedDotManager.instance.RedDot[4].SetActive(true);
         /////-> 다시 24시간 카운터 재시작
         //Invoke(nameof(CheckDailyInit), 0.5f);

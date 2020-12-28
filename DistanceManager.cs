@@ -137,20 +137,24 @@ public class DistanceManager : MonoBehaviour
         }
         else if (reDist % 10 == 0)          /// 10 스테이지 보스전
         {
-            Enemy_Hp_Full = 5d *  (5d * 1.55d * reDist) * PlayerInventory.Monster_Boss_HP;
-            Enemy_DropGold =  5d * (3d * 1.15d * reDist) * PlayerInventory.Player_Gold_Earned;
-            //Enemy_Hp_Full =  5d * 5d * Mathf.Pow(1.07f, reDist - 1) * PlayerInventory.Monster_Boss_HP;
-            //Enemy_DropGold =  3d * 3d * Mathf.Pow(1.05f, reDist - 1) * PlayerInventory.Player_Gold_Earned;
+            //Enemy_Hp_Full = 5d *  (5d * 1.55d * reDist) * PlayerInventory.Monster_Boss_HP;
+            //Enemy_DropGold =  5d * (3d * 1.15d * reDist) * PlayerInventory.Player_Gold_Earned;
+            //Enemy_Hp_Full = 5d * 5d * Mathf.Pow(1.07f, reDist - 1) * PlayerInventory.Monster_Boss_HP;
+            //Enemy_DropGold = 3d * 3d * Mathf.Pow(1.05f, reDist - 1) * PlayerInventory.Player_Gold_Earned;
+            Enemy_Hp_Full = (0.25d * (reDist * reDist) + 0.25d * reDist + 4.5d) * 5d * PlayerInventory.Monster_Boss_HP;
+            Enemy_DropGold =  (3d * 1.15d * reDist) * 5d * PlayerInventory.Player_Gold_Earned;
             Debug.LogWarning("BOSS_Hp_Full : " + Enemy_Hp_Full + " BOSS_DropGold : " + Enemy_DropGold);
             //
             CreateEnemyBoss();
         }
         else                                                /// 일반몹
         {
-            Enemy_Hp_Full = (5d * 1.55d * reDist) * PlayerInventory.Monster_Normal_HP;
+            //Enemy_Hp_Full = (5d * 1.55d * reDist) * PlayerInventory.Monster_Normal_HP;
+            //Enemy_DropGold = (3d * 1.15d * reDist) * PlayerInventory.Player_Gold_Earned;
+            //Enemy_Hp_Full = 0.25d * Mathf.Pow(1.07f, reDist) * PlayerInventory.Monster_Normal_HP;
+            //Enemy_DropGold = 3d * Mathf.Pow(1.05f, reDist) * PlayerInventory.Player_Gold_Earned;
+            Enemy_Hp_Full = (0.25d * (reDist * reDist) + 0.25d * reDist + 4.5d) * PlayerInventory.Monster_Normal_HP;
             Enemy_DropGold = (3d * 1.15d * reDist) * PlayerInventory.Player_Gold_Earned;
-            //Enemy_Hp_Full = 5d * Mathf.Pow(1.07f, reDist - 1) * PlayerInventory.Monster_Normal_HP;
-            //Enemy_DropGold = 3d * Mathf.Pow(1.05f, reDist - 1) * PlayerInventory.Player_Gold_Earned;
             Debug.LogWarning("Enemy_Hp_Full : " + Enemy_Hp_Full + " Enemy_DropGold : " + Enemy_DropGold);
 
             /// 1~9 스테이지 일반몹 or 박스
@@ -233,7 +237,7 @@ public class DistanceManager : MonoBehaviour
         PlayserStop();
         /// 0.3초 뒤에 공격
         Invoke(nameof(CallBackEnemyAttack), 0.3f);
-        
+
     }
 
     /// <summary>
@@ -252,6 +256,8 @@ public class DistanceManager : MonoBehaviour
 
     void PlayserStop()
     {
+        /// 이전 애니 정지
+        playerAnitor.StopPlayback();
         /// 1. 플레이어 걷기 멈추기
         if (playerAnitor.transform.parent.parent.gameObject.activeSelf) playerAnitor.Play("Idle", -1, 0f);
         AudioManager.instance.StopAudio("SE");
@@ -286,6 +292,14 @@ public class DistanceManager : MonoBehaviour
     }
 
     public void StopPlayer()
+    {
+        /// 이전 애니 정지
+        playerAnitor.StopPlayback();
+        /// 딜레이 주고 시작
+        Invoke(nameof(InvoStopPlayer), 0.02f);
+    }
+
+    void InvoStopPlayer()
     {
         playerAnitor.speed = PlayerInventory.Player_Move_Speed;
         //Debug.LogError("공속 : " + playerAnitor.speed);
@@ -324,9 +338,32 @@ public class DistanceManager : MonoBehaviour
     /// </summary>
     public void SwampStart()
     {
-        /// 선택한 스테이지 몇?
-        playerAnitor.speed = PlayerInventory.Player_Move_Speed;
-        //Debug.LogError("공속 : " + playerAnitor.speed);
+        /// 이전 애니 정지
+        playerAnitor.StopPlayback();
+        /// 딜레이 주고 시작
+        Invoke(nameof(InvoSwampStart), 0.02f);
+    }
+
+    public void SwampDelay()
+    {
+        /// 이전 애니 정지
+        playerAnitor.StopPlayback();
+        /// 몹 날려버리고
+        if (enemyTransform != null)
+        {
+            enemyTransform.GetComponent<EnemyController>().InvoDestroy();
+            enemyTransform = null;
+        }
+        /// 걷기만
+        bgm.isBGmovigPause = false;
+        playerAnitor.Play("Player_Move", -1, 0f);
+    }
+
+    void InvoSwampStart()
+    {
+        /// TODO : 선택한 스테이지 몇?
+        //playerAnitor.speed = PlayerInventory.Player_Move_Speed;
+        Debug.LogError("늪지 공속 : " + playerAnitor.speed);
         playerAnitor.Play("Player_Move", -1, 0f);
         if (!isWalking)
         {
@@ -356,6 +393,6 @@ public class DistanceManager : MonoBehaviour
                 .OnComplete(CallBackEnemyAttack).SetDelay(1f / PlayerInventory.Player_Move_Speed);
 
         }
-    }
 
+    }
 }

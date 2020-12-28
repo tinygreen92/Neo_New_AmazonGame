@@ -45,6 +45,7 @@ public class EnemyController : MonoBehaviour
 
     public void SetBossStat()
     {
+        HBM.SetHpBarFill(1);
         /// 타임바 활성화 + 늪지/동굴 입장 버튼 비활성화
         HBM.EnableBossColor(true);
         /// 포기 버튼 활성화.
@@ -93,10 +94,13 @@ public class EnemyController : MonoBehaviour
         /// 사망 처리 여부
         if (dEnemy_Hp_Current <= 0)     /// 죽었다.
         {
-            isAliveEnemy = false;
-            /// 골드 드랍 포스 활성화
-            if (!HBM.GoldDropPos.activeSelf) HBM.GoldDropPos.SetActive(true);
             /// 드랍 골드가 있을 경우에만, 사망 처리
+            isAliveEnemy = false;
+            /// 골드 포스 켜주기
+            if (!PlayerPrefsManager.isGoldposOnAir && !HBM.cm.GoldDropPos.activeSelf)
+            {
+                HBM.cm.GoldDropPos.SetActive(true);
+            }
             /// 없으면? 숨겨진 늪지다.
             if (dEnemy_DropGold > 0)
             {
