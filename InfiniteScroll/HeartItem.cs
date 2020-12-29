@@ -113,10 +113,10 @@ public class HeartItem : MonoBehaviour
             double tmpMuti = 0;
             for (int i = thisLevel + 1; i < thisLevel + muti + 1; i++)
             {
-                tmpMuti += (ListModel.Instance.heartList[_index - 1].leafToLvUP * i );
+                tmpMuti += _MultiResult * (ListModel.Instance.heartList[_index - 1].leafToLvUP * i);
             }
             //_MultiResult *= ListModel.Instance.heartList[_index - 1].leafToLvUP * (_MultiLv - 1);
-            _MultiResult *= tmpMuti;
+            _MultiResult = tmpMuti;
         }
 
         return Math.Truncate(_MultiResult);

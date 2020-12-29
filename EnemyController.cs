@@ -48,6 +48,11 @@ public class EnemyController : MonoBehaviour
         HBM.SetHpBarFill(1);
         /// 타임바 활성화 + 늪지/동굴 입장 버튼 비활성화
         HBM.EnableBossColor(true);
+        Invoke(nameof(InvoSetBossStat), 1.5f);
+    }
+
+    void InvoSetBossStat()
+    {
         /// 포기 버튼 활성화.
         HBM.InvoGiveUP();
     }

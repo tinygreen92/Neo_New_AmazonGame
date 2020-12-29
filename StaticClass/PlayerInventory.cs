@@ -415,7 +415,7 @@ public static class PlayerInventory
                 if (int.Parse(ListModel.Instance.weaponList[i].weaponLevel) != 0)
                 {
                     tmp += 
-                        ((double.Parse(ListModel.Instance.weaponList[i].weaponLevel) + Weapon_Lv_Plus) * ListModel.Instance.weaponList[i].increedPower)
+                        ((double.Parse(ListModel.Instance.weaponList[i].weaponLevel) + Weapon_Lv_Plus - 1.0d) * ListModel.Instance.weaponList[i].increedPower)
                         + ListModel.Instance.weaponList[i].startPower;
                 }
             }
@@ -471,12 +471,38 @@ public static class PlayerInventory
             }
             else
             {
+                /// 60일때 이동속도 1배, 120일때 이동속도 2배
                 return (ObscuredFloat)((tmp * tmp2) + 30.0f) * 0.01667f;
             }
-
-
         }
     }
+
+    public static ObscuredFloat Player_STAT_Attack_Speed
+    {
+        get
+        {
+            var tmp = stat_attack_speed;
+
+            var tmp2 = 1.0d
+                + heart_equiped_attack_speed
+                + rune_equiped_attack_speed;
+
+            if (isbuff_attack_speed_up || dia_attack_speed_up) tmp2 += buff_attack_speed_up;
+            if (ispet_equiped_attack_speed) tmp2 += pet_equiped_attack_speed;
+
+            if (FeverManager.isFeverTime)
+            {
+                return (ObscuredFloat)((tmp * tmp2 * Fever_Attack_Speed));
+            }
+            else
+            {
+                /// 60일때 이동속도 1배, 120일때 이동속도 2배
+                return (ObscuredFloat)((tmp * tmp2));
+            }
+        }
+    }
+
+
 
     /// <summary>
     /// 6. 이 동 속 도
@@ -502,6 +528,30 @@ public static class PlayerInventory
             else
             {
                 return (ObscuredFloat)((tmp * tmp2) + 10f) * 0.01667f;
+            }
+        }
+    }
+
+    public static ObscuredFloat Player_STAT_Move_Speed
+    {
+        get
+        {
+            var tmp = stat_move_speed;
+
+            var tmp2 = 1.0d
+                + heart_equiped_move_speed
+                + rune_equiped_move_speed;
+
+            if (isbuff_move_speed_up || dia_move_speed_up) tmp2 += buff_move_speed_up;
+            if (ispet_equiped_move_speed) tmp2 += pet_equiped_move_speed;
+
+            if (FeverManager.isFeverTime)
+            {
+                return (ObscuredFloat)((tmp * tmp2 * Fever_Move_Speed));
+            }
+            else
+            {
+                return (ObscuredFloat)((tmp * tmp2));
             }
         }
     }
@@ -549,6 +599,30 @@ public static class PlayerInventory
             else
             {
                 return Player_DPS * (tmp * tmp2);
+
+            }
+
+        }
+    }
+
+    /// <summary>
+    /// 스탯상으로 표기할 퍼센테이지
+    /// </summary>
+    public static ObscuredDouble Player_STAT_Critical_DPS
+    {
+        get
+        {
+            var tmp = 1.0d +(stat_cri_dps * 0.01d);
+
+            var tmp2 = 1.0d + heart_equiped_cri_power + rune_equiped_cri_power;
+
+            if (FeverManager.isFeverTime)
+            {
+                return  tmp * tmp2 * Fever_Critical_DPS;
+            }
+            else
+            {
+                return  tmp * tmp2;
 
             }
 
@@ -658,6 +732,14 @@ public static class PlayerInventory
         }
     }
 
+    public static ObscuredDouble STAT_Soozip_Powerup_Gold
+    {
+        get
+        {
+            return heart_equiped_soozip_powerup_gold;
+        }
+    }
+
     /// <summary>
     /// 16. 퀘스트 보상 증가
     /// 퀘스트 보상 * ( 유물 퀘스트 보상 증가 % + 룬 퀘스트 보상 증가 % )
@@ -709,6 +791,14 @@ public static class PlayerInventory
         }
     }
 
+    public static ObscuredDouble STAT_Gold_Cost
+    {
+        get
+        {
+            return heart_equiped_gold_cost;
+        }
+    }
+
     /// <summary>
     /// 20. 강화석 강화 비용 감소	
     /// 강화석 강화 비용 - 유물 강화석 강화 비용 감소
@@ -721,6 +811,14 @@ public static class PlayerInventory
         }
     }
 
+    public static ObscuredDouble STAT_EnchantStone_Cost
+    {
+        get
+        {
+            return heart_equiped_enchantStone_cost;
+        }
+    }
+
     /// <summary>
     /// 21. 나뭇잎 강화 비용 감소	
     /// 강화석 강화 비용 - 유물 강화석 강화 비용 감소
@@ -730,6 +828,14 @@ public static class PlayerInventory
         get
         {
             return 1.0d - heart_equiped_leaf_cost;
+        }
+    }
+
+    public static ObscuredDouble STAT_Leaf_Cost
+    {
+        get
+        {
+            return heart_equiped_leaf_cost;
         }
     }
 
@@ -829,6 +935,14 @@ public static class PlayerInventory
         }
     }
 
+    public static ObscuredDouble STAT_AmazonPoint_Cost
+    {
+        get
+        {
+            return (heart_equiped_amazonpoint_cost);
+        }
+    }
+
     /// <summary>
     /// 30. 오프라인 보상 증가 
     /// 오프라인 보상* (유물 오프라인 보상 증가 + 룬 오프라인 보상 증가% )
@@ -841,15 +955,17 @@ public static class PlayerInventory
         }
     }
 
+
+
     /// <summary>
     /// 31. 오프라인 시간 증가 
-    /// 오프라인 시간 180분 + 유물 오프라인 시간 증가
+    /// 오프라인 시간 180분(10800초) + 유물 오프라인 시간 증가
     /// </summary>
     public static ObscuredDouble Offline_Time
     {
         get
         {
-            return 180.0d * (1.0d +  heart_equiped_offline_time);
+            return 10800.0d * (1.0d +  heart_equiped_offline_time);
         }
     }
 

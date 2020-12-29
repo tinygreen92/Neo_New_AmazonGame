@@ -117,10 +117,10 @@ public class SupportItem : MonoBehaviour
             double tmpMuti = 0;
             for (int i = thisLevel + 1; i < thisLevel + muti + 1; i++)
             {
-                tmpMuti += Math.Pow(1.12d, i);
+                tmpMuti += _MultiResult * (Math.Pow(1.12d, i));
             }
             //_MultiResult *= Math.Pow(1.12d, (_MultiLv - 1));
-            _MultiResult *= tmpMuti;
+            _MultiResult = tmpMuti;
         }
 
         return Math.Truncate(_MultiResult);

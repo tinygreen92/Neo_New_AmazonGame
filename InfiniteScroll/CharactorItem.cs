@@ -407,6 +407,7 @@ public class CharactorItem : MonoBehaviour
             /// 레벨 0일때 예외처리
             if (_MultiLv == 1)
             {
+                /// 얘 기본값이 10임. 곱해주는 값
                 _MultiResult = ListModel.Instance.charatorList[_index].nextUpgradeCost;
             }
             else
@@ -414,10 +415,10 @@ public class CharactorItem : MonoBehaviour
                 double tmpMuti = 0;
                 for (int i = thisLevel + 1; i < thisLevel + muti + 1; i++)
                 {
-                    tmpMuti += Math.Pow(1.1d, i);
+                    tmpMuti += 10d * (1d + Math.Pow(1.07d, i));
                 }
-                //_MultiResult *= Math.Pow(1.1d, (_MultiLv - 1));
-                _MultiResult *= tmpMuti;
+                ///_MultiResult = 기본값 곱하기 10
+                _MultiResult = tmpMuti;
             }
         }
         /// 엘릭서 소모일때

@@ -295,6 +295,7 @@ public class DistanceManager : MonoBehaviour
     {
         /// 이전 애니 정지
         playerAnitor.StopPlayback();
+        playerAnitor.Play("Idle", -1, 0f);
         /// 딜레이 주고 시작
         Invoke(nameof(InvoStopPlayer), 0.02f);
     }
@@ -340,6 +341,7 @@ public class DistanceManager : MonoBehaviour
     {
         /// 이전 애니 정지
         playerAnitor.StopPlayback();
+        playerAnitor.Play("Idle", -1, 0f);
         /// 딜레이 주고 시작
         Invoke(nameof(InvoSwampStart), 0.02f);
     }
@@ -348,6 +350,7 @@ public class DistanceManager : MonoBehaviour
     {
         /// 이전 애니 정지
         playerAnitor.StopPlayback();
+        playerAnitor.Play("Idle", -1, 0f);
         /// 몹 날려버리고
         if (enemyTransform != null)
         {
@@ -362,7 +365,7 @@ public class DistanceManager : MonoBehaviour
     void InvoSwampStart()
     {
         /// TODO : 선택한 스테이지 몇?
-        //playerAnitor.speed = PlayerInventory.Player_Move_Speed;
+        playerAnitor.speed = PlayerInventory.Player_Move_Speed;
         Debug.LogError("늪지 공속 : " + playerAnitor.speed);
         playerAnitor.Play("Player_Move", -1, 0f);
         if (!isWalking)

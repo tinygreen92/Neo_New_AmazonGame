@@ -98,13 +98,13 @@ public class WeaponItem : MonoBehaviour
     {
         if (sm.ModeName == 1)          /// 강화
         {
-            _MultiResult = thisLevel > 1 ? ListModel.Instance.weaponList[_index].nextUpgradeCost * 1.09d * thisLevel : ListModel.Instance.weaponList[_index].nextUpgradeCost;
+            _MultiResult = thisLevel > 1 ? ListModel.Instance.weaponList[_index].nextUpgradeCost * (1d+0.15d * thisLevel) : ListModel.Instance.weaponList[_index].nextUpgradeCost;
 
             return Math.Truncate(_MultiResult);
         }
         else if (sm.ModeName == 3)          /// 초월
         {
-            _MultiResult = thisLevel <= 100 ? ListModel.Instance.weaponList[_index].rankUpENstone : ListModel.Instance.weaponList[_index].rankUpENstone * 1.09d * (thisLevel - 100);
+            _MultiResult = thisLevel <= 100 ? ListModel.Instance.weaponList[_index].rankUpENstone : ListModel.Instance.weaponList[_index].rankUpENstone * (1d + 0.15d * (thisLevel-100));
             return Math.Truncate(_MultiResult);
         }
         else return 0;

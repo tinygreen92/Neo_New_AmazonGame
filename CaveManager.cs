@@ -241,10 +241,6 @@ public class CaveManager : MonoBehaviour
     {
         /// 팝업 꺼줌
         EasySunDaPop.SetActive(false);
-        //SystemPopUp.instance.StopLoopLoading();
-        /// 배틀 씬에서 대미지 다시 보여주기
-        //GoldDropPos.SetActive(true);
-        //DamegeDropPos.SetActive(true);
         /// 보스 코루틴 꺼줌.
         PlayerPrefsManager.isEnterTheMine = false;
         HBM.CheatGetOut();
@@ -301,11 +297,12 @@ public class CaveManager : MonoBehaviour
         PlayerPrefsManager.currentMyStage = currentMyDan - 1;
         DistanceManager.instance.SwampDelay();
         /// 타이머 켜주고 늪지 전투 시작
-        Invoke(nameof(InvoEnterCave), 1.2f);
+        Invoke(nameof(InvoEnterCave), 1.5f);
     }
 
     void InvoEnterCave()
     {
+        SystemPopUp.instance.StopLoopLoading();
         PlayerPrefsManager.isEnterTheSwamp = false;
         // 대미지 보여쥼
         DamegeDropPos.SetActive(true);
@@ -526,11 +523,10 @@ public class CaveManager : MonoBehaviour
             }
             else
             {
-                //SystemPopUp.instance.LoopLoadingImg();
+                SystemPopUp.instance.LoopLoadingImg();
                 /// 입장한다
                 PlayerPrefsManager.isEnterTheMine = true;
                 ClickedEnterSwamp();
-                //Invoke(nameof(ClickedEnterSwamp), 1.1f);
                 return;
             }
         }

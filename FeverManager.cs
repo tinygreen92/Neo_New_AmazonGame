@@ -50,12 +50,12 @@ public class FeverManager : MonoBehaviour
     /// </summary>
     public void SetCharaInfoText()
     {
-        charaInfoText[0].text = PlayerPrefsManager.instance.DoubleToStringNumber(PlayerInventory.character_DPS);
-        charaInfoText[1].text = PlayerPrefsManager.instance.DoubleToStringNumber(PlayerInventory.character_HP);
-        charaInfoText[2].text = PlayerPrefsManager.instance.DoubleToStringNumber(PlayerInventory.Player_Attack_Speed);
-        charaInfoText[3].text = PlayerPrefsManager.instance.DoubleToStringNumber(PlayerInventory.Player_Move_Speed);
-        charaInfoText[4].text = PlayerInventory.Player_Critical_Multiplier.ToString("F2") + "%";
-        charaInfoText[5].text = PlayerPrefsManager.instance.DoubleToStringNumber(PlayerInventory.Player_Critical_DPS);
+        charaInfoText[0].text = PlayerPrefsManager.instance.DoubleToStringNumber(PlayerInventory.Player_DPS);
+        charaInfoText[1].text = PlayerPrefsManager.instance.DoubleToStringNumber(PlayerInventory.Player_HP);
+        charaInfoText[2].text = PlayerInventory.Player_STAT_Attack_Speed.ToString("F1");
+        charaInfoText[3].text = PlayerInventory.Player_STAT_Move_Speed.ToString("F2");
+        charaInfoText[4].text = PlayerInventory.Player_Critical_Multiplier.ToString("F2") + " %";
+        charaInfoText[5].text = PlayerInventory.Player_STAT_Critical_DPS.ToString("P2");
     }
 
     public void SetCharaRuneInfo()
@@ -160,45 +160,45 @@ public class FeverManager : MonoBehaviour
     public void SetMoneyInfoTail()
     {
         /// 골드
-        moneyDescText[0].text = PlayerInventory.Player_Gold_Earned.ToString("F2") + "%";
-        moneyDescText[1].text = PlayerInventory.Gold_Cost.ToString("F2") + "%";
+        moneyDescText[0].text = (PlayerInventory.Player_Gold_Earned - 1.0d).ToString("P2");
+        moneyDescText[1].text = PlayerInventory.STAT_Gold_Cost.ToString("P2");
         /// 나뭇잎
-        moneyDescText[2].text = PlayerInventory.Player_Leaf_Earned.ToString("F2") + "%";
-        moneyDescText[3].text = PlayerInventory.Leaf_Cost.ToString("F2") + "%";
+        moneyDescText[2].text = (PlayerInventory.Player_Leaf_Earned - 1.0d).ToString("P2");
+        moneyDescText[3].text = PlayerInventory.STAT_Leaf_Cost.ToString("P2");
         /// 강화석
-        moneyDescText[4].text = PlayerInventory.EnchantStone_Earned.ToString("F2") + "%";
-        moneyDescText[5].text = PlayerInventory.EnchantStone_Cost.ToString("F2") + "%";
+        moneyDescText[4].text = (PlayerInventory.EnchantStone_Earned - 1.0d).ToString("P2");
+        moneyDescText[5].text = PlayerInventory.STAT_EnchantStone_Cost.ToString("P2");
         /// 수집
-        moneyDescText[6].text = PlayerInventory.Soozip_Gold_Earned.ToString("F2") + "%";
-        moneyDescText[7].text = PlayerInventory.Soozip_Powerup_Gold.ToString("F2") + "%";
-        moneyDescText[8].text = PlayerInventory.Soozip_Time.ToString("F2") + "%";
+        moneyDescText[6].text = (PlayerInventory.Soozip_Gold_Earned - 1.0d).ToString("P2");
+        moneyDescText[7].text = PlayerInventory.STAT_Soozip_Powerup_Gold.ToString("P2");
+        moneyDescText[8].text = PlayerInventory.Soozip_Time.ToString("F1") +" 초";
         /// 아마존 결정
-        moneyDescText[9].text = PlayerInventory.AmazonPoint_Earned.ToString("F2") + "%";
-        moneyDescText[10].text = PlayerInventory.AmazonPoint_Cost.ToString("F2") + "%";
+        moneyDescText[9].text = PlayerInventory.heart_equiped_amazonpoint_earned.ToString("F2") + " %";
+        moneyDescText[10].text = PlayerInventory.STAT_AmazonPoint_Cost.ToString("P2");
     }
 
     public void SetEtcInfoTail()
     {
         /// 몬스터
-        etcDescText[0].text = PlayerInventory.Monster_Normal_HP.ToString("F2") + "%";
-        etcDescText[1].text = PlayerInventory.Monster_Boss_HP.ToString("F2") + "%";
+        etcDescText[0].text = PlayerInventory.heart_equiped_monster_normal_HP.ToString("P2");
+        etcDescText[1].text = PlayerInventory.heart_equiped_monster_boss_HP.ToString("P2");
         /// 골드박스
-        etcDescText[2].text = PlayerInventory.Superbox_Gold_Earned.ToString("F2") + "%";
-        etcDescText[3].text = PlayerInventory.Superbox_Encounter.ToString("F2") + "%";
+        etcDescText[2].text = PlayerInventory.heart_equiped_superbox_gold_earned.ToString("P2");
+        etcDescText[3].text = PlayerInventory.heart_equiped_superbox_encounter.ToString("P2");
         /// 무기
-        etcDescText[4].text = PlayerInventory.Weapon_Lv_Plus.ToString("F2") + "%";
-        etcDescText[5].text = PlayerInventory.Weapon_owned_power.ToString("F2") + "%";
+        etcDescText[4].text = PlayerInventory.Weapon_Lv_Plus.ToString("+ 0");
+        etcDescText[5].text = PlayerInventory.Weapon_owned_power.ToString("P2");
         /// 오프라인
-        etcDescText[6].text = PlayerInventory.Offline_Earned.ToString("F2") + "%";
-        etcDescText[7].text = PlayerInventory.heart_equiped_offline_time.ToString("F2") + "%";
+        etcDescText[6].text = (PlayerInventory.Offline_Earned - 1.0d).ToString("P2");
+        etcDescText[7].text = (PlayerInventory.Offline_Time - 10800.0d).ToString("F1") + " 초";
         /// 숨겨진 늪지
-        etcDescText[8].text = PlayerInventory.Cave_Time.ToString("F2") + "%";
+        etcDescText[8].text = PlayerInventory.heart_equiped_cave_time.ToString("F1") + " 초";
         /// 피버타임
-        etcDescText[9].text = PlayerInventory.Fever_Time.ToString("F2") + "%";
-        etcDescText[10].text = PlayerInventory.heart_equiped_fever_kill_cost.ToString("F2") + "%";
-        etcDescText[11].text = PlayerInventory.Fever_Power.ToString("F2") + "%";
-        etcDescText[12].text = PlayerInventory.Fever_Attack_Speed.ToString("F2") + "%";
-        etcDescText[13].text = PlayerInventory.Fever_Move_Speed.ToString("F2") + "%";
+        etcDescText[9].text = PlayerInventory.heart_equiped_fever_time.ToString("F1") + " 초";
+        etcDescText[10].text = PlayerInventory.heart_equiped_fever_kill_cost.ToString("N0") + " 마리";
+        etcDescText[11].text = (PlayerInventory.Fever_Power - 1.0d).ToString("P2");
+        etcDescText[12].text = (PlayerInventory.Fever_Attack_Speed - 1.0d).ToString("P2");
+        etcDescText[13].text = (PlayerInventory.Fever_Move_Speed - 1.0d).ToString("P2");
     }
 
 

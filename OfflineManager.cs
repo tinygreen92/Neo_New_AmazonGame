@@ -96,18 +96,19 @@ public class OfflineManager : MonoBehaviour
             int reHours = resultTime.Hours;
             int reMinutes = resultTime.Minutes;
             int reSeconds = resultTime.Seconds;
+            /// 초단위
             int maxTime = Mathf.RoundToInt((float)PlayerInventory.Offline_Time);
-            /// 3시간 넘거나 하루가 지나면 최대치
-            if ((reHours * 60) + reMinutes >= maxTime || resultTime.Days > 0)
+            /// 3시간 넘거나 하루가 지나면 -> 최대치로 고정
+            if (reSeconds >= maxTime || resultTime.Days > 0)
             {
                 /// 최대치 일때
-                reHours = maxTime / 60;
-                reMinutes = maxTime % 60;
-                reSeconds = 0;
+                reHours = maxTime / 3600;
+                reMinutes = maxTime % 3600;
+                reSeconds = reMinutes % 60;
                 //
                 timerText.text = string.Format("{0:00}:{1:00}:{2:00}", reHours, reMinutes, reSeconds);
                 /// 실제 지급
-                CalOfflineReword(reHours * 3600);
+                CalOfflineReword(maxTime);
             }
             else
             {

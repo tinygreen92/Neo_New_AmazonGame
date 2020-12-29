@@ -100,6 +100,12 @@ public class HpBarManager : MonoBehaviour
     /// </summary>
     public void InvoGiveUP()
     {
+        var reDist = Mathf.RoundToInt((float)PlayerInventory.RecentDistance);
+        /// 10 스테이지 보스전이 아닌 상황에서 호출 되면 리턴
+        if (reDist % 10 != 0)         
+        {
+            return;
+        }
         bossBtn.GetComponent<Image>().sprite = bossSprit[0];            /// 포기 이미지 활성화
         bossBtn.GetChild(0).GetComponent<Text>().text = Lean.Localization.LeanLocalization.GetTranslationText("Battle_Scene_BossGiveUP"); ;            /// 포기 텍스트 활성화
         bossBtn.gameObject.SetActive(true);
@@ -109,6 +115,12 @@ public class HpBarManager : MonoBehaviour
     /// </summary>
     void InvoReFight()
     {
+        var reDist = Mathf.RoundToInt((float)PlayerInventory.RecentDistance);
+        /// 9 스테이지 보스전이 아닌 상황에서 호출 되면 리턴
+        if (reDist % 10 != 9)
+        {
+            return;
+        }
         bossBtn.GetComponent<Image>().sprite = bossSprit[1];            /// 전투시작 이미지 활성화
         bossBtn.GetChild(0).GetComponent<Text>().text = Lean.Localization.LeanLocalization.GetTranslationText("Battle_Scene_BossBtn"); ;            /// 전투시작 텍스트 활성화
         bossBtn.gameObject.SetActive(true);
@@ -153,7 +165,7 @@ public class HpBarManager : MonoBehaviour
         /// 현재 에너미 날려버림 && 내부에서 새 에너미 생성까지
         DistanceManager.instance.StopPlayer();
         /// 전투시작 버튼 활성화.
-        Invoke(nameof(InvoReFight), 0.25f);
+        Invoke(nameof(InvoReFight), 2.0f);
         //
         if (bossCo != null) StopCoroutine(bossCo);
         bossCo = null;
@@ -179,7 +191,7 @@ public class HpBarManager : MonoBehaviour
             Debug.LogWarning("포기 이미지 클릭 : " + PlayerInventory.RecentDistance);
             SetHpBarFill(1);
             EnableBossColor(false);
-            Invoke(nameof(InvoReFight), 0.25f);
+            Invoke(nameof(InvoReFight), 2.0f);
         }
         else    /// 전투시작 이미지 클릭
         {

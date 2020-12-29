@@ -7,10 +7,13 @@ public class ExpManager : MonoBehaviour
 {
     public Transform expParent;
     [Header("- 외부캐릭터 정보창")]
+    public Image infill;
     public Text lvText;
+    public Text lvfillText;
+    public Text infillText;
 
 
-    private static string LEVEL_TEXT = "Lv. ";
+    private static string LEVEL_TEXT = "Amazon Lv. ";
 
 
     public static ExpManager instance;
@@ -29,10 +32,21 @@ public class ExpManager : MonoBehaviour
         /// 외부 표기 레벨
         float calv = PlayerInventory.CurrentAmaLV;
 
-        expParent.GetChild(0).GetComponent<Image>().fillAmount = PlayerInventory.CurrentAmaValue / ((calv+1f) * 100f * (float)PlayerInventory.AmazonPoint_Cost);
+        infill.fillAmount = PlayerInventory.CurrentAmaValue / ((calv+1f) * 100f * (float)PlayerInventory.AmazonPoint_Cost);
         //expParent.GetChild(1).GetComponent<Text>().text = LEVEL_TEXT + calv.ToString("F0");
-        lvText.text = LEVEL_TEXT + calv.ToString("N0");
+        lvText.text = "Lv. " + calv.ToString("N0");
+        lvfillText.text = LEVEL_TEXT + calv.ToString("N0");
+        /// 결정수 텍스트 증가
+        infillText.text = "( " + PlayerInventory.CurrentAmaValue.ToString("N0") + " / " + ((calv + 1f) * 100f * (float)PlayerInventory.AmazonPoint_Cost).ToString("N0") + " )";
     }
+
+
+
+
+
+
+
+
     /// <summary>
     /// 테스트 버튼에 달라붙음
     /// </summary>
