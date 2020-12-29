@@ -5,6 +5,14 @@ using UnityEngine.UI;
 
 public class IAPManager : MonoBehaviour
 {
+    [Header("- 패키지 팝업 세팅")]
+    public Sprite[] PakageCons;
+    public GameObject PackGiftPop;
+    public GameObject[] PackCategory;
+    public Image[] btnImgs;
+    public Sprite EnableBtn;
+    public Sprite DisableBtn;
+    [Header("- 하위 매니저 땡겨오기")]
     public BannerAdPanelController bac;
     public BuffManager bm;
     public NanooManager nm;
@@ -17,6 +25,53 @@ public class IAPManager : MonoBehaviour
     //
     public Transform[] purcBtns;
     public int[] purchaseIndex;
+
+
+
+    public void ClickedPakageShop()
+    {
+        SwichPackageCatgory(0);
+        /// 팝업
+        PopUpManager.instance.ShowPopUP(30);
+    }
+
+    public void SwichPackageCatgory(int _index)
+    {
+        for (int i = 0; i < PackCategory.Length; i++)
+        {
+            PackCategory[i].SetActive(false);
+        }
+        PackCategory[_index].SetActive(true);
+        switch (_index)
+        {
+            case 0:
+                btnImgs[0].sprite = EnableBtn;
+                btnImgs[1].sprite = DisableBtn;
+                btnImgs[2].sprite = DisableBtn;
+                break;
+
+            case 1:
+                btnImgs[0].sprite = DisableBtn;
+                btnImgs[1].sprite = EnableBtn;
+                btnImgs[2].sprite = DisableBtn;
+                break;
+
+            case 2:
+                btnImgs[0].sprite = DisableBtn;
+                btnImgs[1].sprite = DisableBtn;
+                btnImgs[2].sprite = EnableBtn;
+                break;
+
+            default:
+                break;
+        }
+    }
+
+
+
+
+
+
 
     /// <summary>
     /// 외부에서 자신의 인덱스로 호출하는 구매요청
@@ -109,6 +164,35 @@ public class IAPManager : MonoBehaviour
         PopUpManager.instance.ShowPopUP(13);
     }
 
+    public void Test_Purchase_Pakage(int _indx)
+    {
+        purchaseIndex[3] = _indx;
+    }
+
+    public void Purchase_Pakage(int _indx)
+    {
+        ShutUpMalpoi();
+        /// 청약철회 오브젝트 살려줌
+        DescObject.text = LeanLocalization.GetTranslationText("Shop_Desc");
+
+        IconImg.sprite = PakageCons[_indx];
+        IconDesc.text = "";
+
+        if (LeanLocalization.CurrentLanguage == "Korean")
+        {
+            System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("ko-KR", false).NumberFormat;
+            purcBtns[3].GetComponentInChildren<Text>().text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].korPrice).ToString("C", numberFormat);
+        }
+        else
+        {
+            System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
+            purcBtns[3].GetComponentInChildren<Text>().text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].engPrice).ToString("C", numberFormat);
+        }
+        purchaseIndex[3] = _indx;
+        purcBtns[3].gameObject.SetActive(true);
+        PopUpManager.instance.ShowPopUP(13);
+    }
+
     /// <summary>
     /// 모든 버튼 setActive(false)
     /// </summary>
@@ -186,7 +270,8 @@ public class IAPManager : MonoBehaviour
                     break;
             }
         }
-        else if (purcBtns[2].gameObject.activeSelf)                                                                 /// 게임 내 다이아로 구매하는 클릭
+        /// 게임 내 다이아로 구매하는 클릭
+        else if (purcBtns[2].gameObject.activeSelf)                                                                 
         {
             /// 인벤토리 레드닷 켜주기
             RedDotManager.instance.RedDot[3].SetActive(true);
@@ -300,6 +385,61 @@ public class IAPManager : MonoBehaviour
                     break;
             }
         }
+        /// PACK) 일반 패키지 또는 한정 패키지
+        else if (purcBtns[3].gameObject.activeSelf || purcBtns[4].gameObject.activeSelf)
+        {
+            PackGiftPop.SetActive(true);
+            switch (purchaseIndex[3])
+            {
+                case 0:
+                    Purchase_Product_pack_01();
+                    break;
+
+                case 1:
+                    Purchase_Product_pack_02();
+                    break;
+
+                case 2:
+                    Purchase_Product_pack_03();
+                    break;
+
+                case 3:
+                    Purchase_Product_pack_04();
+                    break;
+
+                case 4:
+                    Purchase_Product_pack_05();
+                    break;
+
+                case 5:
+                    Purchase_Product_pack_06();
+                    break;
+
+                case 6:
+                    Purchase_Product_pack_07();
+                    break;
+
+                case 7:
+                    Purchase_Product_pack_08();
+                    break;
+
+                case 8:
+                    Purchase_Product_pack_09();
+                    break;
+
+                case 9:
+                    Purchase_Product_pack_10();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        /// PACK) 연속 패키지
+        else if (purcBtns[5].gameObject.activeSelf)
+        {
+
+        }
     }
 
     private int tmpStone = 0;
@@ -359,7 +499,7 @@ public class IAPManager : MonoBehaviour
             /// 정상 구매 되었으면 몽땅 세이브
             PlayerPrefsManager.instance.TEST_SaveJson();
         }
-        /// 패키지 상점이에용
+        /// TODO : 패키지 상점이에용
         else
         {
 
@@ -451,24 +591,40 @@ public class IAPManager : MonoBehaviour
 
 
 
-            /// 패키집 상점
-            case EM_IAPConstants.Product_package_beginner: SetPopContents(sim.PackCons[0], 1,0, 3);
-                break;
-            case EM_IAPConstants.Product_package_1000:SetPopContents(sim.PackCons[1], 1,0, 3);
-                break;
-            case EM_IAPConstants.Product_package_starter:SetPopContents(sim.PackCons[2], 1,0, 3);
-                break;
-            case EM_IAPConstants.Product_package_standard:SetPopContents(sim.PackCons[3], 1,0, 3);
-                break;
-            case EM_IAPConstants.Product_package_levelup:SetPopContents(sim.PackCons[4], 1,0, 3);
-                break;
-            case EM_IAPConstants.Product_package_crazy:SetPopContents(sim.PackCons[5], 1,0, 3);
-                break;
-            case EM_IAPConstants.Product_package_reinforce:SetPopContents(sim.PackCons[6], 1,0, 3);
+            /// 패키지 상점
+            case EM_IAPConstants.Product_pack_01:
+                //SetPopContents(sim.PackCons[0], 1, 0, 3);
+                /// TODO : 외부 매니저를 끌어오지 그냥?
+
                 break;
 
-
-
+            case EM_IAPConstants.Product_pack_02:
+                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                break;
+            case EM_IAPConstants.Product_pack_03:
+                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                break;
+            case EM_IAPConstants.Product_pack_04:
+                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                break;
+            case EM_IAPConstants.Product_pack_05:
+                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                break;
+            case EM_IAPConstants.Product_pack_06:
+                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                break;
+            case EM_IAPConstants.Product_pack_07:
+                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                break;
+            case EM_IAPConstants.Product_pack_08:
+                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                break;
+            case EM_IAPConstants.Product_pack_09:
+                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                break;
+            case EM_IAPConstants.Product_pack_10:
+                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                break;
             default:
                 break;
         }
@@ -559,55 +715,86 @@ public class IAPManager : MonoBehaviour
         InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
         InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
     }
-    void Purchase_Product_package_beginner()
+
+
+
+    /// ----------------------------------------------------------- 패키지 상점 목록
+
+
+
+    void Purchase_Product_pack_01()
     {
-        InAppPurchasing.Purchase(EM_IAPConstants.Product_package_beginner);
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_pack_01);
         // 핸들러 등록
         InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
         InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
     }
-    void Purchase_Product_package_1000()
+    void Purchase_Product_pack_02()
     {
-        InAppPurchasing.Purchase(EM_IAPConstants.Product_package_1000);
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_pack_02);
         // 핸들러 등록
         InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
         InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
     }
-    void Purchase_Product_package_starter()
+    void Purchase_Product_pack_03()
     {
-        InAppPurchasing.Purchase(EM_IAPConstants.Product_package_starter);
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_pack_03);
         // 핸들러 등록
         InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
         InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
     }
-    void Purchase_Product_package_standard()
+    void Purchase_Product_pack_04()
     {
-        InAppPurchasing.Purchase(EM_IAPConstants.Product_package_standard);
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_pack_04);
         // 핸들러 등록
         InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
         InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
     }
-    void Purchase_Product_package_levelup()
+    void Purchase_Product_pack_05()
     {
-        InAppPurchasing.Purchase(EM_IAPConstants.Product_package_levelup);
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_pack_05);
         // 핸들러 등록
         InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
         InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
     }
-    void Purchase_Product_package_crazy()
+    void Purchase_Product_pack_06()
     {
-        InAppPurchasing.Purchase(EM_IAPConstants.Product_package_crazy);
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_pack_06);
         // 핸들러 등록
         InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
         InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
     }
-    void Purchase_Product_package_reinforce()
+    void Purchase_Product_pack_07()
     {
-        InAppPurchasing.Purchase(EM_IAPConstants.Product_package_reinforce);
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_pack_07);
         // 핸들러 등록
         InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
         InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
     }
+    void Purchase_Product_pack_08()
+    {
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_pack_08);
+        // 핸들러 등록
+        InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
+        InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
+    }
+    void Purchase_Product_pack_09()
+    {
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_pack_09);
+        // 핸들러 등록
+        InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
+        InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
+    }
+    void Purchase_Product_pack_10()
+    {
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_pack_10);
+        // 핸들러 등록
+        InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
+        InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
+    }
+
+
+
 
     #endregion
 

@@ -17,7 +17,8 @@ public class ShopItemManager : MonoBehaviour
     public Sprite[] DiaiCons;
     public Sprite[] SpeciCons;
     public Sprite[] NoriCons;
-    public Sprite[] PackCons;
+    public Sprite[] PackFrontCons;
+    public Sprite[] PackBackCons;
     public Image spriteBox;
     [Header("- 정보 표기 부분")]
     public Text NameBox;

@@ -72,6 +72,7 @@ public class CaveManager : MonoBehaviour
     /// </summary>
     public void AddCaveRunCount()
     {
+        PlayerPrefsManager.isEnterTheSwamp = true;
         /// 가장 높은 스테이지  currentMyDan 세팅
         GetCurrentTryStage();
         /// 이전 다음 버튼 세팅 + 팝업 내용물 세팅
@@ -479,7 +480,7 @@ public class CaveManager : MonoBehaviour
     public void BugFixer()
     {
         PlayerPrefsManager.isEnterTheSwamp = false;
-        DistanceManager.instance.StopPlayer();
+        DistanceManager.instance.CaveCancelPlayer();
     }
 
 
@@ -495,7 +496,6 @@ public class CaveManager : MonoBehaviour
         if (_isLeft)
         {
             easyRellyText.text = LeanLocalization.GetTranslationText("Enter_The_Swapm_Enter");
-            PlayerPrefsManager.isEnterTheSwamp = true;
         }
         else
         {

@@ -98,8 +98,9 @@ public class OfflineManager : MonoBehaviour
             int reSeconds = resultTime.Seconds;
             /// 초단위
             int maxTime = Mathf.RoundToInt((float)PlayerInventory.Offline_Time);
+            Debug.LogWarning("maxTime : " + maxTime + " resultTime.TotalSeconds : " + resultTime.TotalSeconds);
             /// 3시간 넘거나 하루가 지나면 -> 최대치로 고정
-            if (reSeconds >= maxTime || resultTime.Days > 0)
+            if (resultTime.TotalSeconds >= maxTime || resultTime.Days > 0)
             {
                 /// 최대치 일때
                 reHours = maxTime / 3600;

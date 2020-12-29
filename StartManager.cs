@@ -49,7 +49,7 @@ public class StartManager : MonoBehaviour
             // Ask if user wants to exit
             NativeUI.AlertPopup alert = NativeUI.ShowTwoButtonAlert("게임 종료",
                                             "탈출 아마존 : Escape the Amazon을 종료하시겠습니까?",
-                                            "확인",
+                                            "종료",
                                             "취소");
 
             if (alert != null)
