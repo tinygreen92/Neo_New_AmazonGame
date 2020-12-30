@@ -149,10 +149,11 @@ public class OfflineManager : MonoBehaviour
 
     /// <summary>
     /// 최대 거리 보스 HP 계산
+    /// 
     /// </summary>
     /// <param name="dtimeBae">이론상 최대거리</param>
     /// <returns></returns>
-    double GetLastBossHp(double dtimeBae) => 5d * (5d* 1.55d * dtimeBae) * PlayerInventory.Monster_Boss_HP;
+    double GetLastBossHp(double dtimeBae) => (0.1d * (dtimeBae * dtimeBae) + 0.1d * dtimeBae + 4.5d) * 3d * PlayerInventory.Monster_Boss_HP;
 
     /// <summary>
     /// 보상지급과 텍스트 표시 동시에 1분 단위 지급

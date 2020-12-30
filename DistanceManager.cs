@@ -141,7 +141,7 @@ public class DistanceManager : MonoBehaviour
             //Enemy_DropGold =  5d * (3d * 1.15d * reDist) * PlayerInventory.Player_Gold_Earned;
             //Enemy_Hp_Full = 5d * 5d * Mathf.Pow(1.07f, reDist - 1) * PlayerInventory.Monster_Boss_HP;
             //Enemy_DropGold = 3d * 3d * Mathf.Pow(1.05f, reDist - 1) * PlayerInventory.Player_Gold_Earned;
-            Enemy_Hp_Full = (0.15d * (reDist * reDist) + 0.15d * reDist + 4.5d) * 5d * PlayerInventory.Monster_Boss_HP;
+            Enemy_Hp_Full = (0.1d * (reDist * reDist) + 0.1d * reDist + 4.5d) * 3d * PlayerInventory.Monster_Boss_HP;
             Enemy_DropGold =  (3d * 1.15d * reDist) * 5d * PlayerInventory.Player_Gold_Earned;
             Debug.LogWarning("BOSS_Hp_Full : " + Enemy_Hp_Full + " BOSS_DropGold : " + Enemy_DropGold);
             //
@@ -153,7 +153,7 @@ public class DistanceManager : MonoBehaviour
             //Enemy_DropGold = (3d * 1.15d * reDist) * PlayerInventory.Player_Gold_Earned;
             //Enemy_Hp_Full = 0.25d * Mathf.Pow(1.07f, reDist) * PlayerInventory.Monster_Normal_HP;
             //Enemy_DropGold = 3d * Mathf.Pow(1.05f, reDist) * PlayerInventory.Player_Gold_Earned;
-            Enemy_Hp_Full = (0.15d * (reDist * reDist) + 0.15d * reDist + 4.5d) * PlayerInventory.Monster_Normal_HP;
+            Enemy_Hp_Full = (0.1d * (reDist * reDist) + 0.1d * reDist + 4.5d) * PlayerInventory.Monster_Normal_HP;
             Enemy_DropGold = (3d * 1.15d * reDist) * PlayerInventory.Player_Gold_Earned;
             Debug.LogWarning("Enemy_Hp_Full : " + Enemy_Hp_Full + " Enemy_DropGold : " + Enemy_DropGold);
 
