@@ -11,6 +11,7 @@ using UnityEngine.UI;
 
 public class PlayFabManage : MonoBehaviour
 {
+    public IntroManager im;
     public NanooManager nm;
     public PhotonChatManager pcm;
     [Header("- 닉네임 설정 자식 원투")]
@@ -75,7 +76,7 @@ public class PlayFabManage : MonoBehaviour
     {
         myDisplayName = obj.AccountInfo.TitleInfo.DisplayName;
 
-        if (myDisplayName == null || myDisplayName == myPlayFabId)          /// 닉네임 설정이 안되었다? 혹은 도중에 취소했다?
+        if (myDisplayName == null || myDisplayName == myPlayFabId)          /// 닉네임 설정이 안되었다 ||  혹은 도중에 취소했다 (임시로 구글 아이디로 저장)
         {
             PopUpManager.instance.ShowPopUP(5);                     /// 닉네임 설정 팝업창.
         }
@@ -86,6 +87,7 @@ public class PlayFabManage : MonoBehaviour
             /// 닉네임 설정되어 있네? 바로 접속
             pcm.PhotonStart(myDisplayName);
             nm.SetReNickName(myDisplayName);
+            PlayerPrefsManager.isNickNameComp = true;
         }
     }
 
@@ -105,9 +107,13 @@ public class PlayFabManage : MonoBehaviour
     /// </summary>
     public void OkayMyNick()
     {
+        /// 플레이팹 로딩 완료
+        PlayerPrefsManager.isLoadingComp = true;
+        /// 닉네임 세팅하고 게임 접속
         pcm.PhotonStart(myDisplayName);
         nm.SetReNickName(myDisplayName);
-        PlayerPrefsManager.isLoadingComp = true;
+        /// TODO : 인트로 만화 재생.
+        im.StartIntro();
     }
 
     /// <summary>

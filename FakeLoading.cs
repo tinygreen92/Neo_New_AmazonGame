@@ -62,7 +62,8 @@ public class FakeLoading : MonoBehaviour
             loadingBar.fillAmount = Mathf.SmoothStep(0.6f, 1f, currentTime);
             yield return null;
         }
-
+  
+        
         /// ------------------------------------------------
         /// -----화면 까기 전에 완료되어야 할 것 들--------
         /// ------------------------------------------------
@@ -102,6 +103,12 @@ public class FakeLoading : MonoBehaviour
             yield return null;
         }
 
+        while (!PlayerPrefsManager.isNickNameComp)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+        /// 페이크 로딩창 끄기.
+        gameObject.SetActive(false);
         /// 광고제거 했으면 배너 제거 + 속도 1.1배
         bac.Banner525Hide();
         /// 출석체크 동작
@@ -110,9 +117,6 @@ public class FakeLoading : MonoBehaviour
         om.OfflineInit();
         /// 접속하기 업적
         ListModel.Instance.DAYlist_Update(6);
-
-        /// 페이크 로딩창 끄기.
-        gameObject.SetActive(false);
     }
 
 

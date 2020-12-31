@@ -124,19 +124,16 @@ public class ShopItemManager : MonoBehaviour
             spriteBox.sprite = DiaiCons[_count];
             /// 그런거 없고 다이아상점도 2줄짜기 설명
             BoxActivating(false);
-            //if (LeanLocalization.CurrentLanguage == "Korean")
-            //{
-            //    System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("ko-KR", false).NumberFormat;
-            //    MidleDescBox.text = targetList[_count].korDesc;
-            //    KRWBox.text = System.Convert.ToInt64(targetList[_count].korPrice).ToString("C", numberFormat);
-            //}
-            //else
-            //{
-            //    System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
-            //    MidleDescBox.text = targetList[_count].engDesc;
-            //    KRWBox.text = System.Convert.ToInt64(targetList[_count].engPrice).ToString("C", numberFormat);
-            //}
-            //return;
+            if (LeanLocalization.CurrentLanguage == "Korean")
+            {
+                System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("ko-KR", false).NumberFormat;
+                KRWBox.text = System.Convert.ToInt64(targetList[_count].korPrice).ToString("C", numberFormat);
+            }
+            else
+            {
+                System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
+                KRWBox.text = System.Convert.ToInt64(targetList[_count].engPrice).ToString("C", numberFormat);
+            }
         }
 
         /// 두줄 짜리 설명 = 스페셜이랑 일반

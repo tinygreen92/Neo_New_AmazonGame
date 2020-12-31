@@ -115,18 +115,16 @@ public class NanooManager : MonoBehaviour
         {
             plugin.SetLanguage(Configure.PN_LANG_EN);
         }
-        /// 배너 오픈
-        OpenBanner();
-        /// 개인 기록 관련
-        StartCoroutine(MyRankiner());
         /// 텍스트 갱신
         outterNameText.text = _name;
         innerNameText.text = _name;
+        /// 개인 기록 관련
+        StartCoroutine(MyRankiner());
     }
 
     IEnumerator MyRankiner()
     {
-        while (!PlayerPrefsManager.isJObjectLoad)
+        while (!PlayerPrefsManager.isNickNameComp)
         {
             yield return new WaitForFixedUpdate();
         }
@@ -138,6 +136,9 @@ public class NanooManager : MonoBehaviour
             /// 개인 랭킹 갱신
             Invoke(nameof(ShowRankingPersonal), 2.0f);
         }
+
+        /// 배너 오픈
+        OpenBanner();
     }
 
 

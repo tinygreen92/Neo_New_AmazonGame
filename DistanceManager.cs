@@ -37,7 +37,7 @@ public class DistanceManager : MonoBehaviour
     {
         yield return null;
         /// 로딩창 없어질 때까지 행동하지 않음.
-        while (!PlayerPrefsManager.isLoadingComp)
+        while (!PlayerPrefsManager.isNickNameComp)
         {
             yield return new WaitForFixedUpdate();
         }

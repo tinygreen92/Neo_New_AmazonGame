@@ -3,12 +3,35 @@ using Lean.Localization;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable] // 이걸 적어줘야 인스펙터창에 나온다
+public class PackageData
+{
+    public Sprite titleIcon;   // pack_01...
+    [TextArea]
+    public string inner;  // 내용물 5개에서 7개 각각 스트링
+    [TextArea]
+    public string outter;  // 보너스 글자
+}
+
 public class IAPManager : MonoBehaviour
 {
+    [Header("- 패키지 데이터 스트링 뿌려줌")]
+    [SerializeField]
+    public PackageData[] pd;
+    [SerializeField]
+    public PackageData[] pdEng;                         // TODO : 글로벌 대응
+    [Space]
+    [Header("- 리얼리 팝업 세팅")]
+    public GameObject ComplPopup;
+    public Image ComplGifteIcon;
     [Header("- 패키지 팝업 세팅")]
-    public Sprite[] PakageCons;
     public GameObject PackGiftPop;
+    public Image packGiftIcon;
+    public Text innerPackText;
+    public Text outterPackText;
+    [Space]
     public GameObject[] PackCategory;
+    [Space]
     public Image[] btnImgs;
     public Sprite EnableBtn;
     public Sprite DisableBtn;
@@ -23,7 +46,9 @@ public class IAPManager : MonoBehaviour
     public Text DescObject;
     public Text GiftGetText;
     //
+    [Space]
     public Transform[] purcBtns;
+    [Space]
     public int[] purchaseIndex;
 
 
@@ -164,33 +189,76 @@ public class IAPManager : MonoBehaviour
         PopUpManager.instance.ShowPopUP(13);
     }
 
-    public void Test_Purchase_Pakage(int _indx)
+    /// <summary>
+    /// 인덱스와 해당 상품 가격까지 같이 받아옴 진짜 구입
+    /// </summary>
+    /// <param name="_indx"></param>
+    /// <param name="_wonhwa"></param>
+    public void Purchase_Pakage(int _indx, string _wonhwa)
     {
+        /// 긴 텍스트  받아와
+        var itemInfo = pd[_indx];
+        /// 리얼 구매에서 쓸것
         purchaseIndex[3] = _indx;
+        /// 내용물 채우기
+        packGiftIcon.sprite = itemInfo.titleIcon;
+        ComplGifteIcon.sprite = itemInfo.titleIcon;
+        innerPackText.text = itemInfo.inner;
+        outterPackText.text = itemInfo.outter;
+        /// 진짜 구매? 팝업 버튼 띄우기
+        PackGiftPop.SetActive(true);
     }
 
-    public void Purchase_Pakage(int _indx)
+    /// <summary>
+    /// 진짜 패키지 구매 버튼에 붙여줘라
+    /// </summary>
+    public void Clicked_Real_Pakege()
     {
-        ShutUpMalpoi();
-        /// 청약철회 오브젝트 살려줌
-        DescObject.text = LeanLocalization.GetTranslationText("Shop_Desc");
-
-        IconImg.sprite = PakageCons[_indx];
-        IconDesc.text = "";
-
-        if (LeanLocalization.CurrentLanguage == "Korean")
+        switch (purchaseIndex[3])
         {
-            System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("ko-KR", false).NumberFormat;
-            purcBtns[3].GetComponentInChildren<Text>().text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].korPrice).ToString("C", numberFormat);
+            case 0:
+                Purchase_Product_pack_01();
+                break;
+
+            case 1:
+                Purchase_Product_pack_02();
+                break;
+
+            case 2:
+                Purchase_Product_pack_03();
+                break;
+
+            case 3:
+                Purchase_Product_pack_04();
+                break;
+
+            case 4:
+                Purchase_Product_pack_05();
+                break;
+
+            case 5:
+                Purchase_Product_pack_06();
+                break;
+
+            case 6:
+                Purchase_Product_pack_07();
+                break;
+
+            case 7:
+                Purchase_Product_pack_08();
+                break;
+
+            case 8:
+                Purchase_Product_pack_09();
+                break;
+
+            case 9:
+                Purchase_Product_pack_10();
+                break;
+
+            default:
+                break;
         }
-        else
-        {
-            System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
-            purcBtns[3].GetComponentInChildren<Text>().text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].engPrice).ToString("C", numberFormat);
-        }
-        purchaseIndex[3] = _indx;
-        purcBtns[3].gameObject.SetActive(true);
-        PopUpManager.instance.ShowPopUP(13);
     }
 
     /// <summary>
@@ -388,52 +456,7 @@ public class IAPManager : MonoBehaviour
         /// PACK) 일반 패키지 또는 한정 패키지
         else if (purcBtns[3].gameObject.activeSelf || purcBtns[4].gameObject.activeSelf)
         {
-            PackGiftPop.SetActive(true);
-            switch (purchaseIndex[3])
-            {
-                case 0:
-                    Purchase_Product_pack_01();
-                    break;
 
-                case 1:
-                    Purchase_Product_pack_02();
-                    break;
-
-                case 2:
-                    Purchase_Product_pack_03();
-                    break;
-
-                case 3:
-                    Purchase_Product_pack_04();
-                    break;
-
-                case 4:
-                    Purchase_Product_pack_05();
-                    break;
-
-                case 5:
-                    Purchase_Product_pack_06();
-                    break;
-
-                case 6:
-                    Purchase_Product_pack_07();
-                    break;
-
-                case 7:
-                    Purchase_Product_pack_08();
-                    break;
-
-                case 8:
-                    Purchase_Product_pack_09();
-                    break;
-
-                case 9:
-                    Purchase_Product_pack_10();
-                    break;
-
-                default:
-                    break;
-            }
         }
         /// PACK) 연속 패키지
         else if (purcBtns[5].gameObject.activeSelf)
@@ -593,37 +616,44 @@ public class IAPManager : MonoBehaviour
 
             /// 패키지 상점
             case EM_IAPConstants.Product_pack_01:
-                //SetPopContents(sim.PackCons[0], 1, 0, 3);
-                /// TODO : 외부 매니저를 끌어오지 그냥?
-
+                ComplPopup.SetActive(true);
                 break;
 
             case EM_IAPConstants.Product_pack_02:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_03:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_04:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_05:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_06:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_07:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_08:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_09:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_10:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                ComplPopup.SetActive(true);
                 break;
             default:
                 break;
@@ -799,3 +829,4 @@ public class IAPManager : MonoBehaviour
     #endregion
 
 }
+

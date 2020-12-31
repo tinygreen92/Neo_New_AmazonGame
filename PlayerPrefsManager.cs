@@ -131,7 +131,8 @@ public class PlayerPrefsManager : MonoBehaviour
     /// </summary>
     public static ObscuredBool isAllmute;                           /// 오디오 매니저 입닥쳐
 
-    public static ObscuredBool isLoadingComp;                  /// 닉네임 정해졌니?
+    public static ObscuredBool isNickNameComp;                  /// 닉네임 정해졌니?
+    public static ObscuredBool isLoadingComp;                  /// 플레이팹 세팅 다됐니?
     public static ObscuredBool isTutorialClear;                  /// 첫 튜토리얼 완료했니?
     public static ObscuredBool isGetOfflineReword;                  /// 오프라인 보상 수령 했니?
 
