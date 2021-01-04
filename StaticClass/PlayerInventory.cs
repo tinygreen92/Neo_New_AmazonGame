@@ -345,7 +345,7 @@ public static class PlayerInventory
     /// </summary>
     /// <param name="_index"></param>
     /// <returns></returns>
-    static ObscuredInt Pet_lv(ObscuredInt _index)
+    public static ObscuredInt Pet_lv(ObscuredInt _index)
     {
         return int.Parse(ListModel.Instance.petList[_index].petLevel);
     }

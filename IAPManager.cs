@@ -1,5 +1,6 @@
 ﻿using EasyMobile;
 using Lean.Localization;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,9 @@ public class PackageData
 
 public class IAPManager : MonoBehaviour
 {
+    [Header("- 패키지 내용물 숫자 ")]
+    public int[] front5Amount;
+    public int[] back7Amount;
     [Header("- 패키지 데이터 스트링 뿌려줌")]
     [SerializeField]
     public PackageData[] pd;
@@ -29,6 +33,7 @@ public class IAPManager : MonoBehaviour
     public Image packGiftIcon;
     public Text innerPackText;
     public Text outterPackText;
+    public Text btnPackText;
     [Space]
     public GameObject[] PackCategory;
     [Space]
@@ -194,8 +199,16 @@ public class IAPManager : MonoBehaviour
     /// </summary>
     /// <param name="_indx"></param>
     /// <param name="_wonhwa"></param>
-    public void Purchase_Pakage(int _indx, string _wonhwa)
+    public void Purchase_Pakage(int _indx, string _wonhwa, int[] _amount)
     {
+        if (_indx < 5)
+        {
+            front5Amount = _amount;
+        }
+        else
+        {
+            back7Amount = _amount;
+        }
         /// 긴 텍스트  받아와
         var itemInfo = pd[_indx];
         /// 리얼 구매에서 쓸것
@@ -205,6 +218,17 @@ public class IAPManager : MonoBehaviour
         ComplGifteIcon.sprite = itemInfo.titleIcon;
         innerPackText.text = itemInfo.inner;
         outterPackText.text = itemInfo.outter;
+        /// 버튼 가격 채우기
+        if (LeanLocalization.CurrentLanguage == "Korean")
+        {
+            System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("ko-KR", false).NumberFormat;
+            btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].korPrice).ToString("C", numberFormat);
+        }
+        else
+        {
+            System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
+            btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].engPrice).ToString("C", numberFormat);
+        }
         /// 진짜 구매? 팝업 버튼 띄우기
         PackGiftPop.SetActive(true);
     }
@@ -616,43 +640,66 @@ public class IAPManager : MonoBehaviour
 
             /// 패키지 상점
             case EM_IAPConstants.Product_pack_01:
+                StartCoroutine(Front5());
                 ComplPopup.SetActive(true);
                 break;
 
             case EM_IAPConstants.Product_pack_02:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                StartCoroutine(Front5());
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_03:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                StartCoroutine(Front5());
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_04:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                StartCoroutine(Front5());
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_05:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                StartCoroutine(Notouch(0));
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_06:
+                StartCoroutine(Notouch(1));
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_07:
-                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                nm.PostboxItemSend("stone", 15, "");
+                PlayerInventory.isSuperUser = 525;
+                ListModel.Instance.mvpDataList[0].SuperUser = 525;
+                bac.Banner525Hide();
+                PlayerInventory.SetBuffStack(1);
+                bm.MoneyLoveBuff(0);
+                PlayerInventory.SetBuffStack(2);
+                bm.MoneyLoveBuff(1);
+                PlayerInventory.SetBuffStack(3);
+                bm.MoneyLoveBuff(2);
+                PlayerInventory.SetBuffStack(4);
+                bm.MoneyLoveBuff(3);
+                /// 플레이팹에 상태 저장
+                GameObject.FindWithTag("PFM").GetComponent<PlayFabManage>().SetUserData();
+                PlayerPrefs.Save();
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_08:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                StartCoroutine(Back7());
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_09:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                StartCoroutine(Back7());
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_10:
                 //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                StartCoroutine(Back7());
                 ComplPopup.SetActive(true);
                 break;
             default:
@@ -664,6 +711,74 @@ public class IAPManager : MonoBehaviour
         /// 정상 구매 되었으면 몽땅 세이브
         PlayerPrefsManager.instance.TEST_SaveJson();
     }
+
+
+    IEnumerator Notouch(int _index)
+    {
+        if (_index == 0)
+        {
+            yield return null;
+            nm.PostboxItemSend("weapon_coupon", 100, "");
+            yield return null;
+            nm.PostboxItemSend("reinforce", 10000, "");
+            yield return null;
+            nm.PostboxItemSend("mining", 50, "");
+            yield return null;
+            nm.PostboxItemSend("amber", 100, "");
+            yield return null;
+            nm.PostboxItemSend("stone", 150, "");
+            yield return null;
+        }
+        else
+        {
+            yield return null;
+            nm.PostboxItemSend("diamond", 1000, "");
+            yield return null;
+            nm.PostboxItemSend("elixr", 5, "");
+            yield return null;
+            nm.PostboxItemSend("leaf", 5000, "");
+            yield return null;
+            nm.PostboxItemSend("reinforce", 2500, "");
+            yield return null;
+            nm.PostboxItemSend("stone", 5, "");
+            yield return null;
+        }
+    }
+
+    IEnumerator Front5()
+    {
+        yield return null;
+        nm.PostboxItemSend("diamond", front5Amount[0], "");
+        yield return null;
+        nm.PostboxItemSend("elixr", front5Amount[1], "");
+        yield return null;
+        nm.PostboxItemSend("cave_clear", front5Amount[2], "");
+        yield return null;
+        nm.PostboxItemSend("mining", front5Amount[3], "");
+        yield return null;
+        nm.PostboxItemSend("stone", front5Amount[4], "");
+        yield return null;
+    }
+
+    IEnumerator Back7()
+    {
+        yield return null;
+        nm.PostboxItemSend("diamond", back7Amount[0], "");
+        yield return null;
+        nm.PostboxItemSend("elixr", back7Amount[1], "");
+        yield return null;
+        nm.PostboxItemSend("leaf", back7Amount[2], "");
+        yield return null;
+        nm.PostboxItemSend("reinforce", back7Amount[3], "");
+        yield return null;
+        nm.PostboxItemSend("cave_clear", back7Amount[4], "");
+        yield return null;
+        nm.PostboxItemSend("mining", back7Amount[5], "");
+        yield return null;
+        nm.PostboxItemSend("stone", back7Amount[6], "");
+        yield return null;
+    }
+
 
 
     #region <현금결제_상품_목록>

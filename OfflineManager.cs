@@ -63,7 +63,7 @@ public class OfflineManager : MonoBehaviour
                 isPaused = false;
                 /* 앱이 활성화 되었을 때 처리 */
                 /// TODO : 오프라인 보상 처리
-                OfflineInit();
+                //OfflineInit();
             }
         }
     }

@@ -196,31 +196,31 @@ public class DailyManager : MonoBehaviour
         {
             case 0: nm.PostboxDailySend("weapon_coupon", 2); break;
             case 1: nm.PostboxDailySend("cave", 2); break;
-            case 2: nm.PostboxDailySend("reinforce_box", 1); break;
+            case 2: nm.PostboxDailySend("reinforce_box", 3); break;
             case 3: nm.PostboxDailySend("cave_clear", 2); break;
             case 4: nm.PostboxDailySend("diamond", 100); break;
 
             case 5: nm.PostboxDailySend("weapon_coupon", 2); break;
             case 6: nm.PostboxDailySend("cave", 2); break;
-            case 7: nm.PostboxDailySend("leaf_box", 1); break;
+            case 7: nm.PostboxDailySend("leaf_box", 5); break;
             case 8: nm.PostboxDailySend("cave_clear", 2); break;
             case 9: nm.PostboxDailySend("diamond", 100); break;
 
             case 10: nm.PostboxDailySend("weapon_coupon", 2); break;
             case 11: nm.PostboxDailySend("cave", 2); break;
-            case 12: nm.PostboxDailySend("reinforce_box", 1); break;
+            case 12: nm.PostboxDailySend("reinforce_box", 3); break;
             case 13: nm.PostboxDailySend("cave_clear", 2); break;
             case 14: nm.PostboxDailySend("diamond", 100); break;
 
             case 15: nm.PostboxDailySend("weapon_coupon", 2); break;
             case 16: nm.PostboxDailySend("cave", 2); break;
-            case 17: nm.PostboxDailySend("leaf_box", 1); break;
+            case 17: nm.PostboxDailySend("leaf_box", 5); break;
             case 18: nm.PostboxDailySend("cave_clear", 2); break;
             case 19: nm.PostboxDailySend("diamond", 100); break;
 
             case 20: nm.PostboxDailySend("weapon_coupon", 5); break;
             case 21: nm.PostboxDailySend("cave", 4); break;
-            case 22: nm.PostboxDailySend("elixr", 2); break;
+            case 22: nm.PostboxDailySend("elixr", 10); break;
             case 23: nm.PostboxDailySend("cave_clear", 4); break;
             case 24: nm.PostboxDailySend("diamond", 200); break;
 

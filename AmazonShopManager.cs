@@ -258,7 +258,7 @@ public class AmazonShopManager : MonoBehaviour
         /// 아마존 레벨 달성 보상
         PlayerInventory.Money_AmazonCoin += PlayerPrefsManager.ZogarkMissionCnt;
         /// 아마존 결정 조각 획득 팝업
-        PopUpManager.instance.ShowGetPop(5, PlayerPrefsManager.ZogarkMissionCnt.ToString());
+        PopUpManager.instance.ShowGetPop(10, PlayerPrefsManager.ZogarkMissionCnt.ToString());
         /// 미션 카운터 늘려줌
         PlayerPrefsManager.ZogarkMissionCnt += 5;
         /// 새로고침
@@ -350,7 +350,7 @@ public class AmazonShopManager : MonoBehaviour
         ListModel.Instance.ALLlist_Update(2, tmpReword);
         _AdsComp = false;
         /// 결정 조각 팝업 
-        PopUpManager.instance.ShowGetPop(5, tmpReword.ToString());
+        PopUpManager.instance.ShowGetPop(10, tmpReword.ToString());
         /// 팝업 꺼주기
         TopViewClicked(true);
         PopUpManager.instance.HidePopUP(26);

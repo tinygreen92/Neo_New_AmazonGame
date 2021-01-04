@@ -1,9 +1,11 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class WeaponItem : MonoBehaviour
 {
+    public Image[] passOrFail;
     public WeaponManager sm;
     [Header("- 회색 커버 오브젝트")]
     public GameObject GrayImage;
@@ -329,11 +331,12 @@ public class WeaponItem : MonoBehaviour
             {
                 thisLevel++;
                 ListModel.Instance.Weapon_LvUP(_index, thisLevel);
+                EnchantPassOrFail(true);
             }
             /// 강화 실패는 여기로
             else
             {
-
+                EnchantPassOrFail(false);
             }
 
         }
@@ -355,7 +358,30 @@ public class WeaponItem : MonoBehaviour
         }
     }
 
-
+    void EnchantPassOrFail(bool _ispass)
+    {
+        if (_ispass)
+        {
+            passOrFail[1].DOFade(0, 0);
+            passOrFail[1].gameObject.SetActive(true);
+            passOrFail[1].DOFade(0.7f, 0.3f).SetEase(Ease.OutElastic);
+            passOrFail[2].gameObject.SetActive(true);
+            passOrFail[2].DOFade(0, 0);
+            passOrFail[2].DOFade(1, 0.3f).SetEase(Ease.OutBack).OnComplete(ShutUPEnchant);
+        }
+        else
+        {
+            passOrFail[0].DOFade(0, 0);
+            passOrFail[0].gameObject.SetActive(true);
+            passOrFail[0].DOFade(0.7f, 0.3f).SetEase(Ease.OutElastic).OnComplete(ShutUPEnchant);
+        }
+    }
+    private void ShutUPEnchant()
+    {
+        passOrFail[0].gameObject.SetActive(false);
+        passOrFail[1].gameObject.SetActive(false);
+        passOrFail[2].gameObject.SetActive(false);
+    }
     private void Update()
     {
         if (sm.ModeName == 3 && thisLevel <= 100) return;

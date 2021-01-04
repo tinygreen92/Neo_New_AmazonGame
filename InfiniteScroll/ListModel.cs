@@ -39,7 +39,7 @@ public struct HeartContent
     public string heartLevel;                       // 현재 레벨
     public string maxLevel;                         // 최대 레벨
     public float powerToLvUP;                   // 레벨업 당 증가치
-    public double nextUpgradeNeed;     // 다음 업그레이드에 필요한 나뭇잎
+    public double nextUpgradeNeed;     // 나뭇잎 시작값
     public double leafToLvUP;                   // 나뭇잎 증가 공식
     public float dropTable;                         // 뽑기 확률
     public string descHead;                         // 능력치 설명 앞쪽

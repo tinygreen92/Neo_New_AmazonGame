@@ -1,9 +1,14 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PetItem : MonoBehaviour
 {
+    [Header("- 강화시 버튼 반짝")]
+    public Ease ease;
+    public Image[] passOrFail;
     public Button targetBtn;
+    [Header("- 매니저")]
     public PetManager sm;
     public BuffManager bm;
     [Header("- 회색 커버 오브젝트")]
@@ -153,8 +158,7 @@ public class PetItem : MonoBehaviour
             // 영구 타이머 미작동시 한번 실행
             if (sm.currentTimes[_index] == -1)
             {
-                // 골드획득 영구 타이머 작동 (0~19)
-                if (ListModel.Instance.petList[_index].isEnable != "TRUE")
+                if (ListModel.Instance.petList[_index].isEnable == "TRUE")
                 {
                     if (_index == 0)
                     {
@@ -163,6 +167,7 @@ public class PetItem : MonoBehaviour
                     else
                     {
                         bm.DieHardCoTimer(_index + 3);
+                        sm.PetAnimStart(_index);
                     }
                 }
             }
@@ -239,6 +244,7 @@ public class PetItem : MonoBehaviour
             else
             {
                 bm.DieHardCoTimer(_index + 3);
+                sm.PetAnimStart(_index);
             }
         }
         /// 다이아로 구매후엔 나뭇잎 강화.
@@ -276,6 +282,7 @@ public class PetItem : MonoBehaviour
                 /// 강화 성공은 여기로
                 if (random <= 100.7f - (thisLevel * 0.7f))
                 {
+                    EnchantPassOrFail(true);
                     Debug.LogWarning("펫 강화 성공! ");
                     thisLevel++;
                     ListModel.Instance.Pet_LevelUp(_index, thisLevel);
@@ -283,6 +290,7 @@ public class PetItem : MonoBehaviour
                 /// 강화 실패는 여기로
                 else
                 {
+                    EnchantPassOrFail(false);
                     Debug.LogWarning("강화 실패 ㅠㅠ  : ");
                 }
 
@@ -306,6 +314,7 @@ public class PetItem : MonoBehaviour
                 /// 강화 성공은 여기로
                 if (random <= 100.3f - (thisLevel * 0.3f))
                 {
+                    EnchantPassOrFail(true);
                     Debug.LogWarning("펫 강화 성공! ");
                     thisLevel++;
                     ListModel.Instance.Pet_LevelUp(_index, thisLevel);
@@ -313,6 +322,7 @@ public class PetItem : MonoBehaviour
                 /// 강화 실패는 여기로
                 else
                 {
+                    EnchantPassOrFail(false);
                     Debug.LogWarning("강화 실패 ㅠㅠ  : ");
                 }
 
@@ -344,6 +354,33 @@ public class PetItem : MonoBehaviour
         {
             glowEffect[i].SetActive(false);
         }
+    }
+
+
+    void EnchantPassOrFail(bool _ispass)
+    {
+        if (_ispass)
+        {
+            passOrFail[1].DOFade(0,0);
+            passOrFail[1].gameObject.SetActive(true);
+            passOrFail[1].DOFade(0.7f, 0.3f).SetEase(Ease.OutElastic);
+            passOrFail[2].gameObject.SetActive(true);
+            passOrFail[2].DOFade(0,0);
+            passOrFail[2].DOFade(1, 0.3f).SetEase(ease).OnComplete(ShutUPEnchant);
+        }
+        else
+        {
+            passOrFail[0].DOFade(0, 0);
+            passOrFail[0].gameObject.SetActive(true);
+            passOrFail[0].DOFade(0.7f, 0.3f).SetEase(Ease.OutElastic).OnComplete(ShutUPEnchant);
+        }
+    }
+
+    private void ShutUPEnchant()
+    {
+        passOrFail[0].gameObject.SetActive(false);
+        passOrFail[1].gameObject.SetActive(false);
+        passOrFail[2].gameObject.SetActive(false);
     }
 
     private void Update()

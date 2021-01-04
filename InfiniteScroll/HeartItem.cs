@@ -99,7 +99,7 @@ public class HeartItem : MonoBehaviour
             thisLevel = _MaxLv;
             return 0;
         }
-
+        /// 시작값.
         _MultiResult = ListModel.Instance.heartList[_index - 1].nextUpgradeNeed;
         // 다음 1레벨 / 다음 10레벨 / 다음 100레벨
         _MultiLv = muti + lv - 1;
@@ -113,7 +113,7 @@ public class HeartItem : MonoBehaviour
             double tmpMuti = 0;
             for (int i = thisLevel + 1; i < thisLevel + muti + 1; i++)
             {
-                tmpMuti += _MultiResult * (ListModel.Instance.heartList[_index - 1].leafToLvUP * i);
+                tmpMuti += _MultiResult * (1 + ListModel.Instance.heartList[_index - 1].leafToLvUP * i);
             }
             //_MultiResult *= ListModel.Instance.heartList[_index - 1].leafToLvUP * (_MultiLv - 1);
             _MultiResult = tmpMuti;
@@ -344,7 +344,7 @@ public class HeartItem : MonoBehaviour
     /// </summary>
     bool IsPurchaseable()
     {
-        if (PlayerInventory.Money_Leaf >= GetMutipleUpgrade(mutiple, thisLevel)) return true;
+        if (PlayerInventory.Money_Leaf >= PlayerInventory.Leaf_Cost * GetMutipleUpgrade(mutiple, thisLevel)) return true;
         else return false;
     }
 

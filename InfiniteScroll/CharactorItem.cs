@@ -105,7 +105,7 @@ public class CharactorItem : MonoBehaviour
             case 1:
                 ChractorLvUp(false);
                 DescBox[2].text = ListModel.Instance.charatorList[_index].description;
-                EffectBox[2].text = PlayerInventory.stat_power.ToString("F1");
+                EffectBox[2].text = PlayerInventory.stat_power.ToString("N0");
 
                 break;
 

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class BuffManager : MonoBehaviour
 {
+    public GameObject[] BuffEffect;
+    public PetManager pm;
     [Header("- 회색 이미지 위에 씌울 칼라 이미지들")]
     public Image[] filedImgs;
     /// <summary>
@@ -41,8 +43,15 @@ public class BuffManager : MonoBehaviour
         float maxTime;
 
         /// 펫이랑 상점 버프 구분
-        if (_id > 3) maxTime = ListModel.Instance.petList[_id - 3].usingTimeDam * int.Parse(ListModel.Instance.petList[_id - 3].petLevel);
-        else maxTime = SHOP_BUFF_TIME;
+        if (_id > 3)
+        {
+            maxTime = ListModel.Instance.petList[_id - 3].usingTimeDam * int.Parse(ListModel.Instance.petList[_id - 3].petLevel);
+        }
+        /// 상점 버프는 초 고정
+        else
+        {
+            maxTime = SHOP_BUFF_TIME;
+        }
 
         /// 버프 켜줌
         BuffOnOff(_id, true);
@@ -94,27 +103,35 @@ public class BuffManager : MonoBehaviour
         {
             case 0:
                 PlayerInventory.dia_power_up = _sw;
+                if(_sw) PlayEffectPetBuff(0);
                 break;
             case 1:
                 PlayerInventory.dia_attack_speed_up = _sw;
+                if (_sw) PlayEffectPetBuff(1);
                 break;
             case 2:
                 PlayerInventory.dia_move_speed_up = _sw;
+                if (_sw) PlayEffectPetBuff(2);
                 break;
             case 3:
                 PlayerInventory.dia_gold_earned_up = _sw;
+                if (_sw) PlayEffectPetBuff(3);
                 break;
             case 4:
                 PlayerInventory.ispet_equiped_power = _sw;
+                if (_sw) pm.PlayEffectPetBuff(1);
                 break;
             case 5:
                 PlayerInventory.ispet_equiped_attack_speed = _sw;
+                if (_sw) pm.PlayEffectPetBuff(2);
                 break;
             case 6:
                 PlayerInventory.ispet_equiped_move_speed = _sw;
+                if (_sw) pm.PlayEffectPetBuff(3);
                 break;
             case 7:
                 PlayerInventory.ispet_equiped_gold_earned = _sw;
+                if (_sw) pm.PlayEffectPetBuff(4);
                 break;
 
             default:
@@ -122,5 +139,21 @@ public class BuffManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 버프 이펙트 배틀 필드에 호출
+    /// </summary>
+    /// <param name="indx"></param>
+    public void PlayEffectPetBuff(int indx)
+    {
+        BuffEffect[indx].SetActive(true);
+        StartCoroutine(InvoEffect(indx));
+    }
+
+    IEnumerator InvoEffect(int indx)
+    {
+        yield return new WaitForSeconds(5);
+
+        BuffEffect[indx].SetActive(false);
+    }
 
 }

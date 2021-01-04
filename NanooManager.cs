@@ -124,7 +124,7 @@ public class NanooManager : MonoBehaviour
 
     IEnumerator MyRankiner()
     {
-        while (!PlayerPrefsManager.isNickNameComp)
+        while (!PlayerPrefsManager.isLoadingComp)
         {
             yield return new WaitForFixedUpdate();
         }
@@ -134,7 +134,7 @@ public class NanooManager : MonoBehaviour
             /// 랭킹 기록
             RecordRankDistance(Mathf.RoundToInt((float)PlayerInventory.RecentDistance) - 1);
             /// 개인 랭킹 갱신
-            Invoke(nameof(ShowRankingPersonal), 2.0f);
+            Invoke(nameof(ShowRankingPersonal), 5.0f);
         }
 
         /// 배너 오픈

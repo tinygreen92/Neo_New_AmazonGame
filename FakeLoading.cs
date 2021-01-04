@@ -18,6 +18,11 @@ public class FakeLoading : MonoBehaviour
     float lastTime = 3f;
     float alpha;
     // Start is called before the first frame update
+
+
+
+
+
     void Start()
     {
         /// 타이틀 이미지, 로딩바 뒷쪽 활성화
@@ -27,10 +32,35 @@ public class FakeLoading : MonoBehaviour
         selfimg = GetComponent<Image>();
         selfimg.enabled = true;
         loadingBar.fillAmount = 0;
+
         StartCoroutine(Loading());
-        
-        ///StartCoroutine(StartLoading());
     }
+    /// <summary>
+    /// 테스트 버튼에 붙이자 -> json 리셋후 종료
+    /// </summary>
+    void TEST_RESTE_JSON()
+    {
+        ListModel.Instance.supList.Clear();
+        ListModel.Instance.charatorList.Clear();
+        ListModel.Instance.invisibleheartList.Clear();
+        ListModel.Instance.invisibleruneList.Clear();
+        ListModel.Instance.weaponList.Clear();
+        ListModel.Instance.petList.Clear();
+        ListModel.Instance.shopList.Clear();
+        ListModel.Instance.shopListSPEC.Clear();
+        ListModel.Instance.shopListNOR.Clear();
+        ListModel.Instance.mineCraft.Clear();
+        //
+        CodeStage.AntiCheat.Storage.ObscuredPrefs.DeleteAll();
+        PlayerPrefs.DeleteAll();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit(); // 어플리케이션 종료
+#endif
+    }
+
 
     IEnumerator Loading()
     {

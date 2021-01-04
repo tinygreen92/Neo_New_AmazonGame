@@ -863,22 +863,22 @@ public class RuneManager : MonoBehaviour
         switch (_god)
         {
             case "LS4":
-                if (random < 5f) random = 100f;
-                else random = 95f;
+                if (random < 5f) random = 95f;
+                else random = 89;
                 break;
 
             case "L5":
-                if (random < 95f) random = 100f;
-                else random = 95f;
+                if (random < 95f) random = 95f;
+                else random = 100f;
                 break;
 
             case "RL4":
                 if (random < 10f) random = 100f;
-                else random = 80f;
+                else random = 95f;
                 break;
 
             case "R5":
-                random = 80f;
+                random = 100f;
                 break;
 
             default:

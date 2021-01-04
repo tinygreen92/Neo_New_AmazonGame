@@ -78,6 +78,7 @@ public class PlayFabManage : MonoBehaviour
 
         if (myDisplayName == null || myDisplayName == myPlayFabId)          /// 닉네임 설정이 안되었다 ||  혹은 도중에 취소했다 (임시로 구글 아이디로 저장)
         {
+            PopUpManager.instance.ShowPopUP(0);                     /// 개인정보 이용약관
             PopUpManager.instance.ShowPopUP(5);                     /// 닉네임 설정 팝업창.
         }
         else
@@ -91,6 +92,21 @@ public class PlayFabManage : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 이용약관
+    /// </summary>
+    public void OpenE_Dragon()
+    {
+        Application.OpenURL("https://docs.google.com/document/d/1UN7PaKHUl12bNxyPvG-JQ6Saevz4HxYJVSPXO60UsBs/edit?usp=sharing");
+    }
+
+    /// <summary>
+    /// 이용약관
+    /// </summary>
+    public void OpenDOG_DRAGON()
+    {
+        Application.OpenURL("https://docs.google.com/document/d/1HeDnju0OqyWmVDlB5R5w1W-md6hvrhPPlGqcTEWE2AA/edit?usp=sharing");
+    }
 
 
     /// <summary>
