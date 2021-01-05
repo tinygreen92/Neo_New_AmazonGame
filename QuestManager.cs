@@ -6,20 +6,23 @@ using UnityEngine.UI;
 
 public class QuestManager : MonoBehaviour
 {
+    public Image[] dayAllBtnImg;
+    public Sprite[] allBtnSprs;
+    [Space]
     public ScrollRect scBar1;
     public ScrollRect scBar2;
-
+    [Space]
     public Transform C5;
     public Transform C17;
-
-    public delegate void ChainFunc();       // 아웃라인 델리게이트
-    public ChainFunc chain;                 // 체인 메서드
-
+    [Space]
     public GameObject[] missonPanel;
     [HideInInspector]
     public bool isALLquest;
     [Header("-0은 회색 1은 파랑")]
     public Sprite[] BtnSprite;
+    //
+    public delegate void ChainFunc();       // 아웃라인 델리게이트
+    public ChainFunc chain;                 // 체인 메서드
 
     private void OnEnable()
     {
@@ -60,6 +63,7 @@ public class QuestManager : MonoBehaviour
         {
             C5.GetChild(i).GetComponent<MissionItem>().UpdateMission();
         }
+
     }
     public void QMc17Update()
     {

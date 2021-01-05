@@ -29,6 +29,8 @@ public class IAPManager : MonoBehaviour
     public GameObject ComplPopup;
     public Image ComplGifteIcon;
     [Header("- 패키지 팝업 세팅")]
+    public GameObject FreeGiftPop;
+    public GameObject DiaGiftPop;
     public GameObject PackGiftPop;
     public Image packGiftIcon;
     public Text innerPackText;
@@ -65,6 +67,10 @@ public class IAPManager : MonoBehaviour
         PopUpManager.instance.ShowPopUP(30);
     }
 
+    /// <summary>
+    /// 캐키지 상점 상단 탭 관리
+    /// </summary>
+    /// <param name="_index"></param>
     public void SwichPackageCatgory(int _index)
     {
         for (int i = 0; i < PackCategory.Length; i++)
@@ -72,6 +78,7 @@ public class IAPManager : MonoBehaviour
             PackCategory[i].SetActive(false);
         }
         PackCategory[_index].SetActive(true);
+        PackCategory[_index].GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
         switch (_index)
         {
             case 0:
@@ -199,7 +206,7 @@ public class IAPManager : MonoBehaviour
     /// </summary>
     /// <param name="_indx"></param>
     /// <param name="_wonhwa"></param>
-    public void Purchase_Pakage(int _indx, string _wonhwa, int[] _amount)
+    public void Purchase_Pakage(int _indx, int[] _amount)
     {
         if (_indx < 5)
         {
@@ -218,6 +225,48 @@ public class IAPManager : MonoBehaviour
         ComplGifteIcon.sprite = itemInfo.titleIcon;
         innerPackText.text = itemInfo.inner;
         outterPackText.text = itemInfo.outter;
+        /// 버튼 가격 채우기
+        if (LeanLocalization.CurrentLanguage == "Korean")
+        {
+            System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("ko-KR", false).NumberFormat;
+            btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].korPrice).ToString("C", numberFormat);
+        }
+        else
+        {
+            System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
+            btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].engPrice).ToString("C", numberFormat);
+        }
+        /// 진짜 구매? 팝업 버튼 띄우기
+        PackGiftPop.SetActive(true);
+    }
+
+    public void Purchase_Pakage(int _indx)
+    {
+        /// 긴 텍스트  받아와
+        var itemInfo = pd[_indx];
+        /// 내용물 채우기
+        packGiftIcon.sprite = itemInfo.titleIcon;
+        ComplGifteIcon.sprite = itemInfo.titleIcon;
+        innerPackText.text = itemInfo.inner;
+        outterPackText.text = itemInfo.outter;
+
+        /// 무료인지? 
+        if (_indx == 10 || _indx == 14 || _indx == 18)
+        {
+            /// 진짜 구매? 팝업 버튼 띄우기
+            FreeGiftPop.SetActive(true);
+            return;
+        }
+        /// 다이아 구매인지? 
+        else if (_indx == 11 || _indx == 12 || _indx == 15 || _indx == 16 || _indx == 19 || _indx == 20)
+        {
+            /// 진짜 구매? 팝업 버튼 띄우기
+            DiaGiftPop.SetActive(true);
+            return;
+        }
+
+        /// 현질 구매인지? 
+        purchaseIndex[3] = _indx;
         /// 버튼 가격 채우기
         if (LeanLocalization.CurrentLanguage == "Korean")
         {
@@ -280,10 +329,125 @@ public class IAPManager : MonoBehaviour
                 Purchase_Product_pack_10();
                 break;
 
-            default:
+            /// -----------------------------------------------------------------------------------
+
+            case 10:
+                break;
+            case 11:
+                PakageDiaItem(100);
+                break;
+            case 12:
+                PakageDiaItem(300);
+                break;
+            case 13:
+                Purchase_Product_day_01();
+                break;
+
+            /// -----------------------------------------------------------------------------------
+
+            case 14:
+                break;
+            case 15:
+                PakageDiaItem(500);
+                break;
+            case 16:
+                PakageDiaItem(700);
+                break;
+            case 17:
+                Purchase_Product_week_01();
+                break;
+
+            /// -----------------------------------------------------------------------------------
+
+            case 18:
+                break;
+            case 19:
+                PakageDiaItem(5000);
+                break;
+            case 20:
+                PakageDiaItem(5000);
+                break;
+            case 21:
+                Purchase_Product_month_01();
+                break;
+            case 22:
+                Purchase_Product_month_02();
+                break;
+            case 23:
+                Purchase_Product_month_03();
                 break;
         }
     }
+
+    /// <summary>
+    /// 다이아 가지고 있으면 패키지 구매 완료
+    /// </summary>
+    /// <param name="_Dia"></param>
+    void PakageDiaItem(int _Dia)
+    {
+        if (PlayerInventory.Money_Dia < _Dia)
+        {
+            /// 다이어 없으면 팝업?
+            return;
+        }
+        PlayerInventory.Money_Dia -= _Dia;
+        /// 템 지급
+        /// (_indx == 11 || _indx == 12 || _indx == 15 || _indx == 16 || _indx == 19 || _indx == 20)
+        switch (purchaseIndex[3])
+        {
+            case 11:
+                nm.PostboxItemSend("reinforce_box", 3, "");
+                break;
+            case 12:
+                nm.PostboxItemSend("reinforce_box", 10, "");
+                break;
+            case 15:
+                nm.PostboxItemSend("weapon_coupon", 10, "");
+                break;
+            case 16:
+                nm.PostboxItemSend("weapon_coupon", 15, "");
+                break;
+            case 19:
+                StartCoroutine(DiaDiaPack(0));
+                break;
+            case 20:
+                StartCoroutine(DiaDiaPack(1));
+                break;
+        }
+
+    }
+
+    IEnumerator DiaDiaPack(int _Index)
+    {
+        yield return null;
+        /// 0 이면 앞 1이면 뒤
+        if (_Index == 0)
+        {
+            nm.PostboxItemSend("reinforce_box", 50, "");
+            yield return null;
+            nm.PostboxItemSend("mining", 25, "");
+            yield return null;
+            nm.PostboxItemSend("amber", 25, "");
+            yield return null;
+        }
+        else
+        {
+            nm.PostboxItemSend("elixr", 50, "");
+            yield return null;
+            nm.PostboxItemSend("leaf_box", 25, "");
+            yield return null;
+            nm.PostboxItemSend("reinforce_box", 25, "");
+            yield return null;
+        }
+    }
+
+
+
+
+
+
+
+
 
     /// <summary>
     /// 모든 버튼 setActive(false)
@@ -702,6 +866,39 @@ public class IAPManager : MonoBehaviour
                 StartCoroutine(Back7());
                 ComplPopup.SetActive(true);
                 break;
+
+
+            case EM_IAPConstants.Product_day_01:
+                StartCoroutine(DailyPack());
+                ComplPopup.SetActive(true);
+                break;
+            case EM_IAPConstants.Product_week_01:
+                StartCoroutine(WeekPack());
+                ComplPopup.SetActive(true);
+                break;
+            case EM_IAPConstants.Product_month_01:
+                StartCoroutine(MonthPack(1));
+                ComplPopup.SetActive(true);
+                break;
+            case EM_IAPConstants.Product_month_02:
+                StartCoroutine(MonthPack(2));
+                ComplPopup.SetActive(true);
+                break;
+            case EM_IAPConstants.Product_month_03:
+                StartCoroutine(MonthPack(3));
+                ComplPopup.SetActive(true);
+                break;
+
+
+
+
+
+
+
+
+
+
+
             default:
                 break;
         }
@@ -777,6 +974,65 @@ public class IAPManager : MonoBehaviour
         yield return null;
         nm.PostboxItemSend("stone", back7Amount[6], "");
         yield return null;
+    }
+
+    IEnumerator DailyPack()
+    {
+        yield return null;
+        nm.PostboxItemSend("diamond", 100, "");
+        yield return null;
+        nm.PostboxItemSend("leaf_box", 1, "");
+        yield return null;
+        nm.PostboxItemSend("reinforce_box", 1, "");
+        yield return null;
+    }
+    IEnumerator WeekPack()
+    {
+        yield return null;
+        nm.PostboxItemSend("reinforce_box", 20, "");
+        yield return null;
+        nm.PostboxItemSend("amber", 5, "");
+        yield return null;
+        nm.PostboxItemSend("stone", 5, "");
+        yield return null;
+    }
+    IEnumerator MonthPack(int _Index)
+    {
+        yield return null;
+        /// 월간패키지 1, 2, 3
+        switch (_Index)
+        {
+            case 1:
+                nm.PostboxItemSend("weapon_coupon", 10, "");
+                yield return null;
+                nm.PostboxItemSend("reinforce_box", 10, "");
+                yield return null;
+                nm.PostboxItemSend("amber", 5, "");
+                yield return null;
+                nm.PostboxItemSend("stone", 10, "");
+                yield return null;
+                break;
+            case 2:
+                nm.PostboxItemSend("S_box", 1, "");
+                yield return null;
+                nm.PostboxItemSend("reinforce_box", 30, "");
+                yield return null;
+                nm.PostboxItemSend("mining", 10, "");
+                yield return null;
+                nm.PostboxItemSend("stone", 15, "");
+                yield return null;
+                break;
+            case 3:
+                nm.PostboxItemSend("S_box", 5, "");
+                yield return null;
+                nm.PostboxItemSend("reinforce_box", 100, "");
+                yield return null;
+                nm.PostboxItemSend("amber", 50, "");
+                yield return null;
+                nm.PostboxItemSend("stone", 70, "");
+                yield return null;
+                break;
+        }
     }
 
 
@@ -937,9 +1193,41 @@ public class IAPManager : MonoBehaviour
         InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
         InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
     }
-
-
-
+    void Purchase_Product_day_01()
+    {
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_day_01);
+        // 핸들러 등록
+        InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
+        InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
+    }
+    void Purchase_Product_week_01()
+    {
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_week_01);
+        // 핸들러 등록
+        InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
+        InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
+    }
+    void Purchase_Product_month_01()
+    {
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_month_01);
+        // 핸들러 등록
+        InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
+        InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
+    }
+    void Purchase_Product_month_02()
+    {
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_month_02);
+        // 핸들러 등록
+        InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
+        InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
+    }
+    void Purchase_Product_month_03()
+    {
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_month_03);
+        // 핸들러 등록
+        InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
+        InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
+    }
 
     #endregion
 

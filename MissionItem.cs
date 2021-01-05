@@ -41,6 +41,10 @@ public class MissionItem : MonoBehaviour
 
     private void OnEnable()
     {
+        /// 일단 모두 받기 회색
+        qm.dayAllBtnImg[0].sprite = qm.allBtnSprs[0];
+        qm.dayAllBtnImg[1].sprite = qm.allBtnSprs[0];
+        /// 업데이트
         UpdateMission();
     }
 
@@ -55,8 +59,7 @@ public class MissionItem : MonoBehaviour
 
         index = int.Parse(name);
 
-        /// top. 평생 미션일때 
-        /// bot. 일일 미션일때
+        ///                                                              top. 평생 미션일때 
         if (qm.isALLquest)
         {
             sd.wholeNumbers = false;
@@ -69,6 +72,8 @@ public class MissionItem : MonoBehaviour
                 thisBtn.sprite = qm.BtnSprite[1];
                 sd.value = 1f;
                 RedDotManager.instance.RedDot[5].SetActive(true);
+                /// 평생 미션 1 모두 받기 파랑 1
+                qm.dayAllBtnImg[1].sprite = qm.allBtnSprs[1];
             }
             else
             {
@@ -98,6 +103,7 @@ public class MissionItem : MonoBehaviour
                 titleText.text = ListModel.Instance.missionALLlist[index].engDesc;
             }
         }
+        ///                                                           bot. 일일 미션일때
         else
         {
             sd.wholeNumbers = true;
@@ -105,6 +111,8 @@ public class MissionItem : MonoBehaviour
             {
                 thisBtn.sprite = qm.BtnSprite[1];
                 RedDotManager.instance.RedDot[5].SetActive(true);
+                /// 일일 미션 0 모두 받기 파랑 1
+                qm.dayAllBtnImg[0].sprite = qm.allBtnSprs[1];
             }
             else
             {
@@ -181,6 +189,8 @@ public class MissionItem : MonoBehaviour
         ListModel.Instance.DAYlist_Update(0);
         /// 레드닷 끄기
         RedDotManager.instance.RedDot[5].SetActive(false);
+        /// 일일 미션 0 모두 받기 회색  0
+        qm.dayAllBtnImg[0].sprite = qm.allBtnSprs[0];
         /// 새로고침
         qm.QMc5Update();
         /// 스트링[] 몽땅 저장
@@ -208,6 +218,8 @@ public class MissionItem : MonoBehaviour
         //giftGetPop.SetActive(true);
         /// 레드닷 끄기
         RedDotManager.instance.RedDot[5].SetActive(false);
+        /// 평생 미션 1 모두 받기 회색  0
+        qm.dayAllBtnImg[1].sprite = qm.allBtnSprs[0];
         /// 새로고침
         qm.QMc17Update();
         /// 스트링[] 몽땅 저장
