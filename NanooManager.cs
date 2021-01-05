@@ -253,7 +253,7 @@ public class NanooManager : MonoBehaviour
     public void Postbox()
     {
         SystemPopUp.instance.LoopLoadingImg();
-        Invoke(nameof(InvoStopLoop), 1.0f);
+        Invoke(nameof(InvoStopLoop), 5.0f);
         int _index = 0;
         //
         string uid = string.Empty;
@@ -283,15 +283,16 @@ public class NanooManager : MonoBehaviour
 
                     _index++;
 
-                    if (_index > 19) break;
+                    /// 50개 까지만 인게임 표현 , 그 이상은 서버에 저장
+                    if (_index > 49) break;
                 }
 
-                Debug.Log("PostboxItem Sucess");
+                Debug.LogError("PostboxItem Sucess");
                 SystemPopUp.instance.StopLoopLoading();
             }
             else
             {
-                Debug.Log("PostboxItem Fail");
+                Debug.LogError("PostboxItem Fail");
                 SystemPopUp.instance.StopLoopLoading();
             }
         });

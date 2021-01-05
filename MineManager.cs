@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class MineManager : MonoBehaviour
 {
+    public Transform Pet_INFINITI;
     [Header(" - 안전 운행 뉴 팝업")]
     public GameObject[] innerNewPop;
     [Header(" - 잡다한거")]
@@ -270,6 +271,7 @@ public class MineManager : MonoBehaviour
 
     public void InvoMineEnter()
     {
+        PlayerPrefsManager.instance.TEST_SaveJson();
         /// 멈춰!!
         anim.StopPlayback();
         // 공격 애니메이션 정지
@@ -319,6 +321,7 @@ public class MineManager : MonoBehaviour
     /// </summary>
     public void InvoExitMine()
     {
+        PlayerPrefsManager.instance.TEST_SaveJson();
         /// 빨간 점 꺼주기
         RedDotManager.instance.RedDot[6].SetActive(false);
         /// 멈춰!!
@@ -346,6 +349,11 @@ public class MineManager : MonoBehaviour
         PopUpManager.instance.HidePopUP(23);
         /// 보급상자 다시 켜준다
         SupplyBoxPos.SetActive(true);
+        /// 펫 움직임 활성화.
+        for (int i = 1; i < Pet_INFINITI.childCount; i++)
+        {
+            Pet_INFINITI.GetChild(i).GetComponent<PetItem>().BoxInfoUpdate(i - 1);
+        }
     }
 
     private int adsIndex;
@@ -406,7 +414,9 @@ public class MineManager : MonoBehaviour
     bool _AdsComp;
     void Ads_FreeDiaCanvas()
     {
+        PlayerPrefsManager.instance.TEST_SaveJson();
         SystemPopUp.instance.LoopLoadingImg();
+        Invoke(nameof(InvoStopLoop), 5.0f);
 
         if (PlayerInventory.isSuperUser != 0)
         {
@@ -438,6 +448,11 @@ public class MineManager : MonoBehaviour
             Invoke(nameof(AdsInvo), 0.5f);
         }
 
+    }
+
+    void InvoStopLoop()
+    {
+        SystemPopUp.instance.StopLoopLoading();
     }
     // Event handler called when a rewarded ad has completed
     void AdsCompleated(RewardedAdNetwork network, AdPlacement location)

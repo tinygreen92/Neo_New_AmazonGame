@@ -240,6 +240,7 @@ public class CaveManager : MonoBehaviour
     /// </summary>
     void ClickedEnterSwamp()
     {
+        PlayerPrefsManager.instance.TEST_SaveJson();
         /// 팝업 꺼줌
         EasySunDaPop.SetActive(false);
         /// 보스 코루틴 꺼줌.
@@ -608,6 +609,8 @@ public class CaveManager : MonoBehaviour
             ///  강화석 업적 카운트 올리기
             ListModel.Instance.ALLlist_Update(5, tmpES);
         }
+
+        PlayerPrefsManager.instance.TEST_SaveJson();
     }
 
 
@@ -657,7 +660,10 @@ public class CaveManager : MonoBehaviour
     bool isSotangAds;
     public void Ads_Sotang()
     {
+        PlayerPrefsManager.instance.TEST_SaveJson();
         SystemPopUp.instance.LoopLoadingImg();
+        Invoke(nameof(InvoStopLoop), 5.0f);
+
         isSotangAds = true;
         if (PlayerInventory.isSuperUser != 0)
         {
@@ -684,7 +690,10 @@ public class CaveManager : MonoBehaviour
         }
     }
 
-
+    void InvoStopLoop()
+    {
+        SystemPopUp.instance.StopLoopLoading();
+    }
     /// <summary>
     /// 실제 광고를 봤다면 true
     /// </summary>
@@ -692,6 +701,7 @@ public class CaveManager : MonoBehaviour
     public void Ads_FreeDiaCanvas()
     {
         SystemPopUp.instance.LoopLoadingImg();
+        Invoke(nameof(InvoStopLoop), 5.0f);
 
         if (PlayerInventory.isSuperUser != 0)
         {
@@ -773,6 +783,8 @@ public class CaveManager : MonoBehaviour
         _AdsComp = false;
         isSotangAds = false;
         SystemPopUp.instance.StopLoopLoading();
+        PlayerPrefsManager.instance.TEST_SaveJson();
+
     }
 
     #endregion

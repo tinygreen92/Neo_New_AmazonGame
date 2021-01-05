@@ -32,6 +32,11 @@ public class EnemyController : MonoBehaviour
         else isFristClone = true;
     }
 
+    public void SetEnemy_Hp_Current(double current)
+    {
+        dEnemy_Hp_Current -= current;
+    }
+
     public void SetEnemyStat(double _hp, double _gold)
     {
         isAliveEnemy = true;

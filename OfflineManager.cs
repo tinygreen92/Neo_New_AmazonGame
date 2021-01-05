@@ -346,7 +346,9 @@ public class OfflineManager : MonoBehaviour
     bool _AdsComp;
     public void Ads_OffCanvas()
     {
+        PlayerPrefsManager.instance.TEST_SaveJson();
         SystemPopUp.instance.LoopLoadingImg();
+        Invoke(nameof(InvoStopLoop), 5.0f);
 
         if (PlayerInventory.isSuperUser != 0)
         {
@@ -368,6 +370,11 @@ public class OfflineManager : MonoBehaviour
             Invoke(nameof(AdsOffInvo), 0.5f);
         }
 
+    }
+
+    void InvoStopLoop()
+    {
+        SystemPopUp.instance.StopLoopLoading();
     }
     // Event handler called when a rewarded ad has completed
     void AdsOffCompleated(RewardedAdNetwork network, AdPlacement location)

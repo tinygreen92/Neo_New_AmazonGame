@@ -85,7 +85,8 @@ public class DailyManager : MonoBehaviour
             PopUpManager.instance.ShowPopUP(3);
             RedDotManager.instance.RedDot[4].SetActive(false);
             RedDotManager.instance.RedDot[7].SetActive(false);
-
+            /// 체크할 일자 테두리 활성화
+            btnPanelChild[PlayerPrefsManager.DailyCount_Cheak].GetChild(2).gameObject.SetActive(true);
             /// 클릭 버튼 활성화.
             invisibleDragon.SetActive(true);
         }
@@ -99,6 +100,7 @@ public class DailyManager : MonoBehaviour
         {
             btnPanelChild[i].GetChild(1).gameObject.SetActive(false); // 출첵완료 이미지 벗기기
         }
+
         /// ture 면 update문 실행
         isFristRun = true;
 
@@ -314,7 +316,7 @@ public class DailyManager : MonoBehaviour
             PlayerPrefsManager.DailyCount_Cheak = 0;
             for (int i = 0; i < btnPanelChild.Length; i++)
             {
-                btnPanelChild[i].GetChild(1).gameObject.SetActive(false); // 출첵완료 이미지
+                btnPanelChild[i].GetChild(1).gameObject.SetActive(false); // 출첵완료 이미지 벗겨줌
             }
         }
         /// 접속시간 보상 스택 0으로 초기화.

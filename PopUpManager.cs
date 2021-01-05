@@ -172,7 +172,9 @@ public class PopUpManager : MonoBehaviour
         // 하루 10회 제한
         if (PlayerPrefsManager.FreeDiaCnt > 9) return;
 
+        PlayerPrefsManager.instance.TEST_SaveJson();
         SystemPopUp.instance.LoopLoadingImg();
+        Invoke(nameof(InvoStopLoop), 5.0f);
 
         if (Advertising.IsRewardedAdReady(RewardedAdNetwork.MoPub, AdPlacement.Default))
         {
@@ -186,6 +188,10 @@ public class PopUpManager : MonoBehaviour
             Invoke(nameof(AdsInvo), 0.5f);
         }
 
+    }
+    void InvoStopLoop()
+    {
+        SystemPopUp.instance.StopLoopLoading();
     }
     // Event handler called when a rewarded ad has completed
     void AdsCompleated(RewardedAdNetwork network, AdPlacement location)

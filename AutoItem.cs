@@ -201,8 +201,10 @@ public class AutoItem : MonoBehaviour
         /// 채굴 완료
         else if (TargetImage[3].gameObject.activeSelf)
         {
-            /// 저장소 보상 획득
+            /// 저장소에 광물 보관
             sm.GetOverLoadReword(_index);
+            /// 저장소에 광물 보관된다 팝업
+            PopUpManager.instance.ShowGrobalPopUP(6);
         }
 
         // 글로우 모두 숨김
@@ -211,10 +213,6 @@ public class AutoItem : MonoBehaviour
         glowEffect[0].SetActive(true);
         glowEffect[1].SetActive(true);
     }
-
-
-
-
 
 
     /// <summary>

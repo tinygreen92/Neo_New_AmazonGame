@@ -752,7 +752,7 @@ public class IAPManager : MonoBehaviour
         yield return null;
         nm.PostboxItemSend("elixr", front5Amount[1], "");
         yield return null;
-        nm.PostboxItemSend("cave_clear", front5Amount[2], "");
+        nm.PostboxItemSend("cave", front5Amount[2], "");
         yield return null;
         nm.PostboxItemSend("mining", front5Amount[3], "");
         yield return null;

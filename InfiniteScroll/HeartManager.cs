@@ -26,8 +26,6 @@ public class HeartManager : MonoBehaviour
     {
         /// 다이아몬드 재화 처리 + 플레이팹 접속
         CalDiamondWithPlayfab();
-        /// 로딩 뺑글이 종료
-        Invoke(nameof(TESTLOOOOOOP), 0.5f);
         // 유물 안 뽑힌거 하나 집어서 인벤토리로 넣어줌.
         int random = Random.Range(0, ListModel.Instance.invisibleheartList.Count);
 
@@ -54,20 +52,10 @@ public class HeartManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 일정 시간 뒤에 뺑뻉이 꺼주기.
-    /// </summary>
-    public void TESTLOOOOOOP()
-    {
-        SystemPopUp.instance.StopLoopLoading();
-    }
-
-    /// <summary>
     /// 플레이팹에 접속하여 다이아몬드 빼오기
     /// </summary>
     private void CalDiamondWithPlayfab()
     {
-        /// TODO : 플레이팹 접속하기전 로딩 뺑뺑이 호출 StopLoopLoading
-        SystemPopUp.instance.LoopLoadingImg();
         PlayerInventory.Money_Dia -= 300;
         /// 유물 뽑기 1회 진행
         if (PlayerPrefsManager.currentTutoIndex == 20) ListModel.Instance.TUTO_Update(20);

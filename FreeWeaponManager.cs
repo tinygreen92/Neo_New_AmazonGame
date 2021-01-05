@@ -112,7 +112,9 @@ public class FreeWeaponManager : MonoBehaviour
     {
         if (PlayerPrefsManager.FreeWeaponCnt > 9) return;
 
+        PlayerPrefsManager.instance.TEST_SaveJson();
         SystemPopUp.instance.LoopLoadingImg();
+        Invoke(nameof(InvoStopLoop), 5.0f);
 
         if (Advertising.IsRewardedAdReady(RewardedAdNetwork.MoPub, AdPlacement.Default))
         {
@@ -129,6 +131,12 @@ public class FreeWeaponManager : MonoBehaviour
         }
 
     }
+
+    void InvoStopLoop()
+    {
+        SystemPopUp.instance.StopLoopLoading();
+    }
+
     // Event handler called when a rewarded ad has completed
     void AdsCompleated(RewardedAdNetwork network, AdPlacement location)
     {

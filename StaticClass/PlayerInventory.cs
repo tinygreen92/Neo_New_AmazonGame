@@ -959,13 +959,13 @@ public static class PlayerInventory
 
     /// <summary>
     /// 31. 오프라인 시간 증가 
-    /// 오프라인 시간 180분(10800초) + 유물 오프라인 시간 증가
+    /// 오프라인 시간 240분(14400초) + 유물 오프라인 시간 증가
     /// </summary>
     public static ObscuredDouble Offline_Time
     {
         get
         {
-            return 10800.0d * (1.0d +  heart_equiped_offline_time);
+            return 14400.0d * (1.0d +  heart_equiped_offline_time);
         }
     }
 

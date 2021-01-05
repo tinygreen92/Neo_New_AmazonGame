@@ -54,7 +54,9 @@ public class SupplyBoxManager : MonoBehaviour
     bool _AdsComp;
     void Ads_FreeDiaCanvas()
     {
+        PlayerPrefsManager.instance.TEST_SaveJson();
         SystemPopUp.instance.LoopLoadingImg();
+        Invoke(nameof(InvoStopLoop), 5.0f);
 
         if (PlayerInventory.isSuperUser != 0)
         {
@@ -76,6 +78,10 @@ public class SupplyBoxManager : MonoBehaviour
             Invoke(nameof(AdsInvo), 0.5f);
         }
 
+    }
+    void InvoStopLoop()
+    {
+        SystemPopUp.instance.StopLoopLoading();
     }
     // Event handler called when a rewarded ad has completed
     void AdsCompleated(RewardedAdNetwork network, AdPlacement location)

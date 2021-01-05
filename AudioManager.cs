@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // 오디오정보 클래스
 /// <summary>
@@ -53,9 +54,14 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void AllMute()
     {
-        bgmInfo[0].volume = 0;
-        seInfo[0].volume = 0;
-
+        for (int i = 0; i < bgmInfo.Length; i++)
+        {
+            bgmInfo[i].volume = 0;
+        }
+        for (int i = 0; i < seInfo.Length; i++)
+        {
+            seInfo[i].volume = 0;
+        }
         PlayerPrefsManager.isAllmute = true;
         StopAllAudio();
     }
@@ -65,29 +71,38 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void AllUnMute()
     {
-        bgmInfo[0].volume = defualtVolume;
-        seInfo[0].volume = defualtVolume;
+        for (int i = 0; i < bgmInfo.Length; i++)
+        {
+            bgmInfo[i].volume = defualtVolume;
+        }
+        for (int i = 0; i < seInfo.Length; i++)
+        {
+            seInfo[i].volume = defualtVolume;
+        }
         PlayerPrefsManager.isAllmute = false;
         /// 본래 배경 음악 재생
         PlayBGM("Main");
     }
 
     [Header("-사운드 On 버튼 달아두기")]
-    public GameObject soundIcon;
+    public Image soundIcon;
+    public Sprite[]  soundSprs;
 
 
 
     public void AudioSetting()
     {
-        if (PlayerPrefsManager.isAllmute)
+        if (!PlayerPrefsManager.isAllmute)
         {
-            soundIcon.SetActive(false);
+            /// 뮤트 상태로 바꿔줌
+            soundIcon.sprite = soundSprs[0];
             AllMute();
         }
         else
         {
+            /// 다시 소리 재생해줌.
+            soundIcon.sprite = soundSprs[1];
             AllUnMute();
-            StopBGM();
         }
     }
 

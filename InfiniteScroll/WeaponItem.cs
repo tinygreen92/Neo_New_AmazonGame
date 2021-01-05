@@ -205,7 +205,7 @@ public class WeaponItem : MonoBehaviour
         else if (sm.ModeName == 2)           /// 합성
         {
             SuperImage.SetActive(false);
-            if (int.Parse(ListModel.Instance.weaponList[_index].weaAmount) >= 11)
+            if (int.Parse(ListModel.Instance.weaponList[_index].weaAmount) >= 10)
             {
                 SetEQUIP_BTN_OJ(2, true);
             }

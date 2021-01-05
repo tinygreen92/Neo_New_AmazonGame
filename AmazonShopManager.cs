@@ -293,7 +293,9 @@ public class AmazonShopManager : MonoBehaviour
     bool _AdsComp;
     public void Ads_FreeDiaCanvas()
     {
+        PlayerPrefsManager.instance.TEST_SaveJson();
         SystemPopUp.instance.LoopLoadingImg();
+        Invoke(nameof(InvoStopLoop), 5.0f);
 
         if (Advertising.IsRewardedAdReady(RewardedAdNetwork.MoPub, AdPlacement.Default))
         {
@@ -309,6 +311,10 @@ public class AmazonShopManager : MonoBehaviour
             Invoke(nameof(AdsInvo), 0.5f);
         }
 
+    }
+    void InvoStopLoop()
+    {
+        SystemPopUp.instance.StopLoopLoading();
     }
     // Event handler called when a rewarded ad has completed
     void AdsCompleated(RewardedAdNetwork network, AdPlacement location)

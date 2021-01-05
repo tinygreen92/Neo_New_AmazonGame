@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BotBtnBackImg : MonoBehaviour
 {
     public GameObject[] TopImg;
     public GameObject[] BotImg;
+    [Header("-바깥 채팅 박스 텍스트")]
+    public Image ArrowIcon;
+    public Sprite ArroIcons;
 
     private void Awake()
     {
@@ -21,7 +25,8 @@ public class BotBtnBackImg : MonoBehaviour
     /// </summary>
     /// <param name="_index"></param>
     public void BBB_Changer(int _index)
-    {
+    {   /// 채팅 화살표 바꿔주기
+        ArrowIcon.sprite = ArroIcons;
         /// 동일 버튼 누를땐 동작 없음
         if (!TopImg[_index].activeSelf)
         {

@@ -66,6 +66,30 @@ public class PresentManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 우편함 모두 받기
+    /// </summary>
+    public void AceptAllItem()
+    {
+        /// 우편함 비어 있으면 리턴
+        if (ParentTrans.childCount <1)
+        {
+            return;
+        }
 
+        SystemPopUp.instance.LoopLoadingImg();
+        Invoke(nameof(InvoStopLoop), 0.3f);
+
+        for (; ; )
+        {
+            ParentTrans.GetChild(0).GetComponent<PresentItem>().ClickedPresentBtn();
+            if (ParentTrans.childCount < 1) break;
+        }
+    }
+
+    void InvoStopLoop()
+    {
+        SystemPopUp.instance.StopLoopLoading();
+    }
 
 }

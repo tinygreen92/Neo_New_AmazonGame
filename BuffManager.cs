@@ -13,13 +13,18 @@ public class BuffManager : MonoBehaviour
     /// </summary>
     private const float SHOP_BUFF_TIME = 1800.0f;
 
+    Coroutine[] buffTimer = new Coroutine[8];
+
+
+
     /// <summary>
     /// <버프> 외부에서 영구적인 코루틴 타이머 호출
     /// </summary>
     /// <param name="_id"></param>
     public void DieHardCoTimer(int _id)
     {
-        StartCoroutine(BuffTimerStart(_id));
+        if (buffTimer[_id] != null && _id > 3) return;
+        buffTimer[_id] = StartCoroutine(BuffTimerStart(_id));
     }
 
     /// <summary>

@@ -368,7 +368,18 @@ public class RuneManager : MonoBehaviour
         _isLeft = false;
         tmpRuneList.Clear();
         /// 버튼 누를때 상단 공간에 5개가 다 모였나 체크
-        if (fussionRuneList.Count != 5) return;
+        if (fussionRuneList.Count != 5)
+        {
+            return;
+        }
+        /// 진짜 조합 하실?
+        PopUpManager.instance.ShowGrobalPopUP(5);
+    }
+    /// <summary>
+    /// 진짜 조합하실 확인 누르면 조합
+    /// </summary>
+    public void InvoBtnRuneFussion()
+    {
         /// 룬페이지 커버 씌우고
         RuneFullCover.SetActive(true);
         /// 확률 보정 초기화. (이미 소모했으므로))
