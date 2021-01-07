@@ -90,9 +90,6 @@ public class TutoManager : MonoBehaviour
             case 11:            // 캐릭터 Lv. 5 달성
                 ListModel.Instance.TUTO_BeforeComp(_index, int.Parse(ListModel.Instance.charatorList[0].charLevel));
                 break;
-            case 12:            // 하이에나 두개골 수집 달성
-                ListModel.Instance.TUTO_BeforeComp(_index, int.Parse(ListModel.Instance.supList[1].supporterLevel));
-                break;
 
             case 19:            // 하이에나 두개골 수집  달성
                 ListModel.Instance.TUTO_BeforeComp(_index, int.Parse(ListModel.Instance.supList[1].supporterLevel));

@@ -24,9 +24,20 @@ public class QuestManager : MonoBehaviour
     public delegate void ChainFunc();       // 아웃라인 델리게이트
     public ChainFunc chain;                 // 체인 메서드
 
+    public bool isAceptEnable;
+
     private void OnEnable()
     {
+        /// 상단 버튼 호출
         SwichTapBtn(0);
+    }
+
+    private void OnDisable()
+    {
+        /// 모두받기 일단 회색
+        isAceptEnable = false;
+        dayAllBtnImg[0].sprite = allBtnSprs[0];
+        dayAllBtnImg[1].sprite = allBtnSprs[0];
     }
 
     /// <summary>
@@ -35,6 +46,7 @@ public class QuestManager : MonoBehaviour
     /// <param name="_index"></param>
     public void SwichTapBtn(int _index)
     {
+        /// 스크롤 위로
         scBar1.verticalNormalizedPosition = 1;
         scBar2.verticalNormalizedPosition = 1;
 
@@ -42,12 +54,17 @@ public class QuestManager : MonoBehaviour
         {
             case 0:
                 isALLquest = false;
+
+                /// 평생 받기 일단 회색
+                dayAllBtnImg[1].sprite = allBtnSprs[0];
                 missonPanel[0].SetActive(true);
                 missonPanel[1].SetActive(false);
                 break;
 
             case 1:
                 isALLquest = true;
+                /// 일일 받기 일단 회색
+                dayAllBtnImg[0].sprite = allBtnSprs[0];
                 missonPanel[0].SetActive(false);
                 missonPanel[1].SetActive(true);
                 break;
@@ -58,20 +75,29 @@ public class QuestManager : MonoBehaviour
     }
     public void QMc5Update()
     {
+        isAceptEnable = false;
+        dayAllBtnImg[0].sprite = allBtnSprs[0];
         /// 지금 활성화된 자식만큼 배수 적용해줌. -> 배수 적용된 뒤에 새로고침.
         for (int i = 0; i < C5.childCount; i++)
         {
             C5.GetChild(i).GetComponent<MissionItem>().UpdateMission();
         }
-
+        if (!isAceptEnable) return;
+        /// 일일 미션 0 모두 받기 파랑 1
+        dayAllBtnImg[0].sprite = allBtnSprs[1];
     }
     public void QMc17Update()
     {
+        isAceptEnable = false;
+        dayAllBtnImg[1].sprite = allBtnSprs[0];
         /// 지금 활성화된 자식만큼 배수 적용해줌. -> 배수 적용된 뒤에 새로고침.
         for (int i = 0; i < C17.childCount; i++)
         {
             C17.GetChild(i).GetComponent<MissionItem>().UpdateMission();
         }
+        if (!isAceptEnable) return;
+        /// 평생 미션 1 모두 받기 파랑 1
+        dayAllBtnImg[1].sprite = allBtnSprs[1];
     }
 
     /// <summary>
@@ -79,6 +105,8 @@ public class QuestManager : MonoBehaviour
     /// </summary>
     public void GetDayAllReword()
     {
+        isAceptEnable = false;
+        dayAllBtnImg[0].sprite = allBtnSprs[0];
         for (int i = 0; i < C5.childCount; i++)
         {
             if (ListModel.Instance.missionDAYlist[i].maxValue == ListModel.Instance.missionDAYlist[i].curentValue)
@@ -99,6 +127,9 @@ public class QuestManager : MonoBehaviour
         C5.GetChild(0).GetComponent<MissionItem>().UpdateMission();
         /// 레드닷 끄기
         RedDotManager.instance.RedDot[5].SetActive(false);
+        if (!isAceptEnable) return;
+        /// 일일 미션 0 모두 받기 파랑 1
+        dayAllBtnImg[0].sprite = allBtnSprs[1];
     }
 
     /// <summary>
@@ -106,6 +137,8 @@ public class QuestManager : MonoBehaviour
     /// </summary>
     public void GetALLAllReword()
     {
+        isAceptEnable = false;
+        dayAllBtnImg[1].sprite = allBtnSprs[0];
         /// 지금 활성화된 자식만큼 배수 적용해줌. -> 배수 적용된 뒤에 새로고침.
         for (int i = 0; i < C17.childCount; i++)
         {
@@ -127,6 +160,9 @@ public class QuestManager : MonoBehaviour
         }
         /// 레드닷 끄기
         RedDotManager.instance.RedDot[5].SetActive(false);
+        if (!isAceptEnable) return;
+        /// 평생 미션 1 모두 받기 파랑 1
+        dayAllBtnImg[1].sprite = allBtnSprs[1];
     }
 
 

@@ -29,13 +29,20 @@ public class IAPManager : MonoBehaviour
     public GameObject ComplPopup;
     public Image ComplGifteIcon;
     [Header("- 패키지 팝업 세팅")]
-    public GameObject FreeGiftPop;
-    public GameObject DiaGiftPop;
     public GameObject PackGiftPop;
     public Image packGiftIcon;
     public Text innerPackText;
     public Text outterPackText;
     public Text btnPackText;
+    [Space]
+    public GameObject btnWonGo;
+    public GameObject txRufundGo;
+    //무료
+    public GameObject btnFreeGo;
+    // 다이아
+    public GameObject btnDiaGo;
+    public Text btnDiaText;
+
     [Space]
     public GameObject[] PackCategory;
     [Space]
@@ -58,7 +65,8 @@ public class IAPManager : MonoBehaviour
     [Space]
     public int[] purchaseIndex;
 
-
+    [HideInInspector]
+    public int reqDia;                      // 패키지 떨거지에서 받아오는 다이아 갯수
 
     public void ClickedPakageShop()
     {
@@ -68,7 +76,18 @@ public class IAPManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 캐키지 상점 상단 탭 관리
+    /// 패키지 구매 팝업 다 꺼주기 -> 구매화면 슝에 붙여
+    /// </summary>
+    public void ShutUpSnepe()
+    {
+        btnFreeGo.SetActive(false);
+        btnDiaGo.SetActive(false);
+        btnWonGo.SetActive(false);
+        txRufundGo.SetActive(false);
+    }
+
+    /// <summary>
+    /// 패키지 상점 상단 탭 관리
     /// </summary>
     /// <param name="_index"></param>
     public void SwichPackageCatgory(int _index)
@@ -79,24 +98,49 @@ public class IAPManager : MonoBehaviour
         }
         PackCategory[_index].SetActive(true);
         PackCategory[_index].GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
+        /// 팝업 옵션 다 꺼주기
+        ShutUpSnepe();
+        /// 어느 패널 열거니
         switch (_index)
         {
             case 0:
                 btnImgs[0].sprite = EnableBtn;
                 btnImgs[1].sprite = DisableBtn;
                 btnImgs[2].sprite = DisableBtn;
+                btnImgs[3].sprite = DisableBtn;
+                btnImgs[4].sprite = DisableBtn;
                 break;
 
             case 1:
                 btnImgs[0].sprite = DisableBtn;
                 btnImgs[1].sprite = EnableBtn;
                 btnImgs[2].sprite = DisableBtn;
+                btnImgs[3].sprite = DisableBtn;
+                btnImgs[4].sprite = DisableBtn;
                 break;
 
             case 2:
                 btnImgs[0].sprite = DisableBtn;
                 btnImgs[1].sprite = DisableBtn;
                 btnImgs[2].sprite = EnableBtn;
+                btnImgs[3].sprite = DisableBtn;
+                btnImgs[4].sprite = DisableBtn;
+                break;
+
+            case 3:
+                btnImgs[0].sprite = DisableBtn;
+                btnImgs[1].sprite = DisableBtn;
+                btnImgs[2].sprite = DisableBtn;
+                btnImgs[3].sprite = EnableBtn;
+                btnImgs[4].sprite = DisableBtn;
+                break;
+
+            case 4:
+                btnImgs[0].sprite = DisableBtn;
+                btnImgs[1].sprite = DisableBtn;
+                btnImgs[2].sprite = DisableBtn;
+                btnImgs[3].sprite = DisableBtn;
+                btnImgs[4].sprite = EnableBtn;
                 break;
 
             default:
@@ -225,6 +269,10 @@ public class IAPManager : MonoBehaviour
         ComplGifteIcon.sprite = itemInfo.titleIcon;
         innerPackText.text = itemInfo.inner;
         outterPackText.text = itemInfo.outter;
+        /// 청약 철회 메세지
+        txRufundGo.SetActive(true);
+        /// 현금 구매 버튼
+        btnWonGo.SetActive(true);
         /// 버튼 가격 채우기
         if (LeanLocalization.CurrentLanguage == "Korean")
         {
@@ -242,6 +290,8 @@ public class IAPManager : MonoBehaviour
 
     public void Purchase_Pakage(int _indx)
     {
+        /// 어떤 버튼 보여줄까 숨겨.
+        ShutUpSnepe();
         /// 긴 텍스트  받아와
         var itemInfo = pd[_indx];
         /// 내용물 채우기
@@ -249,35 +299,47 @@ public class IAPManager : MonoBehaviour
         ComplGifteIcon.sprite = itemInfo.titleIcon;
         innerPackText.text = itemInfo.inner;
         outterPackText.text = itemInfo.outter;
+        /// 리얼 구매 팝업 데이터 넘기기용
+        purchaseIndex[3] = _indx;
 
         /// 무료인지? 
         if (_indx == 10 || _indx == 14 || _indx == 18)
         {
-            /// 진짜 구매? 팝업 버튼 띄우기
-            FreeGiftPop.SetActive(true);
-            return;
+            /// 진짜 구매? 팝업 버튼 띄우기 전 작업 버튼 1
+            /// 청약 철회 메세지
+            txRufundGo.SetActive(false);
+            /// 무료 구매 버튼
+            btnFreeGo.SetActive(true);
         }
         /// 다이아 구매인지? 
         else if (_indx == 11 || _indx == 12 || _indx == 15 || _indx == 16 || _indx == 19 || _indx == 20)
         {
-            /// 진짜 구매? 팝업 버튼 띄우기
-            DiaGiftPop.SetActive(true);
-            return;
-        }
-
-        /// 현질 구매인지? 
-        purchaseIndex[3] = _indx;
-        /// 버튼 가격 채우기
-        if (LeanLocalization.CurrentLanguage == "Korean")
-        {
-            System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("ko-KR", false).NumberFormat;
-            btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].korPrice).ToString("C", numberFormat);
+            /// 진짜 구매? 팝업 버튼 띄우기 전 작업 다이아 버튼
+            /// 청약 철회 메세지
+            txRufundGo.SetActive(false);
+            /// 다이아 구매 버튼
+            btnDiaText.text = reqDia.ToString();
+            btnDiaGo.SetActive(true);
         }
         else
         {
-            System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
-            btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].engPrice).ToString("C", numberFormat);
+            /// 현질인지? 버튼 가격 채우기
+            if (LeanLocalization.CurrentLanguage == "Korean")
+            {
+                System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("ko-KR", false).NumberFormat;
+                btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].korPrice).ToString("C", numberFormat);
+            }
+            else
+            {
+                System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
+                btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].engPrice).ToString("C", numberFormat);
+            }
+            /// 청약 철회 메세지
+            txRufundGo.SetActive(true);
+            /// 현질 구매 버튼
+            btnWonGo.SetActive(true);
         }
+
         /// 진짜 구매? 팝업 버튼 띄우기
         PackGiftPop.SetActive(true);
     }
@@ -332,12 +394,18 @@ public class IAPManager : MonoBehaviour
             /// -----------------------------------------------------------------------------------
 
             case 10:
+                PakageFreeItem(10);
+                ComplPopup.SetActive(true);
                 break;
             case 11:
                 PakageDiaItem(100);
+                SwichPackageCatgory(2);
+                ComplPopup.SetActive(true);
                 break;
             case 12:
                 PakageDiaItem(300);
+                SwichPackageCatgory(2);
+                ComplPopup.SetActive(true);
                 break;
             case 13:
                 Purchase_Product_day_01();
@@ -346,12 +414,18 @@ public class IAPManager : MonoBehaviour
             /// -----------------------------------------------------------------------------------
 
             case 14:
+                PakageFreeItem(14);
+                ComplPopup.SetActive(true);
                 break;
             case 15:
                 PakageDiaItem(500);
+                SwichPackageCatgory(3);
+                ComplPopup.SetActive(true);
                 break;
             case 16:
                 PakageDiaItem(700);
+                SwichPackageCatgory(3);
+                ComplPopup.SetActive(true);
                 break;
             case 17:
                 Purchase_Product_week_01();
@@ -360,12 +434,18 @@ public class IAPManager : MonoBehaviour
             /// -----------------------------------------------------------------------------------
 
             case 18:
+                PakageFreeItem(18);
+                ComplPopup.SetActive(true);
                 break;
             case 19:
                 PakageDiaItem(5000);
+                SwichPackageCatgory(4);
+                ComplPopup.SetActive(true);
                 break;
             case 20:
                 PakageDiaItem(5000);
+                SwichPackageCatgory(4);
+                ComplPopup.SetActive(true);
                 break;
             case 21:
                 Purchase_Product_month_01();
@@ -375,6 +455,47 @@ public class IAPManager : MonoBehaviour
                 break;
             case 23:
                 Purchase_Product_month_03();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 무료 보급
+    /// </summary>
+    /// <param name="_Dia"></param>
+    void PakageFreeItem(int _index)
+    {
+        /// 템 지급
+        StartCoroutine(InvoFree(_index));
+    }
+
+    IEnumerator InvoFree(int _index)
+    {
+        yield return null;
+
+        switch (_index)
+        {
+            case 10:
+                nm.PostboxItemSend("leaf_box", 1, "");
+                yield return null;
+                nm.PostboxItemSend("reinforce_box", 1, "");
+                yield return null;
+                break;
+            case 14:
+                nm.PostboxItemSend("diamond", 100, "");
+                yield return null;
+                nm.PostboxItemSend("elixr", 1, "");
+                yield return null;
+                nm.PostboxItemSend("amber", 1, "");
+                yield return null;
+                break;
+            case 18:
+                nm.PostboxItemSend("diamond", 300, "");
+                yield return null;
+                nm.PostboxItemSend("leaf_box", 5, "");
+                yield return null;
+                nm.PostboxItemSend("elixr", 5, "");
+                yield return null;
                 break;
         }
     }
@@ -414,7 +535,6 @@ public class IAPManager : MonoBehaviour
                 StartCoroutine(DiaDiaPack(1));
                 break;
         }
-
     }
 
     IEnumerator DiaDiaPack(int _Index)

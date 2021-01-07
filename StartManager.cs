@@ -27,7 +27,7 @@ public class StartManager : MonoBehaviour
         /// ------------------------------------------------------------------ ///
         if (isDebugMode) return;
         // 로그 비활성화
-        Debug.unityLogger.logEnabled = false;
+        //Debug.unityLogger.logEnabled = false;
         // 화면 꺼짐 방지
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }

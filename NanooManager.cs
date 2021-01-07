@@ -42,37 +42,29 @@ public class NanooManager : MonoBehaviour
     /// <returns></returns>
     private IEnumerator NickUpd()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(1f);
 
-        if (!Social.localUser.authenticated) GameServices.Init();
-        int logCnt = 0;
-
-        while (!Social.localUser.authenticated)
+        if (!Social.localUser.authenticated)
         {
-            yield return new WaitForSeconds(1.0f);
+            GameServices.Init();
+        } 
 
-            if (!Social.localUser.authenticated) GameServices.Init();
+        yield return new WaitForSeconds(2.0f);
 
-            logCnt++;
-
-            if (logCnt >= 2) break;
-        }
+        //int logCnt = 0;
+        //while (!Social.localUser.authenticated)
+        //{
+        //    yield return new WaitForSeconds(2.0f);
+        //    GameServices.Init();
+        //    logCnt++;
+        //    if (logCnt >= 2) break;
+        //}
 
         if (StartManager.instance.isDebugMode)
         {
             playfabm.InitPlayfab(userID);
             Debug.LogWarning("디버그 모드임.");
             yield break;
-        }
-
-        /// 3 번 시도 후에도 구글 로그인 안되었으면 게임 종료
-        if (!Social.localUser.authenticated)
-        {
-#if UNITY_EDITOR
-            //UnityEditor.EditorApplication.isPlaying = false;
-#else
-                   // Application.Quit(); // 어플리케이션 종료
-#endif
         }
 
         if (Social.localUser.authenticated)
@@ -85,8 +77,6 @@ public class NanooManager : MonoBehaviour
         }
         else
         {
-            ///  TO DO : 인터넷 연결 확인해달라 경고 메세지 띄우고 메인 화면으로 돌려보내기..
-            //SceneManager.LoadScene(1);
             StartManager.instance.headChatTxt.text = "";
             retryCnt++;
             Tweener tw = StartManager.instance.headChatTxt.DOText("재섭속 시도 " + retryCnt + "회...", 1f);

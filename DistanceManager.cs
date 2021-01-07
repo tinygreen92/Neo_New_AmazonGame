@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DistanceManager : MonoBehaviour
 {
+    public PetManager pm;
     [Header("- 거리 표시기 좌 중 우")]
     //public Text beforeDistance; // 좌측
     public Text mainDistance; // 중앙
@@ -258,12 +259,18 @@ public class DistanceManager : MonoBehaviour
     {
         /// 이전 애니 정지
         playerAnitor.StopPlayback();
+        playerAnitor.speed = 0;
         /// 1. 플레이어 걷기 멈추기
-        if (playerAnitor.transform.parent.parent.gameObject.activeSelf) playerAnitor.Play("Idle", -1, 0f);
+        if (playerAnitor.transform.parent.parent.gameObject.activeSelf)
+        {
+            //playerAnitor.Play("Idle", -1, 0f);
+            playerAnitor.Play("Player_Attack", -1, 0f);
+        }
         AudioManager.instance.StopAudio("SE");
         isWalking = false;
         /// 2. 배경 정지
         bgm.isBGmovigPause = true;
+        pm.PetAnimStop(true);
     }
 
     /// <summary>
@@ -295,7 +302,9 @@ public class DistanceManager : MonoBehaviour
     {
         /// 이전 애니 정지
         playerAnitor.StopPlayback();
-        playerAnitor.Play("Idle", -1, 0f);
+        playerAnitor.speed = 0;
+        //playerAnitor.Play("Idle", -1, 0f);
+        playerAnitor.Play("Player_Attack", -1, 0f);
         /// 딜레이 주고 시작
         Invoke(nameof(InvoStopPlayer), 0.02f);
     }
@@ -306,7 +315,9 @@ public class DistanceManager : MonoBehaviour
         if (enemyTransform != null) return;
         /// 이전 애니 정지
         playerAnitor.StopPlayback();
-        playerAnitor.Play("Idle", -1, 0f);
+        playerAnitor.speed = 0;
+        //playerAnitor.Play("Idle", -1, 0f);
+        playerAnitor.Play("Player_Attack", -1, 0f);
         /// 딜레이 주고 시작
         Invoke(nameof(InvoStopPlayer), 0.02f);
     }
@@ -321,7 +332,10 @@ public class DistanceManager : MonoBehaviour
             //AudioManager.instance.PlayAudio("Walk", "SE");
             isWalking = true;
         }
+        /// 배경 흘러감
         bgm.isBGmovigPause = false;
+        pm.PetAnimStop(false);
+
         if (enemyTransform != null)
         {
             enemyTransform.GetComponent<EnemyController>().InvoDestroy();
@@ -352,7 +366,9 @@ public class DistanceManager : MonoBehaviour
     {
         /// 이전 애니 정지
         playerAnitor.StopPlayback();
-        playerAnitor.Play("Idle", -1, 0f);
+        playerAnitor.speed = 0;
+        //playerAnitor.Play("Idle", -1, 0f);
+        playerAnitor.Play("Player_Attack", -1, 0f);
         /// 딜레이 주고 시작
         Invoke(nameof(InvoSwampStart), 0.02f);
     }
@@ -361,15 +377,20 @@ public class DistanceManager : MonoBehaviour
     {
         /// 이전 애니 정지
         playerAnitor.StopPlayback();
-        playerAnitor.Play("Idle", -1, 0f);
+        playerAnitor.speed = 0;
+        //playerAnitor.Play("Idle", -1, 0f);
+        playerAnitor.Play("Player_Attack", -1, 0f);
         /// 몹 날려버리고
         if (enemyTransform != null)
         {
             enemyTransform.GetComponent<EnemyController>().InvoDestroy();
             enemyTransform = null;
         }
-        /// 걷기만
+        /// 배경 흘러감
         bgm.isBGmovigPause = false;
+        pm.PetAnimStop(false);
+
+        playerAnitor.speed = PlayerInventory.Player_Move_Speed;
         playerAnitor.Play("Player_Move", -1, 0f);
     }
 
@@ -384,7 +405,9 @@ public class DistanceManager : MonoBehaviour
             //AudioManager.instance.PlayAudio("Walk", "SE");
             isWalking = true;
         }
+        /// 흘러감
         bgm.isBGmovigPause = false;
+        pm.PetAnimStop(false);
 
         if (enemyTransform != null)
         {

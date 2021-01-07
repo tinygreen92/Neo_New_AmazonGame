@@ -219,6 +219,11 @@ public class CharactorItem : MonoBehaviour
             PlayerInventory.Money_Gold -= PlayerInventory.Gold_Cost * GetMutipleUpgrade(mutiple, thisLevel);
             /// 엘릭서 지급
             PlayerInventory.Money_Elixir += mutiple;
+
+            /// 캐릭터 레벨 업
+            thisLevel = (int)_MultiLv;
+            ListModel.Instance.Chara_LvUP(_index, thisLevel);
+
             ///  캐릭터 레벨업 업적  완료 카운트
             ListModel.Instance.ALLlist_Update(1, mutiple);
             /// 캐릭터 1회 레벨업 진행
@@ -235,6 +240,13 @@ public class CharactorItem : MonoBehaviour
         }
         else
         {
+            /// 멀티플 적용 받고 <엘릭서> 소모
+            PlayerInventory.Money_Elixir -= (int)GetMutipleUpgrade(mutiple, thisLevel);
+
+            /// 스텟 레벨 업
+            thisLevel = (int)_MultiLv;
+            ListModel.Instance.Chara_LvUP(_index, thisLevel);
+
             ///  스탯 공격력 증가 레벨업 1회 진행
             if (_index == 1 &&  PlayerPrefsManager.currentTutoIndex == 2) ListModel.Instance.TUTO_Update(2);
             if (_index == 1 &&  PlayerPrefsManager.currentTutoIndex == 31) ListModel.Instance.TUTO_Update(31);
@@ -249,14 +261,9 @@ public class CharactorItem : MonoBehaviour
             {
                 ListModel.Instance.TUTO_Update(24);
             }
-
-            /// 멀티플 적용 받고 <엘릭서> 소모
-            PlayerInventory.Money_Elixir -= (int)GetMutipleUpgrade(mutiple, thisLevel);
         }
 
-        /// 레벨 업
-        thisLevel = (int)_MultiLv;
-        ListModel.Instance.Chara_LvUP(_index, thisLevel);
+
 
         // 값 갱신 -> 레벨업은 이쪽에서 처리
         BoxInfoUpdate(_index);

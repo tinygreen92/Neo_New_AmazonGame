@@ -104,8 +104,7 @@ public class FakeLoading : MonoBehaviour
         /// 아마존 결정 게이지 표기
         PlayerInventory.Money_AmazonCoin += 0;
         PlayerInventory.AmazonStoneCount += 0;
-        /// 튜토리얼 새로고침
-        tm.InitTutorial();
+
 
 
         /// ------------------------------------------------
@@ -116,7 +115,9 @@ public class FakeLoading : MonoBehaviour
         {
             yield return new WaitForFixedUpdate();
         }
-        currentTime = 0;
+
+        /// 튜토리얼 새로고침
+        tm.InitTutorial();
 
         /// 타이틀 이미지, 로딩바 뒷쪽 꺼져
         transform.GetChild(0).gameObject.SetActive(false);
@@ -124,6 +125,7 @@ public class FakeLoading : MonoBehaviour
         StartManager.instance.headChatTxt.text = "";
 
 
+        currentTime = 0;
         while (currentTime < 1f)
         {
             currentTime += Time.deltaTime;

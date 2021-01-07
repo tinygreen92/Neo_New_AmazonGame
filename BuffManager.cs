@@ -6,13 +6,18 @@ public class BuffManager : MonoBehaviour
 {
     public GameObject[] BuffEffect;
     public PetManager pm;
+    /// <summary>
+    /// 버프 쿨타임 돌아가는 fillamount
+    /// </summary>
     [Header("- 회색 이미지 위에 씌울 칼라 이미지들")]
     public Image[] filedImgs;
     /// <summary>
     /// 상점에서 사는 버프 시간은 30분 고정이다.
     /// </summary>
     private const float SHOP_BUFF_TIME = 1800.0f;
-
+    /// <summary>
+    /// 버프 타이머 코루틴 8가지
+    /// </summary>
     Coroutine[] buffTimer = new Coroutine[8];
 
 
@@ -23,12 +28,14 @@ public class BuffManager : MonoBehaviour
     /// <param name="_id"></param>
     public void DieHardCoTimer(int _id)
     {
+        /// 버프
         if (buffTimer[_id] != null && _id > 3) return;
+
         buffTimer[_id] = StartCoroutine(BuffTimerStart(_id));
     }
 
     /// <summary>
-    /// 돈주고 버프 사면 버프 이미지 1f로 고정
+    /// 현금으로 버프 사면 버프 이미지 1f로 고정
     /// </summary>
     public void MoneyLoveBuff(int _id)
     {

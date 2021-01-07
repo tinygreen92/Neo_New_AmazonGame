@@ -17,7 +17,7 @@ public class IAReviewManager : MonoBehaviour
 
     IEnumerator ReviewReq()
     {
-        yield return null;
+        yield return new WaitForSeconds(5f);
         // Create instance of ReviewManager
         ReviewManager _reviewManager = new ReviewManager();
         // ...

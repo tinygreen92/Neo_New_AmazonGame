@@ -312,6 +312,15 @@ public class PlayerPrefsManager : MonoBehaviour
         ObscuredPrefs.SetInt("isTutoAllClear", isTutoAllClear ? 525 : 0);
 
 
+        /// 타이머 일괄적으로 저장
+        string tmp = UnbiasedTime.Instance.Now().ToString("yyyyMMddHHmmss");
+        ObscuredPrefs.SetString("DateTime", tmp);
+        ObscuredPrefs.SetString("AmazonShop", tmp);
+        //ObscuredPrefs.SetString("Check_Daily", tmp);
+        ObscuredPrefs.SetString("FreeWeapon", tmp);
+        ObscuredPrefs.SetString("FreeDia", tmp);
+
+        Debug.LogWarning("세이브 데이터 타임 " + tmp);
     }
 
 

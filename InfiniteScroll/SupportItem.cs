@@ -118,9 +118,9 @@ public class SupportItem : MonoBehaviour
             for (int i = thisLevel + 1; i < thisLevel + muti + 1; i++)
             {
                 /// TODO : 변경전 tmpMuti += _MultiResult * (Math.Pow(1.12d, i));
-                tmpMuti += _MultiResult * (1 + 0.15 * i);
+                //tmpMuti += _MultiResult * (1 + 0.15 * i);
+                tmpMuti += _MultiResult * (Math.Pow(1.12d, i));
             }
-            //_MultiResult *= Math.Pow(1.12d, (_MultiLv - 1));
             _MultiResult = tmpMuti;
         }
 
@@ -208,6 +208,16 @@ public class SupportItem : MonoBehaviour
         /// <획득골드량> 배수 곱하기 해서 텍스트 뿌려주기.
         EarnGoldBox.text = T_PLUS + PlayerPrefsManager.instance.DoubleToStringNumber(PlayerInventory.Soozip_Gold_Earned * GetMutipleEarnGold(mutiple , thisLevel)) + " (" + mutiple + ")";
 
+        /// 만렙 찍으면 맥스버튼 활성화.
+        ///             /// 만렙 찍으면 맥스버튼 활성화.
+        if (thisLevel >= 1000)
+        {
+            MaxButton.SetActive(true);
+        }
+        else
+        {
+            MaxButton.SetActive(false);
+        }
 
         // 상태가 활성화 아니라면 회색 이미지 true
         if (ListModel.Instance.supList[_index].isEnable != "TRUE")
@@ -219,17 +229,6 @@ public class SupportItem : MonoBehaviour
         }
         else
         {
-            /// 만렙 찍으면 맥스버튼 활성화.
-            ///             /// 만렙 찍으면 맥스버튼 활성화.
-            if (thisLevel >= 1000)
-            {
-                MaxButton.SetActive(true);
-            }
-            else
-            {
-                MaxButton.SetActive(false);
-            }
-
             GrayImage.SetActive(false);
             // 레벨 0 이면 게이지 코루틴 멈추고 리턴
             if (thisLevel == 0)

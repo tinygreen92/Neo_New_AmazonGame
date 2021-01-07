@@ -35,7 +35,36 @@ public class PetManager : MonoBehaviour
     public void PetAnimStart(int _index)
     {
         petAnim[_index].gameObject.SetActive(true);
+        petAnim[_index].speed = 1;
         petAnim[_index].Play(petAnim[_index].name + "_Idle", -1, 0f);
+    }
+
+    /// <summary>
+    /// 0~4 해당 펫 움직임
+    /// </summary>
+    /// <param name="_index"></param>
+    public void PetAnimStop(bool _trigger)
+    {
+        for (int i = 0; i < petAnim.Length; i++)
+        {
+            if(petAnim[i].gameObject.activeSelf)
+            {
+                /// 스탑이 맞다
+                if (_trigger)
+                {
+                    petAnim[i].speed = 0;
+                    petAnim[i].Play(petAnim[i].name + "_Idle", -1, 0f);
+                }
+                /// 다시 움직여라
+                else
+                {
+                    petAnim[i].speed = 1;
+                    petAnim[i].Play(petAnim[i].name + "_Idle", -1, 0f);
+                }
+
+            }
+        }
+
     }
 
     Coroutine Zeropet = null;

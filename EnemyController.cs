@@ -268,8 +268,11 @@ public class EnemyController : MonoBehaviour
             yield return null;
             if (!HBM.isAttatking) break;
         }
-        DistanceManager.instance.playerAnitor.Play("Idle", -1, 0f);
-
+        /// 이전 애니 정지
+        DistanceManager.instance.playerAnitor.StopPlayback();
+        DistanceManager.instance.playerAnitor.speed = 0;
+        //DistanceManager.instance.playerAnitor.Play("Idle", -1, 0f);
+        DistanceManager.instance.playerAnitor.Play("Player_Attack", -1, 0f);
     }
 
 

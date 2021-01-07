@@ -115,8 +115,11 @@ public class HpBarManager : MonoBehaviour
     /// </summary>
     void InvoReFight()
     {
+        // 2초 안에 늪지에 입장했을 경우 리턴
+        if (PlayerPrefsManager.isGoldposOnAir) return;
+
         var reDist = Mathf.RoundToInt((float)PlayerInventory.RecentDistance);
-        /// 9 스테이지 보스전이 아닌 상황에서 호출 되면 리턴
+        /// 9 스테이지 보스전이 아닌 상황에서 호출 되면
         if (reDist % 10 != 9)
         {
             return;

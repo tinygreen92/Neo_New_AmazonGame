@@ -29,6 +29,7 @@ public class OfflineManager : MonoBehaviour
     {
         string tmp = dateTime.ToString("yyyyMMddHHmmss");
         ObscuredPrefs.SetString("DateTime", tmp);
+        ObscuredPrefs.Save();
         Debug.LogWarning("세이브 데이터 타임 " + tmp);
     }
     DateTime LoadDateTime()
@@ -48,6 +49,8 @@ public class OfflineManager : MonoBehaviour
     /// <param name="pause"></param>
     void OnApplicationPause(bool pause)
     {
+        if (!PlayerPrefsManager.isLoadingComp) return;
+
         if (pause)
         {
             isPaused = true;
@@ -76,6 +79,7 @@ public class OfflineManager : MonoBehaviour
         unbiasedRemaining = UnbiasedTime.Instance.Now();
         SaveDateTime(unbiasedRemaining);
     }
+
 
     public void OfflineInit()
     {

@@ -86,22 +86,29 @@ public class AudioManager : MonoBehaviour
 
     [Header("-사운드 On 버튼 달아두기")]
     public Image soundIcon;
+    public GameObject[] soundText;
     public Sprite[]  soundSprs;
 
 
-
+    /// <summary>
+    /// 컨피그 창에서 설정해줌
+    /// </summary>
     public void AudioSetting()
     {
         if (!PlayerPrefsManager.isAllmute)
         {
             /// 뮤트 상태로 바꿔줌
             soundIcon.sprite = soundSprs[0];
+            soundText[0].SetActive(true);
+            soundText[1].SetActive(false);
             AllMute();
         }
         else
         {
             /// 다시 소리 재생해줌.
             soundIcon.sprite = soundSprs[1];
+            soundText[0].SetActive(false);
+            soundText[1].SetActive(true);
             AllUnMute();
         }
     }

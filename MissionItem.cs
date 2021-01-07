@@ -39,11 +39,9 @@ public class MissionItem : MonoBehaviour
         }
     }
 
+
     private void OnEnable()
     {
-        /// 일단 모두 받기 회색
-        qm.dayAllBtnImg[0].sprite = qm.allBtnSprs[0];
-        qm.dayAllBtnImg[1].sprite = qm.allBtnSprs[0];
         /// 업데이트
         UpdateMission();
     }
@@ -72,7 +70,8 @@ public class MissionItem : MonoBehaviour
                 thisBtn.sprite = qm.BtnSprite[1];
                 sd.value = 1f;
                 RedDotManager.instance.RedDot[5].SetActive(true);
-                /// 평생 미션 1 모두 받기 파랑 1
+                /// 평생 미션 0 모두 받기 파랑 1
+                qm.isAceptEnable = true;
                 qm.dayAllBtnImg[1].sprite = qm.allBtnSprs[1];
             }
             else
@@ -112,6 +111,7 @@ public class MissionItem : MonoBehaviour
                 thisBtn.sprite = qm.BtnSprite[1];
                 RedDotManager.instance.RedDot[5].SetActive(true);
                 /// 일일 미션 0 모두 받기 파랑 1
+                qm.isAceptEnable = true;
                 qm.dayAllBtnImg[0].sprite = qm.allBtnSprs[1];
             }
             else
