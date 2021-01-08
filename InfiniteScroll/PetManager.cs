@@ -86,10 +86,11 @@ public class PetManager : MonoBehaviour
     {
         yield return null;
         float time = 0;
-        int thisLevel = int.Parse(ListModel.Instance.petList[0].petLevel);
         var petDamege = PlayerInventory.character_DPS * ListModel.Instance.petList[0].percentDam * PlayerInventory.Pet_lv(0) * 0.01d;
-        float cooltime = thisLevel != 0 ? (ListModel.Instance.petList[0].coolTime - ((thisLevel - 1) * 2)) : ListModel.Instance.petList[0].coolTime;
-        
+        //float cooltime = thisLevel != 0 ? (ListModel.Instance.petList[0].coolTime - ((thisLevel - 1) * 2)) : ListModel.Instance.petList[0].coolTime;
+        float cooltime;
+        Debug.LogError(" 펫의 공격 준비");
+
         if (EneSpawnPool.childCount > 2)
         {
             /// 스포닝 풀에 몬스터가 활성화일때만 공격
@@ -107,7 +108,7 @@ public class PetManager : MonoBehaviour
             yield return new WaitForFixedUpdate();
 
             time += Time.deltaTime;
-            cooltime = thisLevel != 0 ? (ListModel.Instance.petList[0].coolTime - ((thisLevel - 1) * 2)) : ListModel.Instance.petList[0].coolTime;
+            cooltime = PlayerInventory.Pet_lv(0) != 0 ? (ListModel.Instance.petList[0].coolTime - ((PlayerInventory.Pet_lv(0) - 1) * 2)) : ListModel.Instance.petList[0].coolTime;
             /// 탈출 조건
             if (time >= cooltime)
             {

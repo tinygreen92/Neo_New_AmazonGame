@@ -73,11 +73,15 @@ public class MissionItem : MonoBehaviour
                 /// 평생 미션 0 모두 받기 파랑 1
                 qm.isAceptEnable = true;
                 qm.dayAllBtnImg[1].sprite = qm.allBtnSprs[1];
+                /// 보상 수령가능 아이템 최상단으로 재설정
+                //transform.SetAsFirstSibling();
             }
             else
             {
                 thisBtn.sprite = qm.BtnSprite[0];
                 sd.value = (float)(double.Parse(ListModel.Instance.missionALLlist[index].curentValue) / double.Parse(ListModel.Instance.missionALLlist[index].maxValue));
+                /// 보상 안받은건 밑으로
+                //transform.SetAsLastSibling();
             }
 
 
@@ -102,6 +106,15 @@ public class MissionItem : MonoBehaviour
                 titleText.text = ListModel.Instance.missionALLlist[index].engDesc;
             }
         }
+
+
+
+
+
+
+
+
+
         ///                                                           bot. 일일 미션일때
         else
         {
@@ -113,6 +126,8 @@ public class MissionItem : MonoBehaviour
                 /// 일일 미션 0 모두 받기 파랑 1
                 qm.isAceptEnable = true;
                 qm.dayAllBtnImg[0].sprite = qm.allBtnSprs[1];
+                /// 보상 수령가능 아이템 최상단으로 재설정
+                //transform.SetAsFirstSibling();
             }
             else
             {
@@ -123,6 +138,8 @@ public class MissionItem : MonoBehaviour
             {
                 maxBtn.SetActive(true);
                 transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
+                /// 완료된 아이템 최하단으로 재설정
+                //transform.SetAsLastSibling();
                 /// 슬라이더 설정
                 sd.maxValue = int.Parse(ListModel.Instance.missionDAYlist[index].maxValue);
                 sd.value = int.Parse(ListModel.Instance.missionDAYlist[index].maxValue);
@@ -141,7 +158,6 @@ public class MissionItem : MonoBehaviour
             {
                 maxBtn.SetActive(false);
                 transform.GetChild(0).GetChild(2).gameObject.SetActive(false);
-
                 /// 슬라이더 설정
                 sd.maxValue = int.Parse(ListModel.Instance.missionDAYlist[index].maxValue);
                 sd.value = int.Parse(ListModel.Instance.missionDAYlist[index].curentValue);

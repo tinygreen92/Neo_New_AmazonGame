@@ -67,6 +67,8 @@ public class MoneyManager : MonoBehaviour
         InvenTicketTextBoxs[3].text = PlayerInventory.ticket_cave_enter.ToString("N0");
         InvenTicketTextBoxs[4].text = PlayerInventory.ticket_cave_clear.ToString("N0");
         InvenTicketTextBoxs[5].text = PlayerInventory.S_reinforce_box.ToString("N0");
+
+        /// 아마존 포션
         InvenTicketTextBoxs[6].text = PlayerInventory.S_leaf_box.ToString("N0");
         //
         InvenTicketTextBoxs[7].text = PlayerInventory.mining.ToString("N0");

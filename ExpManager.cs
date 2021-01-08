@@ -37,8 +37,7 @@ public class ExpManager : MonoBehaviour
         lvText.text = "Lv. " + calv.ToString("N0");
         lvfillText.text = LEVEL_TEXT + calv.ToString("N0");
         /// 결정수 텍스트 증가
-        infillText.text = "결정조각 : ( " + PlayerInventory.CurrentAmaValue.ToString("N0") + " / " + ((calv + 1f) * 100f * (float)PlayerInventory.AmazonPoint_Cost).ToString("N0") + " )";
-        /// TODO :  Eng plz infillText.text = "결정조각 ( " + PlayerInventory.CurrentAmaValue.ToString("N0") + " / " + ((calv + 1f) * 100f * (float)PlayerInventory.AmazonPoint_Cost).ToString("N0") + " )";
+        infillText.text = "EXP : ( " + PlayerInventory.CurrentAmaValue.ToString("N0") + " / " + ((calv + 1f) * 100f * (float)PlayerInventory.AmazonPoint_Cost).ToString("N0") + " )";
     }
 
 
@@ -53,9 +52,11 @@ public class ExpManager : MonoBehaviour
     /// </summary>
     public void TEST_CLICKED_AMA()
     {
-        PlayerInventory.AmazonStoneCount += 20;
-        /// 결정조각  업적  카운트
-        ListModel.Instance.ALLlist_Update(2, 20);
+        //PlayerInventory.AmazonStoneCount += 20;
+        ///// 결정조각  업적  카운트
+        //ListModel.Instance.ALLlist_Update(2, 20);
+        /// 아마존 포션 추가
+        PlayerInventory.SetTicketCount("S_leaf_box", 20);
     }
 }
 

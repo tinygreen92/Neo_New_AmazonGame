@@ -583,16 +583,20 @@ public class MineManager : MonoBehaviour
             case 1:
                 if (is2X)
                 {
-                    PlayerInventory.AmazonStoneCount += (adsAmount * 2);
-                    /// 결정조각  업적  카운트
-                    ListModel.Instance.ALLlist_Update(2, (adsAmount * 2));
+                    //PlayerInventory.AmazonStoneCount += (adsAmount * 2);
+                    ///// 결정조각  업적  카운트
+                    //ListModel.Instance.ALLlist_Update(2, (adsAmount * 2));
+                    /// 아마존 포션 추가
+                    PlayerInventory.SetTicketCount("S_leaf_box", (int)(adsAmount * 2));
                     popAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(adsAmount * 2.0d);
                 }
                 else
                 {
-                    PlayerInventory.AmazonStoneCount += adsAmount;
-                    /// 결정조각  업적  카운트
-                    ListModel.Instance.ALLlist_Update(2, adsAmount);
+                    //PlayerInventory.AmazonStoneCount += adsAmount;
+                    ///// 결정조각  업적  카운트
+                    //ListModel.Instance.ALLlist_Update(2, adsAmount);
+                    /// 아마존 포션 추가
+                    PlayerInventory.SetTicketCount("S_leaf_box", (int)(adsAmount));
                 }
                 ListModel.Instance.axeDataList[0].Stack_AmaCystal = 0;
                 break;

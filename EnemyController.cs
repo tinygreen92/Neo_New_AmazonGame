@@ -151,10 +151,12 @@ public class EnemyController : MonoBehaviour
                 randomseed = Random.Range(0, 100f);
                 if (randomseed < PlayerInventory.AmazonPoint_Earned)
                 {
-                    /// 아마존 결정 조각 1개 확률 획득
-                    PlayerInventory.AmazonStoneCount++;
-                    /// 결정조각  업적  카운트
-                    ListModel.Instance.ALLlist_Update(2, 1);
+                    ///// 아마존 결정 조각 1개 확률 획득
+                    //PlayerInventory.AmazonStoneCount++;
+                    ///// 결정조각  업적  카운트
+                    //ListModel.Instance.ALLlist_Update(2, 1);
+                    /// 아마존 포션 추가
+                    PlayerInventory.SetTicketCount("S_leaf_box", 1);
                     ///// 아마존 결정 조각 1개 획득 팝업
                     //PopUpManager.instance.ShowPopUP(25);
                 }

@@ -37,7 +37,11 @@ public class PresentItem : MonoBehaviour
                 case "L_box": tmpHead = "L 등급 무기 상자 "; tmpTail = " 개."; break;
                 case "pvp": tmpHead = "결투장 입장권 "; tmpTail = " 개."; break;
                 case "cave": tmpHead = "숨겨진 늪지 입장권 "; tmpTail = " 개."; break;
-                case "crystal": tmpHead = "아마존 결정 조각 "; tmpTail = " 개."; break;
+
+
+                case "crystal": tmpHead = "아마존 포션 "; tmpTail = " 개."; break;
+
+
                 case "stone": tmpHead = "아마존 결정 "; tmpTail = " 개."; break;
                 case "reinforce": tmpHead = "강화석 "; tmpTail = " 개."; break;
                 case "gold": tmpHead = "골드 "; tmpTail = " 개."; break;
@@ -74,7 +78,10 @@ public class PresentItem : MonoBehaviour
         var playNANOO = GameObject.Find("NanooManager").GetComponent<NanooManager>();
         playNANOO.PostboxItemUse(tmp_uid);
         RedDotManager.instance.RedDot[3].SetActive(true);
+        /// 트랜스폼 제거 해주고
         Lean.Pool.LeanPool.Despawn(transform);
+        ///
+        playNANOO.PostboxRedDot();
     }
 
 }

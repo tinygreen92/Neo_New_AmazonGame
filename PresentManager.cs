@@ -5,9 +5,12 @@ using UnityEngine.UI;
 
 public class PresentManager : MonoBehaviour
 {
+    [Header("- 선물함 모두 받기 버튼")]
+    public Image AllBtn;
+    public Sprite[] AllBtnSprs;
+    [Header("- 선물함 내용물")]
     public Transform ItemCart;
     public Transform ParentTrans;
-
     [Header("- 아이콘 이미지 뭉치")]
     public Sprite[] IconSprs;
 
@@ -17,6 +20,8 @@ public class PresentManager : MonoBehaviour
         {
             Lean.Pool.LeanPool.Despawn(ParentTrans.GetChild(0));
         }
+        /// 모두 받기 회색
+        AllBtn.sprite = AllBtnSprs[0];
     }
 
     public void AddPresent(string _code, string _amount, string _uid, string _message)
@@ -41,7 +46,13 @@ public class PresentManager : MonoBehaviour
             case "L_box": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[9]; break;
             case "pvp": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[10]; break;
             case "cave": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[11]; break;
+           
+            /// --------- 아마존 포션
+            
             case "crystal": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[12]; break;
+            
+
+            
             case "stone": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[13]; break;
             case "reinforce": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[14]; break;
             case "gold": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[15]; break;
@@ -85,7 +96,39 @@ public class PresentManager : MonoBehaviour
             ParentTrans.GetChild(0).GetComponent<PresentItem>().ClickedPresentBtn();
             if (ParentTrans.childCount < 1) break;
         }
+
+        /// 모두 받기 회색
+        AllBtn.sprite = AllBtnSprs[0];
     }
+
+    public void RedotAssemble()
+    {
+        if (ParentTrans.childCount < 1)
+        {
+            AllBtn.sprite = AllBtnSprs[0];
+        }
+        else
+        {
+            AllBtn.sprite = AllBtnSprs[1];
+        }
+    }
+
+    /// <summary>
+    /// 버튼색 파란색? 회색?
+    /// </summary>
+    /// <param name="isBlue"></param>
+    public void SetBtnBlueAllcept(bool isBlue)
+    {
+        if (isBlue)
+        {
+            AllBtn.sprite = AllBtnSprs[1];
+        }
+        else
+        {
+            AllBtn.sprite = AllBtnSprs[0];
+        }
+    }
+
 
     void InvoStopLoop()
     {

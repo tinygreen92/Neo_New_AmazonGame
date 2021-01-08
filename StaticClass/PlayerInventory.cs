@@ -1044,8 +1044,9 @@ public static class PlayerInventory
     public static ObscuredInt ticket_pvp_enter;             // 결투 입장권
     public static ObscuredInt ticket_cave_enter;             // 늪지 동굴 입장권
     public static ObscuredInt ticket_cave_clear;             /// 늪지 동굴 소탕권
-
-    public static ObscuredInt S_leaf_box;             // 대박 나뭇잎 묶음
+    //
+    public static ObscuredInt S_leaf_box;             // 대박 나뭇잎 묶음에서 아마존 코인으로 변경
+    //
     public static ObscuredInt S_reinforce_box;    // 대박 강화석 묶음
     public static ObscuredInt mining;             // 채굴권
     public static ObscuredInt amber;             // 호박석
@@ -1060,7 +1061,7 @@ public static class PlayerInventory
     static ObscuredLong money_Dia;                // 다이아
     static ObscuredLong money_Leaf;               // 나뭇잎
     static ObscuredLong money_EnchantStone;            // 강화석
-    static ObscuredLong money_AmazonStone;            // 아마존 코인(결정)
+    static ObscuredLong money_AmazonStone;            // 아마존 결정
 
 
 
@@ -1075,8 +1076,9 @@ public static class PlayerInventory
             case "pvp": ticket_pvp_enter += _amount; break;
             case "cave_enter": ticket_cave_enter += _amount; break;
             case "cave_clear": ticket_cave_clear += _amount; break;
-                //
+            /// 아마존 포션
             case "S_leaf_box": S_leaf_box += _amount; break;
+            //
             case "S_reinforce_box": S_reinforce_box += _amount; break;
             case "mining": mining += _amount; break;
             case "amber": amber += _amount; break;
@@ -1200,11 +1202,21 @@ public static class PlayerInventory
     }
 
     /// <summary>
-    /// 아마존 결정 조각 누적
+    /// 아마존 결정 조각 누적 -> 아마존 포션이고 누적 안함
     /// </summary>
     public static ObscuredLong AmazonStoneCount
     {
-        get { if (amazonStoneMAX > 0) return amazonStoneMAX; else return 0; }
+        get 
+        {
+            if (amazonStoneMAX > 0)
+            { 
+                return amazonStoneMAX; 
+            }
+            else
+            {
+                return 0;
+            }
+        }
         set 
         { 
             amazonStoneMAX = value;
@@ -1238,7 +1250,7 @@ public static class PlayerInventory
 
     public static ObscuredFloat GetInnerValue(ObscuredInt inner)
     {
-        ///
+        /// * (float)PlayerInventory.AmazonPoint_Cost 어케 적용????
         ObscuredFloat result = 0;
         for (int i = 0; i <= inner; i++)
         {

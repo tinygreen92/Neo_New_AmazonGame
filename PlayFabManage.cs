@@ -316,7 +316,7 @@ public class PlayFabManage : MonoBehaviour
                 /// { "SECTOR_0", PlayerPrefsManager.instance.LoadStringJsonn("isilpus")}, 
                 { "SECTOR_0", PlayerInventory.isSuperUser.ToString() },                                         ///  광고 제거 구매 여부 저장
                 { "SECTOR_1", "1" },                                          ///  
-                { "SECTOR_2", PlayerInventory.AmazonStoneCount.ToString()},                             /// 결정 조각 게이지 저장
+                { "SECTOR_2", "2"},                             /// 
                 { "SECTOR_3", "3" },
                 { "SECTOR_4", "4"},
                 { "SECTOR_5", "5"},

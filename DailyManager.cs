@@ -295,7 +295,7 @@ public class DailyManager : MonoBehaviour
     /// </summary>
     void ResetDailyQuest()
     {
-        Debug.LogError("!!!!! Quest Reset !!!!!");
+        Debug.LogError("!!!!! ResetDailyQuest Reset !!!!!");
         // 다음날 0시 시간. /  최신값
         DateTime currentTime = UnbiasedTime.Instance.Now().Date.AddDays(1);
         // 최신값 세이브
@@ -328,11 +328,78 @@ public class DailyManager : MonoBehaviour
         ObscuredPrefs.SetInt("isDailyCheak", 0);
         PlayerPrefsManager.isDailyCheak = false;
         ObscuredPrefs.Save();
+
+        /// 패키지 레드닷 켜줌
+        RedDotManager.instance.RedDot[8].SetActive(true);
+        /// 일일 / 주간 / 월간 무료 갱신
+        ListModel.Instance.mvpDataList[0].daily_10 = 0;
+        ListModel.Instance.mvpDataList[0].daily_11 = 0;
+        ListModel.Instance.mvpDataList[0].daily_12 = 0;
+        ListModel.Instance.mvpDataList[0].daily_13 = 0;
+        /// 주간 갱신 월요일
+        if (UnbiasedTime.Instance.Now().DayOfWeek == DayOfWeek.Monday)
+        {
+            ListModel.Instance.mvpDataList[0].weekend_14 = 0;
+            ListModel.Instance.mvpDataList[0].weekend_15 = 0;
+            ListModel.Instance.mvpDataList[0].weekend_16 = 0;
+            ListModel.Instance.mvpDataList[0].weekend_17 = 0;
+            ListModel.Instance.mvpDataList[0].weekend_Day = 0;
+        }
+        else
+        {
+            ResetMonday(ListModel.Instance.mvpDataList[0].weekend_Day);
+        }
+
+        /// 월간 갱신 1일
+        if (UnbiasedTime.Instance.Now().Day == 1 ||
+            UnbiasedTime.Instance.Now().Day < ListModel.Instance.mvpDataList[0].mouth_Day)
+        {
+            ListModel.Instance.mvpDataList[0].mouth_18 = 0;
+            ListModel.Instance.mvpDataList[0].mouth_19 = 0;
+            ListModel.Instance.mvpDataList[0].mouth_20 = 0;
+            ListModel.Instance.mvpDataList[0].mouth_21 = 0;
+            ListModel.Instance.mvpDataList[0].mouth_22 = 0;
+            ListModel.Instance.mvpDataList[0].mouth_23 = 0;
+            ListModel.Instance.mvpDataList[0].mouth_Day = 0;
+        }
+
         /// 날짜 지나면 레드닷 활성화
         RedDotManager.instance.RedDot[7].SetActive(true);
         RedDotManager.instance.RedDot[4].SetActive(true);
         /////-> 다시 24시간 카운터 재시작
         //Invoke(nameof(CheckDailyInit), 0.5f);
+
+        PlayerPrefsManager.instance.TEST_SaveJson();
+    }
+
+    /// <summary>
+    /// 무슨 요일에 보상을 받았니?
+    /// </summary>
+    /// <param name="_weekDay"></param>
+    private void ResetMonday(int _weekDay)
+    {
+        /// 만약 _weekDay = 5이면 금요일, 다음주 수요일에 접속하는 경우
+
+
+        switch (UnbiasedTime.Instance.Now().DayOfWeek)
+        {
+            case DayOfWeek.Sunday:
+                break;
+            case DayOfWeek.Monday:
+                break;
+            case DayOfWeek.Tuesday:
+                break;
+            case DayOfWeek.Wednesday:
+                break;
+            case DayOfWeek.Thursday:
+                break;
+            case DayOfWeek.Friday:
+                break;
+            case DayOfWeek.Saturday:
+                break;
+            default:
+                break;
+        }
     }
 
 

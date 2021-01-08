@@ -25,8 +25,9 @@ public class ModelHandler : MonoBehaviour
         /// 완전 초기화 후에 쌔삥 데이터로 갈아 끼워줌
         if (!ObscuredPrefs.HasKey("TEST_Key"))
         {
-            ObscuredPrefs.SetInt("TEST_Key", 525);
-            //
+            /// 초반 초기화 완료 됐을때 키 초기화 TEST_Save 로 옮긴다
+            //ObscuredPrefs.SetInt("TEST_Key", 525);
+            
             if (ListModel.Instance.charatorList.Count == 0) TA_Parse_Charr();
             if (ListModel.Instance.supList.Count == 0) TA_Parser();
             if (ListModel.Instance.invisibleheartList.Count == 0) TA_Parser_HV();
@@ -46,6 +47,27 @@ public class ModelHandler : MonoBehaviour
                 buff_attack_speed_up = 0,
                 buff_gold_earned_up = 0,
                 buff_move_speed_up = 0,
+                pack_06 = 0,
+                pack_07 = 0,
+                pack_08 = 0,
+                pack_09 = 0,
+                pack_10 = 0,
+                daily_10 = 0,
+                daily_11 = 0,
+                daily_12 = 0,
+                daily_13 = 0,
+                weekend_14 = 0,
+                weekend_15 = 0,
+                weekend_16 = 0,
+                weekend_17 = 0,
+                mouth_18 = 0,
+                mouth_19 = 0,
+                mouth_20 = 0,
+                mouth_21 = 0,
+                mouth_22 = 0,
+                mouth_23 = 0,
+                weekend_Day = 0,
+                mouth_Day = 0,
             });
             // 수정 동굴 초기 수치 세팅
             ListModel.Instance.axeDataList.Add(new AxeStat
@@ -57,6 +79,10 @@ public class ModelHandler : MonoBehaviour
                 Axe_Speed = 1,
                 Axe_Skill = 1,
             });
+
+            /// 초반 초기화 완료 됐을때 키 초기화
+            ObscuredPrefs.SetInt("TEST_Key", 525);
+
             /// 스트링[] 몽땅 저장
             PlayerPrefsManager.instance.TEST_SaveJson();
             // 초기 무기 1렙 짜리 장착
@@ -87,7 +113,11 @@ public class ModelHandler : MonoBehaviour
             PlayerInventory.ticket_cave_enter = int.Parse(ObscuredPrefs.GetString("ticket_cave_enter"));
             PlayerInventory.ticket_cave_clear = int.Parse(ObscuredPrefs.GetString("ticket_cave_clear"));
             PlayerInventory.S_reinforce_box = int.Parse(ObscuredPrefs.GetString("S_reinforce_box"));
+
+
             PlayerInventory.S_leaf_box = int.Parse(ObscuredPrefs.GetString("S_leaf_box"));
+            
+            
             PlayerInventory.mining = int.Parse(ObscuredPrefs.GetString("mining"));
             PlayerInventory.amber = int.Parse(ObscuredPrefs.GetString("amber"));
             PlayerPrefsManager.DailyCount_Cheak = ObscuredPrefs.GetInt("DailyCount_Cheak");

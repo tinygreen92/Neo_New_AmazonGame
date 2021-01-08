@@ -154,6 +154,33 @@ public class MVP                 /// 유료 결제 트리거 보관
     public int buff_attack_speed_up;
     public int buff_gold_earned_up;
     public int buff_move_speed_up;
+    // 한정 패키지 구매 여부
+    public int pack_06;
+    public int pack_07;
+    public int pack_08;
+    public int pack_09;
+    public int pack_10;
+    // 일간 패키지
+    public int daily_10;
+    public int daily_11;
+    public int daily_12;
+    public int daily_13;
+    // 주간 패키지
+    public int weekend_14;
+    public int weekend_15;
+    public int weekend_16;
+    public int weekend_17;
+    // 월간 패키지
+    public int mouth_18;
+    public int mouth_19;
+    public int mouth_20;
+    public int mouth_21;
+    public int mouth_22;
+    public int mouth_23;
+    /// 주간/월간 패키지 체크 날짜
+    public int weekend_Day;
+    public int mouth_Day;
+
 }
 
 

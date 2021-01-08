@@ -39,6 +39,8 @@ public class OfflineManager : MonoBehaviour
         string data = ObscuredPrefs.GetString("DateTime", "19000101120000");
         DateTime saveDateTime = DateTime.ParseExact(data, "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
         Debug.LogWarning("로드 데이터 타임 " + saveDateTime);
+        /// 오프라인 시간 자동 저장 트리거 온! 얘 실행 되기 전까지 시간 강제저장 없음
+        PlayerPrefsManager.isCheckOffline = true;
         return saveDateTime;
     }
 
@@ -192,7 +194,7 @@ public class OfflineManager : MonoBehaviour
                 }
             }
             /// 거리 갱신
-            PlayerInventory.RecentDistance = applejack + 19.0d;
+            PlayerInventory.RecentDistance = applejack + 9.0d;
         }
         else
         {
@@ -225,15 +227,28 @@ public class OfflineManager : MonoBehaviour
 
         //나뭇잎
         ltimeBae1 = 0;
-        /// 나뭇잎 기본 획득량 공식 (거리 비례)
-        for (double i = tmpDistance; i < rainbowDash; i+= 10.0d)
+
+        /// 보스킬 0일 경우
+        if (tmpDistance <= rainbowDash)
         {
-            ltimeBae1 += Mathf.CeilToInt((float)(PlayerInventory.Player_Leaf_Earned * 10.0d * (1.0d + (0.35d * applejack))));
+            ltimeBae1 += Mathf.CeilToInt((float)(PlayerInventory.Player_Leaf_Earned * 10.0d * (1.0d + (0.35d * (rainbowDash+1d)))));
         }
+        else
+        {
+            /// 나뭇잎 기본 획득량 공식 (거리 비례)
+            for (double i = tmpDistance; i < rainbowDash; i += 10.0d)
+            {
+                ltimeBae1 += Mathf.CeilToInt((float)(PlayerInventory.Player_Leaf_Earned * 10.0d * (1.0d + (0.35d * i))));
+            }
+        }
+
+
         Debug.LogWarning("오프라인 이전 거리 : " + tmpDistance + " 보스 잡고 최대거리  :  " + rainbowDash + " 보스전 거리 " + applejack);
 
-        if (rainbowDash < 11.0d) ltimeBae1 = 0;              /// 보스킬 0 이면 예외처리
-        ltimeBae1 = (long)(ltimeBae1 * PlayerInventory.Offline_Earned);
+        /// 1.0키로 도달 못하면 예외처리
+        if (rainbowDash < 10.0d) ltimeBae1 = 0;
+        /// _input * 0.01d  = 잡은 몬스터 수 * 0.1
+        ltimeBae1 = (long)(_input * 0.01d * ltimeBae1 * PlayerInventory.Offline_Earned);
         PlayerInventory.Money_Leaf += ltimeBae1;
         /// 나뭇잎 획득량 업적 올리기
         ListModel.Instance.ALLlist_Update(4, ltimeBae1);
@@ -246,15 +261,16 @@ public class OfflineManager : MonoBehaviour
         // 아마존 결정 조각
         ltimeBae3 = Mathf.CeilToInt(_input / 500.0f);
         ltimeBae3 = (long)(ltimeBae3 * PlayerInventory.Offline_Earned);
-        PlayerInventory.AmazonStoneCount += ltimeBae3;
-        /// 결정조각  업적  카운트
-        ListModel.Instance.ALLlist_Update(2, ltimeBae3);
+        //PlayerInventory.AmazonStoneCount += ltimeBae3;
+        ///// 결정조각  업적  카운트
+        //ListModel.Instance.ALLlist_Update(2, ltimeBae3);
+        /// 아마존 포션 추가
+        PlayerInventory.SetTicketCount("S_leaf_box", (int)ltimeBae3);
         /// 텍스트 표기
         rewordText[0].text = PlayerPrefsManager.instance.DoubleToStringNumber(dtimeBae);
         rewordText[1].text = PlayerPrefsManager.instance.DoubleToStringNumber(ltimeBae1);
         rewordText[2].text = ltimeBae2.ToString("N0");
         rewordText[3].text = ltimeBae3.ToString("N0");
-
     }
 
     ///// <summary>
@@ -329,9 +345,11 @@ public class OfflineManager : MonoBehaviour
         ListModel.Instance.ALLlist_Update(5, ltimeBae2);
         rewordText[2].text = (ltimeBae2 * 2).ToString("N0");
 
-        PlayerInventory.AmazonStoneCount += ltimeBae3;
-        /// 결정조각  업적  카운트
-        ListModel.Instance.ALLlist_Update(2, ltimeBae3);
+        //PlayerInventory.AmazonStoneCount += ltimeBae3;
+        ///// 결정조각  업적  카운트
+        //ListModel.Instance.ALLlist_Update(2, ltimeBae3);
+        /// 아마존 포션 추가
+        PlayerInventory.SetTicketCount("S_leaf_box", (int)ltimeBae3);
         rewordText[3].text = (ltimeBae3 * 2).ToString("N0");
     }
 

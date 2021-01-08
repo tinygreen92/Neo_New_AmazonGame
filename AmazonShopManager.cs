@@ -237,12 +237,13 @@ public class AmazonShopManager : MonoBehaviour
         {
             case 0: nm.PostboxDailySend("L_box", 1); break;
             case 1: nm.PostboxDailySend("S_box", 1); break;
-            case 2: nm.PostboxDailySend("Crazy_dia", 1); break;
-            case 3: nm.PostboxDailySend("S_reinforce_box", 1); break;
-            case 4: nm.PostboxDailySend("Crazy_elixr", 1); break;
-            case 5: nm.PostboxDailySend("S_leaf_box", 1); break;
+            //case 2: nm.PostboxDailySend("Crazy_dia", 1); break;
+            //case 3: nm.PostboxDailySend("S_reinforce_box", 1); break;
+            //case 4: nm.PostboxDailySend("Crazy_elixr", 1); break;
+            //case 5: nm.PostboxDailySend("S_leaf_box", 1); break;
             /// 룬 뽑기 실행하면 리턴
             case 6: rm.GatchaRune(); gameObject.SetActive(false); return;
+            default: return;
         }
         /// 
         giftBoxPop.SetActive(true);
@@ -271,7 +272,7 @@ public class AmazonShopManager : MonoBehaviour
     /// </summary>
     public void ClickedTAILAccept()
     {
-        /// 그레이색이면 리턴
+        /// 그레이색이면 리턴 || 결정 카운터 9 이상이면 리턴
         if (AcceptBtn[1].sprite == AcceptSpr[0] || PlayerPrefsManager.AmaAdsTimer > 9) return;
         /// 팝업 내용 채우기
         AdsAmount.text = "x" + (10 * (PlayerPrefsManager.AmaAdsTimer+1)).ToString();
@@ -350,10 +351,8 @@ public class AmazonShopManager : MonoBehaviour
         ListModel.Instance.ALLlist_Update(0, 1);
         /// 광고 시청 일일 업적
         ListModel.Instance.DAYlist_Update(7);
-        /// 결정 조각 추가
-        PlayerInventory.AmazonStoneCount += tmpReword;
-        /// 결정조각  업적  카운트
-        ListModel.Instance.ALLlist_Update(2, tmpReword);
+        /// 아마존 포션 추가
+        PlayerInventory.SetTicketCount("S_leaf_box", tmpReword);
         _AdsComp = false;
         /// 결정 조각 팝업 
         PopUpManager.instance.ShowGetPop(10, tmpReword.ToString());

@@ -167,6 +167,7 @@ public class HpBarManager : MonoBehaviour
         EnableBossColor(false);
         /// 현재 에너미 날려버림 && 내부에서 새 에너미 생성까지
         DistanceManager.instance.StopPlayer();
+        bossBtn.gameObject.SetActive(false);
         /// 전투시작 버튼 활성화.
         Invoke(nameof(InvoReFight), 2.0f);
         //

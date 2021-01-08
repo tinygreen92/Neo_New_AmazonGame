@@ -522,16 +522,27 @@ public class PopInventory : MonoBehaviour
                 itemAmount.text = PlayerInventory.ticket_leaf_box.ToString("N0");
                 itemIcon.sprite = gatChaIcons[1];
                 break;
+
+
+                /// 아마존 포션
+                
+
             case 5:
                 itemDesc.text = ListModel.Instance.shopListAMA[3].korTailDesc;
                 itemAmount.text = PlayerInventory.S_reinforce_box.ToString("N0");
                 itemIcon.sprite = gatChaIcons[2];
                 break;
+
+
+                /// ---------------------------------- 아마존 포션
+
+
             case 6:
-                itemDesc.text = ListModel.Instance.shopListAMA[5].korTailDesc;
+                itemDesc.text = LeanLocalization.GetTranslationText("Inven_Money_Desc_08");
                 itemAmount.text = PlayerInventory.S_leaf_box.ToString("N0");
                 itemIcon.sprite = gatChaIcons[3];
                 break;
+
             case 7:
                 itemDesc.text = ListModel.Instance.shopListAMA[2].korTailDesc;
                 itemAmount.text = PlayerInventory.Crazy_dia.ToString("N0");
@@ -670,7 +681,11 @@ public class PopInventory : MonoBehaviour
                 }
 
                 break;
-            // S_leaf_box
+           
+
+                /// -------------------------------------------------------
+                /// 아마존 포션으로 바꿔
+
             case 6:
                 if (PlayerInventory.S_leaf_box < 1) return;
                 /// 10회?
@@ -679,27 +694,25 @@ public class PopInventory : MonoBehaviour
                     tmpAllamont = PlayerInventory.S_leaf_box;
                     PlayerInventory.S_leaf_box = 0;
                     isLastPPOP = true;
-                    /// 대박 나뭇잎 10회 뽑
-                    random = UnityEngine.Random.Range(1000* tmpAllamont, (5000 * tmpAllamont) +1);
-                    PlayerInventory.Money_Leaf += random;
-                    /// 나뭇잎 획득량 업적 올리기
-                    ListModel.Instance.ALLlist_Update(4, random);
+                    /// 아마존 포션 모두 열기
+                    PlayerInventory.AmazonStoneCount += tmpAllamont;
+                    /// 결정조각  업적  카운트
+                    ListModel.Instance.ALLlist_Update(2, tmpAllamont);
                     /// 미니팝업 세팅
-                    miniIcon.sprite = miniSprs[1];
-                    miniAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(random);
+                    miniIcon.sprite = miniSprs[4];
+                    miniAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(tmpAllamont);
                     miniPop.SetActive(true);
                 }
                 else
                 {
                     PlayerInventory.S_leaf_box--;
-                    /// 대박 나뭇잎  1 회 뽑
-                    random = UnityEngine.Random.Range(1000, 5001);
-                    PlayerInventory.Money_Leaf += random;
-                    /// 나뭇잎 획득량 업적 올리기
-                    ListModel.Instance.ALLlist_Update(4, random);
+                    /// 아마존 포션 1 회 열기
+                    PlayerInventory.AmazonStoneCount++;
+                    /// 결정조각  업적  카운트
+                    ListModel.Instance.ALLlist_Update(2, 1);
                     /// 미니팝업 세팅
-                    miniIcon.sprite = miniSprs[1];
-                    miniAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(random);
+                    miniIcon.sprite = miniSprs[4];
+                    miniAmount.text = "x1";
                     miniPop.SetActive(true);
                 }
 
@@ -877,13 +890,13 @@ public class PopInventory : MonoBehaviour
         PlayerInventory.SetTicketCount("pvp", 10);
         PlayerInventory.SetTicketCount("cave_enter", 10);
         PlayerInventory.SetTicketCount("cave_clear", 10);
-        PlayerInventory.SetTicketCount("S_leaf_box", 10);
-        PlayerInventory.SetTicketCount("S_reinforce_box", 10);
         PlayerInventory.SetTicketCount("mining", 10);
         PlayerInventory.SetTicketCount("amber", 10);
         //
-        PlayerInventory.SetTicketCount("Crazy_dia", 10);
-        PlayerInventory.SetTicketCount("Crazy_elixr", 10);
+        PlayerInventory.SetTicketCount("S_leaf_box", 10);
+        //PlayerInventory.SetTicketCount("S_reinforce_box", 10);
+        //PlayerInventory.SetTicketCount("Crazy_dia", 10);
+        //PlayerInventory.SetTicketCount("Crazy_elixr", 10);
         //
         PlayerInventory.SetBoxsCount("weapon_coupon", 10);
         PlayerInventory.SetBoxsCount("E", 10);
@@ -900,7 +913,7 @@ public class PopInventory : MonoBehaviour
         PlayerInventory.Money_EnchantStone+=10;
         PlayerInventory.Money_Gold+=10;
         PlayerInventory.Money_Leaf+=10;
-
+        //
 
         MoneyManager.instance.RefreshAllMoney();
     }

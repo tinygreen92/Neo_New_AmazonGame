@@ -175,6 +175,7 @@ public class PlayerPrefsManager : MonoBehaviour
     public static ObscuredBool isGoldposOnAir;                            // 늪지 있을때는 돈 안 떨구기 나가면 돈 떨구기
     public static ObscuredBool isBossBtnAlive;                           // 화면 전환 후 배틀 캔버스에 보스 도전버튼 표기 되어야함
     public static ObscuredBool isIdleModeOn;                   // 지금 방치모드 켜져있니?
+    public static ObscuredBool isCheckOffline;                   // 오프라인 팝업 띄웠니?
 
     /// <summary>
     /// 튜토리얼에서 사용하는 어디까지 클리어했니 인덱스
@@ -312,13 +313,22 @@ public class PlayerPrefsManager : MonoBehaviour
         ObscuredPrefs.SetInt("isTutoAllClear", isTutoAllClear ? 525 : 0);
 
 
-        /// 타이머 일괄적으로 저장
+        /// 아직 오프라인 체크 안함
+        if (!isCheckOffline)
+        {
+            return;
+        }
+
+        /// 오프라인 보상 체크 끝났다면 타이머 일괄적으로 저장
         string tmp = UnbiasedTime.Instance.Now().ToString("yyyyMMddHHmmss");
         ObscuredPrefs.SetString("DateTime", tmp);
         ObscuredPrefs.SetString("AmazonShop", tmp);
         //ObscuredPrefs.SetString("Check_Daily", tmp);
         ObscuredPrefs.SetString("FreeWeapon", tmp);
         ObscuredPrefs.SetString("FreeDia", tmp);
+
+        ObscuredPrefs.Save();
+        PlayerPrefs.Save();
 
         Debug.LogWarning("세이브 데이터 타임 " + tmp);
     }
@@ -582,16 +592,16 @@ public class PlayerPrefsManager : MonoBehaviour
         ListModel.Instance.shopListNOR = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[11]));
         ListModel.Instance.shopListPACK = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[12]));
         ListModel.Instance.shopListAMA = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[13]));
-        //
+        // 유료 구매 부분
         ListModel.Instance.mvpDataList = JsonConvert.DeserializeObject<List<MVP>>(AESDecrypt128(tunamayo[14]));
-        //
+        //일퀘 / 업적 / 튜토리얼
         ListModel.Instance.missionDAYlist = JsonConvert.DeserializeObject<List<MissonSchool>>(AESDecrypt128(tunamayo[15]));
         ListModel.Instance.missionALLlist = JsonConvert.DeserializeObject<List<MissonSchool>>(AESDecrypt128(tunamayo[16]));
         ListModel.Instance.missionTUTOlist = JsonConvert.DeserializeObject<List<MissonSchool>>(AESDecrypt128(tunamayo[17]));
-        //
+        // 채굴 관련
         ListModel.Instance.mineCraft = JsonConvert.DeserializeObject<List<MineCraft>>(AESDecrypt128(tunamayo[18]));
         ListModel.Instance.axeDataList = JsonConvert.DeserializeObject<List<AxeStat>>(AESDecrypt128(tunamayo[19]));
-        //
+        // 늪지 관련
         ListModel.Instance.swampCaveData = JsonConvert.DeserializeObject<List<SwampCave>>(AESDecrypt128(tunamayo[20]));
 
 
@@ -604,8 +614,8 @@ public class PlayerPrefsManager : MonoBehaviour
         /// 장착 룬 스탯 새로고침
         ListModel.Instance.SetEquipedRuneEffect();
         /// 유료 재화 구매 여부 로드
-        /// TODO : 영구적인 버프 효과 아이콘 활성화
         PlayerInventory.isSuperUser = ListModel.Instance.mvpDataList[0].SuperUser;
+        /// TODO : 영구적인 버프 효과 아이콘 활성화
         PlayerInventory.isbuff_power_up = ListModel.Instance.mvpDataList[0].buff_power_up != 0 ? true : false;
         if (PlayerInventory.isbuff_power_up) bm.MoneyLoveBuff(0);
         PlayerInventory.isbuff_attack_speed_up = ListModel.Instance.mvpDataList[0].buff_attack_speed_up != 0 ? true : false;
@@ -614,6 +624,10 @@ public class PlayerPrefsManager : MonoBehaviour
         if (PlayerInventory.isbuff_move_speed_up) bm.MoneyLoveBuff(2);
         PlayerInventory.isbuff_gold_earned_up = ListModel.Instance.mvpDataList[0].buff_gold_earned_up != 0 ? true : false;
         if (PlayerInventory.isbuff_gold_earned_up) bm.MoneyLoveBuff(3);
+        /// 1회 한정 패키지 구매 여부 필요 한지?
+        
+
+
 
         /// 장착 무기 스탯 새로고침
         for (int i = 0; i < ListModel.Instance.weaponList.Count; i++)

@@ -276,6 +276,15 @@ public class NanooManager : MonoBehaviour
                     /// 50개 까지만 인게임 표현 , 그 이상은 서버에 저장
                     if (_index > 49) break;
                 }
+                /// 포문 돌았는데 0개다 = 모두받기 회색.
+                if (_index < 1)
+                {
+                    pm.SetBtnBlueAllcept(false);
+                }
+                else
+                {
+                    pm.SetBtnBlueAllcept(true);
+                }
 
                 Debug.LogError("PostboxItem Sucess");
                 SystemPopUp.instance.StopLoopLoading();
@@ -336,7 +345,11 @@ public class NanooManager : MonoBehaviour
                     case "L_box": IconImg.sprite = pm.IconSprs[9]; break;
                     case "pvp": IconImg.sprite = pm.IconSprs[10]; break;
                     case "cave": IconImg.sprite = pm.IconSprs[11]; break;
+
+                    /// 아마존 결정 조각 crystal
+
                     case "crystal": IconImg.sprite = pm.IconSprs[12]; break;
+
                     case "stone": IconImg.sprite = pm.IconSprs[13]; break;
                     case "reinforce": IconImg.sprite = pm.IconSprs[14]; break;
                     case "gold": IconImg.sprite = pm.IconSprs[15]; break;
@@ -410,6 +423,11 @@ public class NanooManager : MonoBehaviour
         });
     }
 
+    public void PostboxRedDot()
+    {
+        pm.RedotAssemble();
+    }
+
     /// <summary>
     /// PostboxItemUse에 서 호출해서 습득
     /// </summary>
@@ -462,11 +480,19 @@ public class NanooManager : MonoBehaviour
             case "cave":
                 PlayerInventory.SetTicketCount("cave_enter", int.Parse(_count));
                 break;
+
+
+
             case "crystal":
-                PlayerInventory.AmazonStoneCount += long.Parse(_count);
-                /// 결정조각  업적  카운트
-                ListModel.Instance.ALLlist_Update(2, long.Parse(_count));
+                //PlayerInventory.AmazonStoneCount += long.Parse(_count);
+                ///// 결정조각  업적  카운트
+                //ListModel.Instance.ALLlist_Update(2, long.Parse(_count));
+                PlayerInventory.SetTicketCount("S_leaf_box", int.Parse(_count));
+
                 break;
+
+
+
             case "stone":
                 PlayerInventory.Money_AmazonCoin += long.Parse(_count);
                 break;

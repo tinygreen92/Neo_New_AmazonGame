@@ -159,23 +159,12 @@ public class HeartItem : MonoBehaviour
             if (ListModel.Instance.heartList.Count >= 30) MaxButton.SetActive(true);
             return;
         }
+
         spriteBox.sprite = icons[int.Parse(ListModel.Instance.heartList[_index - 1].imgIndex)];
         /// 유물 뽑기 버튼 가리기
         GetHeartGatcha(false);
         buttonParent.GetComponent<Button>().targetGraphic = buttonParent.GetChild(0).GetComponent<Image>();
 
-        //for (int i = 0; i < PlayerPrefsManager.heartUpgrageMutiple; i++)
-        //{
-        //    mutiple = i + 1;
-
-        //    // 돈 안 충분하다.
-        //    if (!IsPurchaseable())
-        //    {
-        //        if (mutiple == 1) break;
-        //        mutiple -= 1;
-        //        break;
-        //    }
-        //}
         mutiple = PlayerPrefsManager.heartUpgrageMutiple;
 
         /// 만렙 예외 처리 
@@ -302,6 +291,13 @@ public class HeartItem : MonoBehaviour
 
         ///  유물 카운터 1 올리기
         ListModel.Instance.DAYlist_Update(4);
+
+        /// 아마존 결정 조각 요구치 27 일때 새로 고침
+        if (int.Parse(ListModel.Instance.heartList[_index - 1].imgIndex) == 27)
+        {
+            PlayerInventory.AmazonStoneCount += 0;
+        }
+
         /// 수치 새로 고침
         WeaponTVP.SetHeartRefresh();
     }

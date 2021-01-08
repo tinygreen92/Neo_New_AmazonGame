@@ -14,7 +14,8 @@ public class BuffManager : MonoBehaviour
     /// <summary>
     /// 상점에서 사는 버프 시간은 30분 고정이다.
     /// </summary>
-    private const float SHOP_BUFF_TIME = 1800.0f;
+    //private const float SHOP_BUFF_TIME = 1800.0f;
+    private const float SHOP_BUFF_TIME = 30.0f;
     /// <summary>
     /// 버프 타이머 코루틴 8가지
     /// </summary>

@@ -107,6 +107,7 @@ public class FakeLoading : MonoBehaviour
 
 
 
+
         /// ------------------------------------------------
         /// -----화면 까기 전에 완료되어야 할 것 들--------
         /// ------------------------------------------------
@@ -115,7 +116,18 @@ public class FakeLoading : MonoBehaviour
         {
             yield return new WaitForFixedUpdate();
         }
-
+        /// 무료 구매 몽땅하면 레드닷 꺼줌.
+        var tmpppmt = ListModel.Instance.mvpDataList[0];
+        if (tmpppmt.daily_10 != 0 && tmpppmt.weekend_14 != 0 && tmpppmt.mouth_18 != 0)
+        {
+            /// 패키지 레드닷  꺼줌
+            RedDotManager.instance.RedDot[8].SetActive(false);
+        }
+        else
+        {
+            /// 패키지 레드닷  꺼줌
+            RedDotManager.instance.RedDot[8].SetActive(true);
+        }
         /// 튜토리얼 새로고침
         tm.InitTutorial();
 

@@ -98,8 +98,6 @@ public class IAPManager : MonoBehaviour
         }
         PackCategory[_index].SetActive(true);
         PackCategory[_index].GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
-        /// 팝업 옵션 다 꺼주기
-        ShutUpSnepe();
         /// 어느 패널 열거니
         switch (_index)
         {
@@ -252,6 +250,8 @@ public class IAPManager : MonoBehaviour
     /// <param name="_wonhwa"></param>
     public void Purchase_Pakage(int _indx, int[] _amount)
     {
+        /// 어떤 버튼 보여줄까 숨겨.
+        ShutUpSnepe();
         if (_indx < 5)
         {
             front5Amount = _amount;
@@ -371,30 +371,41 @@ public class IAPManager : MonoBehaviour
                 Purchase_Product_pack_05();
                 break;
 
+
+                /// -------------------------------------------------
+
+
             case 5:
                 Purchase_Product_pack_06();
+                SwichPackageCatgory(1);
                 break;
 
             case 6:
                 Purchase_Product_pack_07();
+                SwichPackageCatgory(1);
                 break;
 
             case 7:
                 Purchase_Product_pack_08();
+                SwichPackageCatgory(1);
                 break;
 
             case 8:
                 Purchase_Product_pack_09();
+                SwichPackageCatgory(1);
                 break;
 
             case 9:
                 Purchase_Product_pack_10();
+                SwichPackageCatgory(1);
                 break;
 
             /// -----------------------------------------------------------------------------------
 
             case 10:
+                ListModel.Instance.mvpDataList[0].daily_10 = 39;
                 PakageFreeItem(10);
+                SwichPackageCatgory(2);
                 ComplPopup.SetActive(true);
                 break;
             case 11:
@@ -414,7 +425,13 @@ public class IAPManager : MonoBehaviour
             /// -----------------------------------------------------------------------------------
 
             case 14:
+                ListModel.Instance.mvpDataList[0].weekend_14 = 41;
+                if (ListModel.Instance.mvpDataList[0].weekend_Day == 0)
+                {
+                    ListModel.Instance.mvpDataList[0].weekend_Day = (int)UnbiasedTime.Instance.Now().DayOfWeek;
+                }
                 PakageFreeItem(14);
+                SwichPackageCatgory(3);
                 ComplPopup.SetActive(true);
                 break;
             case 15:
@@ -434,7 +451,13 @@ public class IAPManager : MonoBehaviour
             /// -----------------------------------------------------------------------------------
 
             case 18:
+                ListModel.Instance.mvpDataList[0].mouth_18 = 81;
+                if (ListModel.Instance.mvpDataList[0].mouth_Day == 0)
+                {
+                    ListModel.Instance.mvpDataList[0].mouth_Day = UnbiasedTime.Instance.Now().Day;
+                }
                 PakageFreeItem(18);
+                SwichPackageCatgory(4);
                 ComplPopup.SetActive(true);
                 break;
             case 19:
@@ -459,6 +482,7 @@ public class IAPManager : MonoBehaviour
         }
     }
 
+
     /// <summary>
     /// 무료 보급
     /// </summary>
@@ -467,6 +491,13 @@ public class IAPManager : MonoBehaviour
     {
         /// 템 지급
         StartCoroutine(InvoFree(_index));
+        /// 무료 구매 몽땅하면 레드닷 꺼줌.
+        var tmpppmt = ListModel.Instance.mvpDataList[0];
+        if (tmpppmt.daily_10 != 0 && tmpppmt.weekend_14 != 0 && tmpppmt.mouth_18 != 0)
+        {
+            /// 패키지 레드닷  꺼줌
+            RedDotManager.instance.RedDot[8].SetActive(false);
+        }
     }
 
     IEnumerator InvoFree(int _index)
@@ -517,21 +548,43 @@ public class IAPManager : MonoBehaviour
         switch (purchaseIndex[3])
         {
             case 11:
+                ListModel.Instance.mvpDataList[0].daily_11 = 102;
                 nm.PostboxItemSend("reinforce_box", 3, "");
                 break;
             case 12:
+                ListModel.Instance.mvpDataList[0].daily_12 = 28;
                 nm.PostboxItemSend("reinforce_box", 10, "");
                 break;
             case 15:
+                ListModel.Instance.mvpDataList[0].weekend_15 = 53;
+                if (ListModel.Instance.mvpDataList[0].weekend_Day == 0)
+                {
+                    ListModel.Instance.mvpDataList[0].weekend_Day = (int)UnbiasedTime.Instance.Now().DayOfWeek;
+                }
                 nm.PostboxItemSend("weapon_coupon", 10, "");
                 break;
             case 16:
+                ListModel.Instance.mvpDataList[0].weekend_16 = 62;
+                if (ListModel.Instance.mvpDataList[0].weekend_Day == 0)
+                {
+                    ListModel.Instance.mvpDataList[0].weekend_Day = (int)UnbiasedTime.Instance.Now().DayOfWeek;
+                }
                 nm.PostboxItemSend("weapon_coupon", 15, "");
                 break;
             case 19:
+                ListModel.Instance.mvpDataList[0].mouth_19 = 91;
+                if (ListModel.Instance.mvpDataList[0].mouth_Day == 0)
+                {
+                    ListModel.Instance.mvpDataList[0].mouth_Day = UnbiasedTime.Instance.Now().Day;
+                }
                 StartCoroutine(DiaDiaPack(0));
                 break;
             case 20:
+                ListModel.Instance.mvpDataList[0].mouth_20 = 93;
+                if (ListModel.Instance.mvpDataList[0].mouth_Day == 0)
+                {
+                    ListModel.Instance.mvpDataList[0].mouth_Day = UnbiasedTime.Instance.Now().Day;
+                }
                 StartCoroutine(DiaDiaPack(1));
                 break;
         }
@@ -814,6 +867,7 @@ public class IAPManager : MonoBehaviour
             if (_amount == -1)
             {
                 sim.popUpIconDesc.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(dtimeBae);
+                GiftGetText.text = LeanLocalization.GetTranslationText("YOUR_REWORD_IN_POCKET");
             }
             /// 버프 아이콘일경우 갯수 표기 안함
             else if (_amount == 11)
@@ -948,15 +1002,23 @@ public class IAPManager : MonoBehaviour
                 StartCoroutine(Notouch(0));
                 ComplPopup.SetActive(true);
                 break;
+
+
+
+                /// ------------------ 한정 패키지 1회 구매 가능
+
+
+
             case EM_IAPConstants.Product_pack_06:
                 StartCoroutine(Notouch(1));
-                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                ListModel.Instance.mvpDataList[0].pack_06 = 6;
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_07:
                 nm.PostboxItemSend("stone", 15, "");
                 PlayerInventory.isSuperUser = 525;
                 ListModel.Instance.mvpDataList[0].SuperUser = 525;
+                ListModel.Instance.mvpDataList[0].pack_07 = 7;
                 bac.Banner525Hide();
                 PlayerInventory.SetBuffStack(1);
                 bm.MoneyLoveBuff(0);
@@ -972,51 +1034,68 @@ public class IAPManager : MonoBehaviour
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_08:
-                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                ListModel.Instance.mvpDataList[0].pack_08 = 8;
                 StartCoroutine(Back7());
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_09:
-                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                ListModel.Instance.mvpDataList[0].pack_09 = 9;
                 StartCoroutine(Back7());
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_10:
-                //SetPopContents(sim.PackCons[1], 1, 0, 3);
+                ListModel.Instance.mvpDataList[0].pack_10 = 1;
                 StartCoroutine(Back7());
                 ComplPopup.SetActive(true);
                 break;
 
 
             case EM_IAPConstants.Product_day_01:
+                ListModel.Instance.mvpDataList[0].daily_13 = 31;
                 StartCoroutine(DailyPack());
+                SwichPackageCatgory(2);
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_week_01:
+                ListModel.Instance.mvpDataList[0].weekend_17 = 71;
+                if (ListModel.Instance.mvpDataList[0].weekend_Day == 0)
+                {
+                    ListModel.Instance.mvpDataList[0].weekend_Day = (int)UnbiasedTime.Instance.Now().DayOfWeek;
+                }
                 StartCoroutine(WeekPack());
+                SwichPackageCatgory(3);
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_month_01:
+                ListModel.Instance.mvpDataList[0].mouth_21 = 21;
+                if (ListModel.Instance.mvpDataList[0].mouth_Day == 0)
+                {
+                    ListModel.Instance.mvpDataList[0].mouth_Day = UnbiasedTime.Instance.Now().Day;
+                }
                 StartCoroutine(MonthPack(1));
+                SwichPackageCatgory(4);
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_month_02:
+                ListModel.Instance.mvpDataList[0].mouth_22 = 12;
+                if (ListModel.Instance.mvpDataList[0].mouth_Day == 0)
+                {
+                    ListModel.Instance.mvpDataList[0].mouth_Day = UnbiasedTime.Instance.Now().Day;
+                }
                 StartCoroutine(MonthPack(2));
+                SwichPackageCatgory(4);
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_month_03:
+                ListModel.Instance.mvpDataList[0].mouth_23 = 32;
+                if (ListModel.Instance.mvpDataList[0].mouth_Day == 0)
+                {
+                    ListModel.Instance.mvpDataList[0].mouth_Day = UnbiasedTime.Instance.Now().Day;
+                }
                 StartCoroutine(MonthPack(3));
+                SwichPackageCatgory(4);
                 ComplPopup.SetActive(true);
                 break;
-
-
-
-
-
-
-
-
-
 
 
             default:

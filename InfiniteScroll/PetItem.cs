@@ -79,7 +79,7 @@ public class PetItem : MonoBehaviour
                 /// 공격력 증가량
                 DescBox1.text = (ListModel.Instance.petList[_index].percentDam * thisLevel).ToString("F0") + "%";
                 /// 쿨 타임
-                DescBox2.text = thisLevel != 0 ? (ListModel.Instance.petList[_index].coolTime - ((thisLevel-1) * 2)).ToString("N0") + "초" : "300초";
+                DescBox2.text = thisLevel != 0 ? (ListModel.Instance.petList[_index].coolTime - ((thisLevel-1) * 2)).ToString("N0") + "초" : "228초";
                 /// 타이틀
                 TitleText1.text = "대미지";
                 /// 온 오프
@@ -92,7 +92,7 @@ public class PetItem : MonoBehaviour
                 /// 공격력 증가량
                 DescBox1.text = (ListModel.Instance.petList[_index].percentDam * thisLevel).ToString("F0") + "%";
                 /// 쿨 타임
-                DescBox2.text = thisLevel != 0 ? (ListModel.Instance.petList[_index].coolTime - ((thisLevel-1) * 3)).ToString("N0") + "초" : "600초";
+                DescBox2.text = thisLevel != 0 ? (ListModel.Instance.petList[_index].coolTime - ((thisLevel-1) * 3)).ToString("N0") + "초" : "307초";
                 /// 버프 지속시간
                 DescBox4.text = (ListModel.Instance.petList[_index].usingTimeDam * thisLevel).ToString("N0") + "초";
                 /// 타이틀
