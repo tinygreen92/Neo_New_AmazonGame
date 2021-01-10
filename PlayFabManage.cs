@@ -332,6 +332,7 @@ public class PlayFabManage : MonoBehaviour
             (result) =>
             {
                 Debug.LogWarning("SECTOR_9 데이터 저장 성공!! " + myPlayFabId);
+                CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
             },
             (error) => Debug.LogWarning("데이터 저장 실패")
             );

@@ -68,7 +68,7 @@ public class FakeLoading : MonoBehaviour
 
         /// Dotween 테스트
         StartManager.instance.headChatTxt.text = "";
-        Tweener tw = StartManager.instance.headChatTxt.DOText(StartManager.instance.NOTICE, 1f);
+        StartManager.instance.headChatTxt.DOText(StartManager.instance.NOTICE, 1f);
         //
         while (currentTime < 1f)
         {
@@ -83,9 +83,9 @@ public class FakeLoading : MonoBehaviour
         }
         /// 첫 실행시 메인 브금 재생
         AudioManager.instance.PlayAudio("Main", "BGM");
-
+        StartManager.instance.headChatTxt.text = "";
+        StartManager.instance.headChatTxt.DOText(StartManager.instance.NOTICE2, 1f);
         currentTime = 0;
-
         while (currentTime < 1f)
         {
             currentTime += Time.deltaTime;
@@ -116,6 +116,7 @@ public class FakeLoading : MonoBehaviour
         {
             yield return new WaitForFixedUpdate();
         }
+
         /// 무료 구매 몽땅하면 레드닷 꺼줌.
         var tmpppmt = ListModel.Instance.mvpDataList[0];
         if (tmpppmt.daily_10 != 0 && tmpppmt.weekend_14 != 0 && tmpppmt.mouth_18 != 0)
@@ -135,7 +136,6 @@ public class FakeLoading : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false);
         transform.GetChild(1).gameObject.SetActive(false);
         StartManager.instance.headChatTxt.text = "";
-
 
         currentTime = 0;
         while (currentTime < 1f)

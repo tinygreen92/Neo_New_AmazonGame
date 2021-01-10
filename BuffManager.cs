@@ -14,8 +14,8 @@ public class BuffManager : MonoBehaviour
     /// <summary>
     /// 상점에서 사는 버프 시간은 30분 고정이다.
     /// </summary>
-    //private const float SHOP_BUFF_TIME = 1800.0f;
-    private const float SHOP_BUFF_TIME = 30.0f;
+    private const float SHOP_BUFF_TIME = 1800.0f;
+    //private const float SHOP_BUFF_TIME = 30.0f;
     /// <summary>
     /// 버프 타이머 코루틴 8가지
     /// </summary>
@@ -43,6 +43,8 @@ public class BuffManager : MonoBehaviour
         filedImgs[_id].fillAmount = 1f;
     }
 
+    WaitForSeconds wfs;
+
     /// <summary>
     /// !!!!!!!!! 최초 한번만 실행 되어야 함
     /// 상점 코루틴은 [공격력 =0 공속 = 1  이속 = 2 골드 = 3 > 4종류 취급
@@ -55,19 +57,9 @@ public class BuffManager : MonoBehaviour
         float time = 0;
         float maxTime;
 
-        /// 펫이랑 상점 버프 구분
-        if (_id > 3)
-        {
-            maxTime = ListModel.Instance.petList[_id - 3].usingTimeDam * int.Parse(ListModel.Instance.petList[_id - 3].petLevel);
-        }
-        /// 상점 버프는 초 고정
-        else
-        {
-            maxTime = SHOP_BUFF_TIME;
-        }
-
         /// 버프 켜줌
         BuffOnOff(_id, true);
+
         yield return null;
 
         while (true)
@@ -75,22 +67,48 @@ public class BuffManager : MonoBehaviour
             yield return new WaitForFixedUpdate();
 
             time += Time.deltaTime;
+            /// 펫 버프는 레벨에따라 실시간 갱신
+            if (_id > 3)
+            {
+                maxTime = ListModel.Instance.petList[_id - 3].usingTimeDam * PlayerInventory.Pet_lv(_id - 3);
+            }
+            /// 상점 버프는 초 고정
+            else
+            {
+                maxTime = SHOP_BUFF_TIME;
+            }
+            /// 이미지 fill
             filedImgs[_id].fillAmount = (maxTime - time) / maxTime;
+
+            /// 종료 조건
             if (time >= maxTime)
             {
-                time = 0;
                 /// 버프 꺼줌
                 BuffOnOff(_id, false);
-                /// 펫 버프 일 경우에는 무한 반복 / 상점 버프는 꺼줌
-                if (_id > 3)
-                {
-                    float cooltime = (ListModel.Instance.petList[_id - 3].coolTime - (int.Parse(ListModel.Instance.petList[_id - 3].petLevel) * 3));
-                    yield return new WaitForSeconds(cooltime);
-                    maxTime = ListModel.Instance.petList[_id - 3].usingTimeDam * int.Parse(ListModel.Instance.petList[_id - 3].petLevel);
-                    BuffOnOff(_id, true);
-                }
-                else break;
+                break;
             }
+        }
+
+        /// 펫 버프 일 경우에는 쿨 타임 대기 후, 무한 반복 / 상점 버프는 꺼줌
+        if (_id > 3)
+        {
+            float cooltime;
+            time = 0;
+
+            while (true)
+            {
+                yield return new WaitForFixedUpdate();
+
+                time += Time.deltaTime;
+                cooltime = (ListModel.Instance.petList[_id - 3].coolTime - (PlayerInventory.Pet_lv(_id - 3) * 3));
+                /// 탈출 조건
+                if (time >= cooltime)
+                {
+                    break;
+                }
+            }
+            /// 펫 버프일 경우 다시 코루틴 시작
+            StartCoroutine(BuffTimerStart(_id));
         }
 
     }

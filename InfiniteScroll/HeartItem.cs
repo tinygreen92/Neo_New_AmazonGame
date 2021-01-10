@@ -292,9 +292,10 @@ public class HeartItem : MonoBehaviour
         ///  유물 카운터 1 올리기
         ListModel.Instance.DAYlist_Update(4);
 
-        /// 아마존 결정 조각 요구치 27 일때 새로 고침
+        /// 아마존 결정 조각 요구치 유물 (27) 일때 레벨업 했다?
         if (int.Parse(ListModel.Instance.heartList[_index - 1].imgIndex) == 27)
         {
+            /// 경험치바 새로 고침
             PlayerInventory.AmazonStoneCount += 0;
         }
 

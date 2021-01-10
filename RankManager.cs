@@ -60,6 +60,7 @@ public class RankManager : MonoBehaviour
 
         if (rankList == null) rankList = new List<RankData>();
         rankList.Clear();
+        /// 나누 랭킹 호출
         nanoo.ShowRankDistance();
         _page = -1;
     }

@@ -773,7 +773,7 @@ public class WeaponManager : MonoBehaviour
         }
         else
         {
-            fullBtnLayout.SetActive(false); fullBtnExit.SetActive(true); fullBtnExitText.SetActive(true);
+            fullBtnLayout.SetActive(false); Invoke(nameof(InvoXiteBtn), 3f); fullBtnExitText.SetActive(true);
         }
         ///뽑기 팝업 호출
         PopUpManager.instance.ShowPopUP(18);
@@ -925,7 +925,7 @@ public class WeaponManager : MonoBehaviour
         }
         else
         {
-            fullBtnLayout.SetActive(false); fullBtnExit.SetActive(true); fullBtnExitText.SetActive(true);
+            fullBtnLayout.SetActive(false); Invoke(nameof(InvoXiteBtn), 3f); fullBtnExitText.SetActive(true);
         }
         ///뽑기 팝업 호출
         PopUpManager.instance.ShowPopUP(18);
@@ -936,6 +936,11 @@ public class WeaponManager : MonoBehaviour
         nsm.RefreshWeapon();
         /// 무기 새로고침
         RefreshWeapon();
+    }
+
+    void InvoXiteBtn()
+    {
+        fullBtnExit.SetActive(true);
     }
 
 

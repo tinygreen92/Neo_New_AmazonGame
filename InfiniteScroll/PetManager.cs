@@ -87,7 +87,6 @@ public class PetManager : MonoBehaviour
         yield return null;
         float time = 0;
         var petDamege = PlayerInventory.character_DPS * ListModel.Instance.petList[0].percentDam * PlayerInventory.Pet_lv(0) * 0.01d;
-        //float cooltime = thisLevel != 0 ? (ListModel.Instance.petList[0].coolTime - ((thisLevel - 1) * 2)) : ListModel.Instance.petList[0].coolTime;
         float cooltime;
         Debug.LogError(" 펫의 공격 준비");
 
@@ -115,6 +114,7 @@ public class PetManager : MonoBehaviour
                 break;
             }
         }
+
         StartCoroutine(AutoPet());
     }
 

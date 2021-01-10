@@ -17,7 +17,7 @@ public class MoneyManager : MonoBehaviour
     public Text[] ElixirTextBoxs;
     public Text[] EnchantStoneTextBoxs;
     public Text[] AmazonStoneTextBoxs;
-    public Text[] CostZogakTextBoxs;
+    //public Text[] CostZogakTextBoxs;
 
     private void Start()
     {
@@ -36,7 +36,7 @@ public class MoneyManager : MonoBehaviour
         DisplayElixir();
         DisplayEnchantStone();
         DisplayAmazonStone();
-        DisplayCostZogak();
+        //DisplayCostZogak();
         ///무기 재호ㅘ
         UpdateBoxs();
         UpdateTicket();
@@ -137,14 +137,14 @@ public class MoneyManager : MonoBehaviour
         }
     }
 
-    public void DisplayCostZogak()
-    {
-        tmpStr = PlayerPrefsManager.instance.DoubleToStringNumber(PlayerInventory.AmazonStoneCount);
-        for (int i = 0; i < CostZogakTextBoxs.Length; i++)
-        {
-            CostZogakTextBoxs[i].text = tmpStr;
-        }
-    }
+    //public void DisplayCostZogak()
+    //{
+    //    tmpStr = PlayerPrefsManager.instance.DoubleToStringNumber(PlayerInventory.AmazonStoneCount);
+    //    for (int i = 0; i < CostZogakTextBoxs.Length; i++)
+    //    {
+    //        CostZogakTextBoxs[i].text = tmpStr;
+    //    }
+    //}
 
 
 

@@ -118,7 +118,7 @@ public class DailyManager : MonoBehaviour
             PlayerPrefsManager.instance.TEST_SaveJson();
             Debug.LogError("3600초 저장! : " + dailydRemaining.Minutes);
             isSave = true;
-            Invoke(nameof(InvoSaveTrigger), 10.0f);
+            Invoke(nameof(InvoSaveTrigger), 61.0f);
         }
 
         /// 24시간 카운트가 계속 돌아가는 상태 = 아직 날짜 안지남. / 출첵도 함.
@@ -331,24 +331,15 @@ public class DailyManager : MonoBehaviour
 
         /// 패키지 레드닷 켜줌
         RedDotManager.instance.RedDot[8].SetActive(true);
+
         /// 일일 / 주간 / 월간 무료 갱신
         ListModel.Instance.mvpDataList[0].daily_10 = 0;
         ListModel.Instance.mvpDataList[0].daily_11 = 0;
         ListModel.Instance.mvpDataList[0].daily_12 = 0;
         ListModel.Instance.mvpDataList[0].daily_13 = 0;
-        /// 주간 갱신 월요일
-        if (UnbiasedTime.Instance.Now().DayOfWeek == DayOfWeek.Monday)
-        {
-            ListModel.Instance.mvpDataList[0].weekend_14 = 0;
-            ListModel.Instance.mvpDataList[0].weekend_15 = 0;
-            ListModel.Instance.mvpDataList[0].weekend_16 = 0;
-            ListModel.Instance.mvpDataList[0].weekend_17 = 0;
-            ListModel.Instance.mvpDataList[0].weekend_Day = 0;
-        }
-        else
-        {
-            ResetMonday(ListModel.Instance.mvpDataList[0].weekend_Day);
-        }
+
+        /// 주간 갱신 
+        ResetMonday(ListModel.Instance.mvpDataList[0].weekend_Day);
 
         /// 월간 갱신 1일
         if (UnbiasedTime.Instance.Now().Day == 1 ||
@@ -378,27 +369,28 @@ public class DailyManager : MonoBehaviour
     /// <param name="_weekDay"></param>
     private void ResetMonday(int _weekDay)
     {
-        /// 만약 _weekDay = 5이면 금요일, 다음주 수요일에 접속하는 경우
-
-
-        switch (UnbiasedTime.Instance.Now().DayOfWeek)
+        /// 만약 _weekDay = 5이면 금요일에 패키지 받고 
+        /// 월요일 접속 안하고
+        /// 다음주 수요일에 접속하는 경우
+        /// UnbiasedTime.Instance.Now().DayOfWeek =Wednesday 3
+        int dayWeek = (int)UnbiasedTime.Instance.Now().DayOfWeek;
+        /// 0 = 일요일은 예외 처리하고 7일 이내에 들어올 경우 초기화
+        if (dayWeek != 0 &&  dayWeek < _weekDay)
         {
-            case DayOfWeek.Sunday:
-                break;
-            case DayOfWeek.Monday:
-                break;
-            case DayOfWeek.Tuesday:
-                break;
-            case DayOfWeek.Wednesday:
-                break;
-            case DayOfWeek.Thursday:
-                break;
-            case DayOfWeek.Friday:
-                break;
-            case DayOfWeek.Saturday:
-                break;
-            default:
-                break;
+            ListModel.Instance.mvpDataList[0].weekend_14 = 0;
+            ListModel.Instance.mvpDataList[0].weekend_15 = 0;
+            ListModel.Instance.mvpDataList[0].weekend_16 = 0;
+            ListModel.Instance.mvpDataList[0].weekend_17 = 0;
+            ListModel.Instance.mvpDataList[0].weekend_Day = 0;
+        }
+        /// 일요일은 지났는데 일요일에 초기화 했으면
+        else if(dayWeek != 0 &&  _weekDay == 0)
+        {
+            ListModel.Instance.mvpDataList[0].weekend_14 = 0;
+            ListModel.Instance.mvpDataList[0].weekend_15 = 0;
+            ListModel.Instance.mvpDataList[0].weekend_16 = 0;
+            ListModel.Instance.mvpDataList[0].weekend_17 = 0;
+            ListModel.Instance.mvpDataList[0].weekend_Day = 0;
         }
     }
 

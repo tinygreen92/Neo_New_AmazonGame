@@ -480,6 +480,8 @@ public class IAPManager : MonoBehaviour
                 Purchase_Product_month_03();
                 break;
         }
+
+        CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
     }
 
 
@@ -529,6 +531,7 @@ public class IAPManager : MonoBehaviour
                 yield return null;
                 break;
         }
+        CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
     }
 
     /// <summary>
@@ -588,6 +591,7 @@ public class IAPManager : MonoBehaviour
                 StartCoroutine(DiaDiaPack(1));
                 break;
         }
+        CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
     }
 
     IEnumerator DiaDiaPack(int _Index)
@@ -612,6 +616,7 @@ public class IAPManager : MonoBehaviour
             nm.PostboxItemSend("reinforce_box", 25, "");
             yield return null;
         }
+        CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
     }
 
 
@@ -843,6 +848,7 @@ public class IAPManager : MonoBehaviour
             GiftGetText.text = LeanLocalization.GetTranslationText("Config_Gift_Desc");
             sim.popUpIconDesc.text = "x" + _amount.ToString("N0");
             nm.PostboxItemSend("diamond", _amount, "");
+            CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
         }
         /// 특별 상점에서 현질함
         else if (_tag == 1)
@@ -908,6 +914,7 @@ public class IAPManager : MonoBehaviour
             nm.PostboxItemSend("stone", tmpStone, "");
             tmpStone = 0;
             GiftGetText.text = LeanLocalization.GetTranslationText("Config_Gift_Desc");
+            CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
         }
         else
         {
@@ -945,7 +952,6 @@ public class IAPManager : MonoBehaviour
                 bac.Banner525Hide();
                 /// 플레이팹에 상태 저장
                 GameObject.FindWithTag("PFM").GetComponent<PlayFabManage>().SetUserData();
-                PlayerPrefs.Save();
 
                 sim.ChangeSection();
                 break;
@@ -1030,7 +1036,6 @@ public class IAPManager : MonoBehaviour
                 bm.MoneyLoveBuff(3);
                 /// 플레이팹에 상태 저장
                 GameObject.FindWithTag("PFM").GetComponent<PlayFabManage>().SetUserData();
-                PlayerPrefs.Save();
                 ComplPopup.SetActive(true);
                 break;
             case EM_IAPConstants.Product_pack_08:
@@ -1139,6 +1144,7 @@ public class IAPManager : MonoBehaviour
             nm.PostboxItemSend("stone", 5, "");
             yield return null;
         }
+        CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
     }
 
     IEnumerator Front5()
@@ -1154,6 +1160,7 @@ public class IAPManager : MonoBehaviour
         yield return null;
         nm.PostboxItemSend("stone", front5Amount[4], "");
         yield return null;
+        CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
     }
 
     IEnumerator Back7()
@@ -1173,6 +1180,7 @@ public class IAPManager : MonoBehaviour
         yield return null;
         nm.PostboxItemSend("stone", back7Amount[6], "");
         yield return null;
+        CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
     }
 
     IEnumerator DailyPack()
@@ -1184,6 +1192,7 @@ public class IAPManager : MonoBehaviour
         yield return null;
         nm.PostboxItemSend("reinforce_box", 1, "");
         yield return null;
+        CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
     }
     IEnumerator WeekPack()
     {
@@ -1194,6 +1203,7 @@ public class IAPManager : MonoBehaviour
         yield return null;
         nm.PostboxItemSend("stone", 5, "");
         yield return null;
+        CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
     }
     IEnumerator MonthPack(int _Index)
     {
@@ -1232,6 +1242,7 @@ public class IAPManager : MonoBehaviour
                 yield return null;
                 break;
         }
+        CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
     }
 
 

@@ -288,6 +288,7 @@ public class PlayerPrefsManager : MonoBehaviour
         ObscuredPrefs.SetString("Money_EnchantStone", PlayerInventory.Money_EnchantStone.ToString());
         ObscuredPrefs.SetString("Money_AmazonCoin", PlayerInventory.Money_AmazonCoin.ToString());
         ObscuredPrefs.SetString("AmazonStoneCount", PlayerInventory.AmazonStoneCount.ToString());
+        ObscuredPrefs.SetString("CurrentAmaLV", PlayerInventory.CurrentAmaLV.ToString());
         ObscuredPrefs.SetString("box_Coupon", PlayerInventory.box_Coupon.ToString());
         ObscuredPrefs.SetString("box_E", PlayerInventory.box_E.ToString());
         ObscuredPrefs.SetString("box_D", PlayerInventory.box_D.ToString());
@@ -322,13 +323,12 @@ public class PlayerPrefsManager : MonoBehaviour
         /// 오프라인 보상 체크 끝났다면 타이머 일괄적으로 저장
         string tmp = UnbiasedTime.Instance.Now().ToString("yyyyMMddHHmmss");
         ObscuredPrefs.SetString("DateTime", tmp);
-        ObscuredPrefs.SetString("AmazonShop", tmp);
+        //ObscuredPrefs.SetString("AmazonShop", tmp);
         //ObscuredPrefs.SetString("Check_Daily", tmp);
-        ObscuredPrefs.SetString("FreeWeapon", tmp);
-        ObscuredPrefs.SetString("FreeDia", tmp);
+        //ObscuredPrefs.SetString("FreeWeapon", tmp);
+        //ObscuredPrefs.SetString("FreeDia", tmp);
 
         ObscuredPrefs.Save();
-        PlayerPrefs.Save();
 
         Debug.LogWarning("세이브 데이터 타임 " + tmp);
     }

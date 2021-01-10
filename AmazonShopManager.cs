@@ -112,7 +112,7 @@ public class AmazonShopManager : MonoBehaviour
         /// 타이머 돌리기
         FreeDiaTimer();
         /// 현재 아마존 결정 레벨
-        Zogark_LV = Mathf.RoundToInt(PlayerInventory.CurrentAmaLV);
+        Zogark_LV = PlayerInventory.CurrentAmaLV;
         /// 아마존 결정 맥스 카운터 += 5 단위로 상승
         if (PlayerPrefsManager.ZogarkMissionCnt == 0)
         {

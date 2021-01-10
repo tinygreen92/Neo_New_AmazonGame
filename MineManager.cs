@@ -12,6 +12,7 @@ public class MineManager : MonoBehaviour
     public GameObject[] innerNewPop;
     [Header(" - 잡다한거")]
     public GameObject SupplyBoxPos;
+    public ScrollScript autoView;
     public Scrollbar scb;
     public Image HP_FILL;
     public float[] currentHPs;
@@ -194,24 +195,28 @@ public class MineManager : MonoBehaviour
         InfiContents.GetChild(0).gameObject.SetActive(false);
         InfiContents.GetChild(1).gameObject.SetActive(false);
         InfiContents.GetChild(2).gameObject.SetActive(false);
+        //
         switch (_multiple)
         {
             case 1:
+                InfiContents.GetChild(0).gameObject.SetActive(true);
+                autoView.content = InfiContents.GetChild(0).GetComponent<RectTransform>();
                 /// 스크롤 바 위로 쭉 올려줌.
                 scb.value = 1f;
-                ///
                 middleMoney[0].SetActive(true);
                 middleMoney[1].SetActive(false);
-                InfiContents.GetChild(0).gameObject.SetActive(true);
                 btnImgs[0].sprite = EnableBtn;
                 btnImgs[1].sprite = DisableBtn;
                 btnImgs[2].sprite = DisableBtn;
                 break;
 
             case 10:
+                InfiContents.GetChild(1).gameObject.SetActive(true);
+                autoView.content = InfiContents.GetChild(1).GetComponent<RectTransform>();
+                /// 스크롤 바 위로 쭉 올려줌.
+                scb.value = 1f;
                 middleMoney[0].SetActive(false);
                 middleMoney[1].SetActive(true);
-                InfiContents.GetChild(1).gameObject.SetActive(true);
                 /// 보관함 버튼 색 새로고침
                 RefreshStack();
                 btnImgs[0].sprite = DisableBtn;
@@ -220,9 +225,12 @@ public class MineManager : MonoBehaviour
                 break;
 
             case 100:
+                InfiContents.GetChild(2).gameObject.SetActive(true);
+                autoView.content = InfiContents.GetChild(2).GetComponent<RectTransform>();
+                /// 스크롤 바 위로 쭉 올려줌.
+                scb.value = 1f;
                 middleMoney[0].SetActive(false);
                 middleMoney[1].SetActive(true);
-                InfiContents.GetChild(2).gameObject.SetActive(true);
                 /// 곡괭이 강화 페이지 버튼 색 새로고침
                 RefreshAxe(-1);
                 btnImgs[0].sprite = DisableBtn;
@@ -301,11 +309,11 @@ public class MineManager : MonoBehaviour
         }
         ///
         MoneyManager.instance.RefreshAllMoney();
-        /// 스크롤바 위로 올리기
-        scb.value = 1f;
         PopUpManager.instance.HidePopUP(23);
         /// 보급상자 임시 꺼주기
         SupplyBoxPos.SetActive(false);
+        /// 광산 100개 리스트
+        DismissGrayBtn(1);
     }
 
     /// <summary> 

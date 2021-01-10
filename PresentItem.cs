@@ -50,7 +50,8 @@ public class PresentItem : MonoBehaviour
                 case "cave_clear": tmpHead = "숨겨진 늪지 소탕권 "; tmpTail = " 개."; break;
                 case "elixr": tmpHead = "엘릭서 "; tmpTail = " 개."; break;
                 //
-                case "S_leaf_box": tmpHead = "대박 나뭇잎 묶음 "; tmpTail = " 개."; break;
+                case "S_leaf_box": tmpHead = "아마존 포션 "; tmpTail = " 개."; break;
+
                 case "S_reinforce_box": tmpHead = "대박 강화석 묶음 "; tmpTail = " 개."; break;
                 case "mining": tmpHead = "수정동굴 채굴권 "; tmpTail = " 개."; break;
                 case "amber": tmpHead = "호박석 "; tmpTail = " 개."; break;

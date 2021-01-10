@@ -11,7 +11,7 @@ public class StayRewordManager : MonoBehaviour
 {
     public Text textStaytext;
     [Header("-1시간 이면 3600")]
-    public float delayTime = 36f;
+    public float delayTime = 3600f;
     public NanooManager nm;
     [Header("-공통 부분")]
     public Sprite[] mainSprs;

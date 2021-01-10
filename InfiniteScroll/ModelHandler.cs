@@ -82,7 +82,8 @@ public class ModelHandler : MonoBehaviour
 
             /// 초반 초기화 완료 됐을때 키 초기화
             ObscuredPrefs.SetInt("TEST_Key", 525);
-
+            /// 로딩바 올려주는 걸 허락한다.
+           PlayerPrefsManager. isJObjectLoad = true;
             /// 스트링[] 몽땅 저장
             PlayerPrefsManager.instance.TEST_SaveJson();
             // 초기 무기 1렙 짜리 장착
@@ -99,6 +100,7 @@ public class ModelHandler : MonoBehaviour
             PlayerInventory.Money_EnchantStone = long.Parse(ObscuredPrefs.GetString("Money_EnchantStone"));
             PlayerInventory.Money_AmazonCoin = long.Parse(ObscuredPrefs.GetString("Money_AmazonCoin"));
             PlayerInventory.AmazonStoneCount = long.Parse(ObscuredPrefs.GetString("AmazonStoneCount"));
+            PlayerInventory.CurrentAmaLV = int.Parse(ObscuredPrefs.GetString("CurrentAmaLV"));
             PlayerInventory.box_Coupon = int.Parse(ObscuredPrefs.GetString("box_Coupon"));
             PlayerInventory.box_E = int.Parse(ObscuredPrefs.GetString("box_E"));
             PlayerInventory.box_D = int.Parse(ObscuredPrefs.GetString("box_D"));

@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class StartManager : MonoBehaviour
 {
     [TextArea]
     public string NOTICE;
+    [TextArea]
+    public string NOTICE2;
     [Header("- 디버그 공지사항용")]
     public Text headChatTxt;
     [Header("- 개발자용 빌드일 때 체크")]
@@ -31,6 +34,8 @@ public class StartManager : MonoBehaviour
         // 화면 꺼짐 방지
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }
+
+
 
     private void Start()
     {

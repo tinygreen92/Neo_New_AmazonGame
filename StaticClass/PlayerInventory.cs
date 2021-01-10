@@ -1043,8 +1043,10 @@ public static class PlayerInventory
     public static ObscuredInt ticket_leaf_box;             // 나뭇잎 묶음
     public static ObscuredInt ticket_pvp_enter;             // 결투 입장권
     public static ObscuredInt ticket_cave_enter;             // 늪지 동굴 입장권
-    public static ObscuredInt ticket_cave_clear;             /// 늪지 동굴 소탕권
-    //
+    public static ObscuredInt ticket_cave_clear;             // 늪지 동굴 소탕권
+    /// <summary>
+    /// 대박 나뭇잎 묶음에서 아마존 코인으로 변경
+    /// </summary>
     public static ObscuredInt S_leaf_box;             // 대박 나뭇잎 묶음에서 아마존 코인으로 변경
     //
     public static ObscuredInt S_reinforce_box;    // 대박 강화석 묶음
@@ -1189,96 +1191,55 @@ public static class PlayerInventory
     public static ObscuredInt MAX_WEAPON_LV;
 
     static ObscuredDouble recentDistance;                                           // 최근 거리
-    static ObscuredLong amazonStoneMAX;                                                       // 아마존 결정 누적 갯수
-
-    ///-------------------------------- getter/setter  -------------------------------------///
-
-
-
     public static ObscuredDouble RecentDistance
     {
         get { if (recentDistance > 0) return recentDistance; else return 0; }
         set { recentDistance = Math.Truncate(value); }
     }
 
+
+    ///-------------------------------- getter/setter  -------------------------------------///
     /// <summary>
-    /// 아마존 결정 조각 누적 -> 아마존 포션이고 누적 안함
+    /// 아마존 레벨 단독 저장 -> 경험치 총량도 관여
+    /// </summary>    
+    public static ObscuredInt CurrentAmaLV;
+    /// <summary>
+    /// 아마존 포션으로 얻은 경험치에 연결된 본체
+    /// </summary>
+    static ObscuredLong amazonStoneCount;
+    static ObscuredInt maxGage;
+    /// <summary>
+    /// 아마존 포션으로 얻은 경험치
     /// </summary>
     public static ObscuredLong AmazonStoneCount
     {
         get 
         {
-            if (amazonStoneMAX > 0)
-            { 
-                return amazonStoneMAX; 
-            }
-            else
-            {
-                return 0;
-            }
+            return amazonStoneCount;
         }
         set 
-        { 
-            amazonStoneMAX = value;
+        {
+            amazonStoneCount = value;
+            /// 유물 경험치 요구 유물 적용
+            maxGage = Mathf.CeilToInt(((CurrentAmaLV + 1) * 100 * (float)AmazonPoint_Cost));
+            /// TODO : 증가 시켰는데 맥스 요구 보다 높으면 이월 시키고 결정지급 / 게이지 돌파하면 이월 시키고 게이지 증가
+            if (amazonStoneCount >= maxGage)
+            {
+                CurrentAmaLV++;
+                amazonStoneCount -= maxGage;
+                Money_AmazonCoin += CurrentAmaLV;
+                PopUpManager.instance.ShowGetPop(5, CurrentAmaLV.ToString());
+                /// 다시 갱신
+                maxGage = Mathf.CeilToInt(((CurrentAmaLV + 1) * 100 * (float)AmazonPoint_Cost));
+            }
+
             /// 게이지 올려
-            ExpManager.instance.UpdateExpGage();
-            MoneyManager.instance.DisplayCostZogak();
+            ExpManager.instance.UpdateExpGage(maxGage);
+            //MoneyManager.instance.DisplayCostZogak();
         }
 
     }
 
-    public static ObscuredFloat CurrentAmaValue { get; set; }
-    public static ObscuredFloat CurrentAmaLV 
-    {
-        get 
-        {
-            ObscuredFloat inner = Mathf.Floor(amazonStoneMAX * 0.01f);
-            ObscuredLong tmp = 0;
-            for (ObscuredInt i = 0; i <= (int)inner; i++)
-            {
-                tmp += i; // 0 1 2 3
-                if (tmp > inner) // 6 > 5 
-                {
-                    inner = (i-1);  // 2
-                    break;
-                }
-            }
-            CurrentAmaValue = amazonStoneMAX - (GetInnerValue((int)inner) * 100f);
-            return inner;  
-        }
-    }
-
-    public static ObscuredFloat GetInnerValue(ObscuredInt inner)
-    {
-        /// * (float)PlayerInventory.AmazonPoint_Cost 어케 적용????
-        ObscuredFloat result = 0;
-        for (int i = 0; i <= inner; i++)
-        {
-            result += i;
-        }
-        /// 계산 후에 적립
-        if (currentCoinGet != result || result == 0)
-        {
-            currentCoinGet = result;
-            if(isFirst)
-            {
-                /// 아마존 결정 조각 레벨업 시 결정 제공 ( 지급 수량 = 레벨 )
-                Money_AmazonCoin += inner;
-                Debug.LogWarning("아마존 조각 모아서 결정 완성 : " + inner);
-                /// 획득 팝업 1개 이상일때만 표기
-                if (inner > 0)
-                {
-                    PopUpManager.instance.ShowGetPop(5, inner.ToString());
-                }
-            }
-            isFirst = true;
-        }
-        return result;
-    }
-
-
-    private static ObscuredFloat currentCoinGet;
-    private static ObscuredBool isFirst;
 
 
     #endregion

@@ -61,7 +61,7 @@ public class PresentManager : MonoBehaviour
             case "cave_clear": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[18]; break;
             case "elixr": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[19]; break;
             //
-            case "S_leaf_box": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[20]; break;
+            case "S_leaf_box": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[12]; break;
             case "S_reinforce_box": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[21]; break;
             case "mining": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[22]; break;
             case "amber": initBox.GetComponent<PresentItem>().IconImg.sprite = IconSprs[23]; break;

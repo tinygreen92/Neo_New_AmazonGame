@@ -144,8 +144,6 @@ public class TutoManager : MonoBehaviour
         {
             tutoText.text = ttlist.korDesc + " ( " + ttlist.curentValue + " / " + ttlist.maxValue + " )";
         }
-        /// 스트링[] 몽땅 저장
-        PlayerPrefsManager.instance.TEST_SaveJson();
     }
 
 

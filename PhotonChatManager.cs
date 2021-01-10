@@ -265,7 +265,7 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
             // TODO : 포톤 끊겼을때 채팅 치면 이곳으로
             outterChatBoxText.text = "<채팅 서버 연결 끊김>";
             Debug.LogError(message);
-            /// 1초 뒤에 재접속
+            /// 1초 뒤에 재접속 시도
             Invoke(nameof(Connect), 1.0f);
         }
         else if (level == ExitGames.Client.Photon.DebugLevel.WARNING)
@@ -274,6 +274,7 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
         }
         else
         {
+            // TODO : 포톤 정상 연결되면 여기로
             outterChatBoxText.text = "<채팅 서버 연결됨>";
             Debug.LogError(message);
         }

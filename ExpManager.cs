@@ -27,17 +27,14 @@ public class ExpManager : MonoBehaviour
     /// 아마존 결정 포인트 경험치 움직일거
     /// </summary>
     /// <param name="tmp">아마존결정 누적 획득량</param>
-    public void UpdateExpGage()
+    public void UpdateExpGage(float maxGage)
     {
-        /// 외부 표기 레벨
-        float calv = PlayerInventory.CurrentAmaLV;
-
-        infill.fillAmount = PlayerInventory.CurrentAmaValue / ((calv+1f) * 100f * (float)PlayerInventory.AmazonPoint_Cost);
-        //expParent.GetChild(1).GetComponent<Text>().text = LEVEL_TEXT + calv.ToString("F0");
-        lvText.text = "Lv. " + calv.ToString("N0");
-        lvfillText.text = LEVEL_TEXT + calv.ToString("N0");
-        /// 결정수 텍스트 증가
-        infillText.text = "EXP : ( " + PlayerInventory.CurrentAmaValue.ToString("N0") + " / " + ((calv + 1f) * 100f * (float)PlayerInventory.AmazonPoint_Cost).ToString("N0") + " )";
+        /// 게이지 갱신
+        infill.fillAmount = (PlayerInventory.AmazonStoneCount *1f) / maxGage;
+        infillText.text = "EXP : ( " + PlayerInventory.AmazonStoneCount + " / " + maxGage.ToString("N0") + " )";
+        /// 레벨 텍스트 갱신
+        lvText.text = "Lv. " + PlayerInventory.CurrentAmaLV;
+        lvfillText.text = LEVEL_TEXT + PlayerInventory.CurrentAmaLV;
     }
 
 

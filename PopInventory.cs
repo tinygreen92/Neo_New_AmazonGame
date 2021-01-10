@@ -12,6 +12,7 @@ using UnityEngine.UI;
 /// </summary>
 public class PopInventory : MonoBehaviour
 {
+    public Text popInvenDesc;
     public GameObject popDesc;
     [Header("-미니 팝업 가챠")]
     public Sprite[] miniSprs;
@@ -522,11 +523,6 @@ public class PopInventory : MonoBehaviour
                 itemAmount.text = PlayerInventory.ticket_leaf_box.ToString("N0");
                 itemIcon.sprite = gatChaIcons[1];
                 break;
-
-
-                /// 아마존 포션
-                
-
             case 5:
                 itemDesc.text = ListModel.Instance.shopListAMA[3].korTailDesc;
                 itemAmount.text = PlayerInventory.S_reinforce_box.ToString("N0");
@@ -541,6 +537,9 @@ public class PopInventory : MonoBehaviour
                 itemDesc.text = LeanLocalization.GetTranslationText("Inven_Money_Desc_08");
                 itemAmount.text = PlayerInventory.S_leaf_box.ToString("N0");
                 itemIcon.sprite = gatChaIcons[3];
+                /// 포션을 사용하여 경험치가 증가되었습니다
+                popInvenDesc.GetComponent<LeanLocalizedText>().enabled = false;
+                popInvenDesc.text = LeanLocalization.GetTranslationText("Use_Amazon_Potion_Desc");
                 break;
 
             case 7:
@@ -563,6 +562,25 @@ public class PopInventory : MonoBehaviour
         /// 팝업 출력
         popDesc.SetActive(true);
     }
+
+    /// <summary>
+    /// 포션 설명 다하면 다시 원래 텍스트 살려주기 [확인][x버튼]에 붙일것.
+    /// </summary>
+    public void SetEnableLeantext()
+    {
+        /// 아마존 포션 마셔서 꺼져있으면
+        if (!popInvenDesc.GetComponent<LeanLocalizedText>().enabled)
+        {
+            /// 아마존 포션 경험치로 변환
+            PlayerInventory.AmazonStoneCount += AmazonPotionAmount;
+            /// 결정조각  업적  카운트
+            ListModel.Instance.ALLlist_Update(2, AmazonPotionAmount);
+            popInvenDesc.GetComponent<LeanLocalizedText>().enabled = true;
+            AmazonPotionAmount = 0;
+        }
+    }
+
+    int AmazonPotionAmount;
 
     /// <summary>
     /// 1개 열거야 10개 열거야?
@@ -694,10 +712,8 @@ public class PopInventory : MonoBehaviour
                     tmpAllamont = PlayerInventory.S_leaf_box;
                     PlayerInventory.S_leaf_box = 0;
                     isLastPPOP = true;
-                    /// 아마존 포션 모두 열기
-                    PlayerInventory.AmazonStoneCount += tmpAllamont;
-                    /// 결정조각  업적  카운트
-                    ListModel.Instance.ALLlist_Update(2, tmpAllamont);
+                    /// 아마존 포션 모두 열기 대기
+                    AmazonPotionAmount =  tmpAllamont;
                     /// 미니팝업 세팅
                     miniIcon.sprite = miniSprs[4];
                     miniAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(tmpAllamont);
@@ -706,10 +722,8 @@ public class PopInventory : MonoBehaviour
                 else
                 {
                     PlayerInventory.S_leaf_box--;
-                    /// 아마존 포션 1 회 열기
-                    PlayerInventory.AmazonStoneCount++;
-                    /// 결정조각  업적  카운트
-                    ListModel.Instance.ALLlist_Update(2, 1);
+                    /// 아마존 포션 1 회 열기 대기
+                    AmazonPotionAmount = 1;
                     /// 미니팝업 세팅
                     miniIcon.sprite = miniSprs[4];
                     miniAmount.text = "x1";

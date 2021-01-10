@@ -51,15 +51,6 @@ public class NanooManager : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
-        //int logCnt = 0;
-        //while (!Social.localUser.authenticated)
-        //{
-        //    yield return new WaitForSeconds(2.0f);
-        //    GameServices.Init();
-        //    logCnt++;
-        //    if (logCnt >= 2) break;
-        //}
-
         if (StartManager.instance.isDebugMode)
         {
             playfabm.InitPlayfab(userID);
@@ -79,7 +70,7 @@ public class NanooManager : MonoBehaviour
         {
             StartManager.instance.headChatTxt.text = "";
             retryCnt++;
-            Tweener tw = StartManager.instance.headChatTxt.DOText("재섭속 시도 " + retryCnt + "회...", 1f);
+            StartManager.instance.headChatTxt.DOText("로그인 재시도 " + retryCnt + "회...", 1f);
 
             StartCoroutine(NickUpd());
         }
@@ -124,7 +115,7 @@ public class NanooManager : MonoBehaviour
             /// 랭킹 기록
             RecordRankDistance(Mathf.RoundToInt((float)PlayerInventory.RecentDistance) - 1);
             /// 개인 랭킹 갱신
-            Invoke(nameof(ShowRankingPersonal), 5.0f);
+            Invoke(nameof(ShowRankingPersonal), 3.0f);
         }
 
         /// 배너 오픈
@@ -157,6 +148,8 @@ public class NanooManager : MonoBehaviour
     public void OpenBanner()
     {
         plugin.OpenBanner();
+        /// 서버타임
+        ServerTime();
     }
 
 
@@ -543,7 +536,6 @@ public class NanooManager : MonoBehaviour
 
             default: break;
         }
-        PlayerPrefs.Save();
         ObscuredPrefs.Save();
     }
 
@@ -641,6 +633,8 @@ public class NanooManager : MonoBehaviour
             }
             else
             {
+                /// 랭킹 호출 실패하면 뺑뺑이 꺼줌
+                SystemPopUp.instance.StopLoopLoading();
                 Debug.Log("Fail");
             }
         });
@@ -668,29 +662,12 @@ public class NanooManager : MonoBehaviour
             }
             else
             {
+                /// 랭킹 호출 실패하면 뺑뺑이 꺼줌
+                SystemPopUp.instance.StopLoopLoading();
                 Debug.LogError(" ShowRankingPersonal Fail");
             }
         });
     }
-
-    /// <summary>
-    /// 유저 자기 자신 랭킹은 바로 보여준다.
-    /// </summary>
-    public void ShowMyRank()
-    {
-        plugin.RankingPersonal("amazon-RANK-665FA4CF-24686EF5", (state, message, rawData, dictionary) => {
-            if (state.Equals(Configure.PN_API_STATE_SUCCESS))
-            {
-                Debug.Log(dictionary["ranking"]);
-                Debug.Log(dictionary["player_data"]);
-                Debug.Log(dictionary["total_player"]);
-            }
-            else Debug.Log("Fail");
-        });
-    }
-
-
-
 
 
 
@@ -702,18 +679,33 @@ public class NanooManager : MonoBehaviour
         plugin.ServerTime((state, message, rawData, dictionary) => {
             if (state.Equals(Configure.PN_API_STATE_SUCCESS))
             {
-                Debug.Log(dictionary["timezone"]);
-                Debug.Log(dictionary["timestamp"]);
-                Debug.Log(dictionary["ISO_8601_date"]);
-                Debug.Log(dictionary["date"]);
+                Debug.LogWarning ("timezone : " + dictionary["timezone"]);
+                Debug.LogWarning("timezone : " + dictionary["timestamp"]);
+                Debug.LogWarning("timezone : " + dictionary["ISO_8601_date"]);
+                Debug.LogWarning("timezone : " + dictionary["date"]);
+                //
+                ConvertFromUnixTimestamp(dictionary["timestamp"].ToString());
             }
             else
             {
                 Debug.Log("Fail");
+                ConvertFromUnixTimestamp("fail");
             }
         });
     }
 
+    void ConvertFromUnixTimestamp(string timestamp)
+    {
+        if (timestamp == "fail")
+        {
+            /// TODO 서버시간 못 받아오면 처리 어케?
+        }
+        else
+        {
+            System.DateTime origin = new System.DateTime(1970, 1, 1, 9, 0, 0, 0);
+            Debug.LogWarning("ConvertFromUnixTimestamp : " + origin.AddSeconds(double.Parse(timestamp)));
+        }
+    }
 
 
 
