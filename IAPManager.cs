@@ -160,7 +160,7 @@ public class IAPManager : MonoBehaviour
     {
         ShutUpMalpoi();
         /// 청약철회 오브젝트 살려줌
-        DescObject.text = LeanLocalization.GetTranslationText("Shop_Desc");
+        DescObject.text = LeanLocalization.GetTranslationText("Shop_Ab_Shop_Desc2");
         IconImg.sprite = sim.DiaiCons[_indx];
         switch (_indx)
         {
@@ -210,7 +210,7 @@ public class IAPManager : MonoBehaviour
     {
         ShutUpMalpoi();
         /// 청약철회 오브젝트 살려줌
-        DescObject.text = LeanLocalization.GetTranslationText("Shop_Desc");
+        DescObject.text = LeanLocalization.GetTranslationText("Shop_Ab_Shop_Desc2");
 
         IconImg.sprite = sim.SpeciCons[_indx];
         IconDesc.text = "";
@@ -377,27 +377,27 @@ public class IAPManager : MonoBehaviour
 
             case 5:
                 Purchase_Product_pack_06();
-                SwichPackageCatgory(1);
+                //SwichPackageCatgory(1);
                 break;
 
             case 6:
                 Purchase_Product_pack_07();
-                SwichPackageCatgory(1);
+                //SwichPackageCatgory(1);
                 break;
 
             case 7:
                 Purchase_Product_pack_08();
-                SwichPackageCatgory(1);
+                //SwichPackageCatgory(1);
                 break;
 
             case 8:
                 Purchase_Product_pack_09();
-                SwichPackageCatgory(1);
+                //SwichPackageCatgory(1);
                 break;
 
             case 9:
                 Purchase_Product_pack_10();
-                SwichPackageCatgory(1);
+                //SwichPackageCatgory(1);
                 break;
 
             /// -----------------------------------------------------------------------------------
@@ -1019,6 +1019,7 @@ public class IAPManager : MonoBehaviour
                 StartCoroutine(Notouch(1));
                 ListModel.Instance.mvpDataList[0].pack_06 = 6;
                 ComplPopup.SetActive(true);
+                SwichPackageCatgory(1);
                 break;
             case EM_IAPConstants.Product_pack_07:
                 nm.PostboxItemSend("stone", 15, "");
@@ -1037,21 +1038,25 @@ public class IAPManager : MonoBehaviour
                 /// 플레이팹에 상태 저장
                 GameObject.FindWithTag("PFM").GetComponent<PlayFabManage>().SetUserData();
                 ComplPopup.SetActive(true);
+                SwichPackageCatgory(1);
                 break;
             case EM_IAPConstants.Product_pack_08:
                 ListModel.Instance.mvpDataList[0].pack_08 = 8;
                 StartCoroutine(Back7());
                 ComplPopup.SetActive(true);
+                SwichPackageCatgory(1);
                 break;
             case EM_IAPConstants.Product_pack_09:
                 ListModel.Instance.mvpDataList[0].pack_09 = 9;
                 StartCoroutine(Back7());
                 ComplPopup.SetActive(true);
+                SwichPackageCatgory(1);
                 break;
             case EM_IAPConstants.Product_pack_10:
                 ListModel.Instance.mvpDataList[0].pack_10 = 1;
                 StartCoroutine(Back7());
                 ComplPopup.SetActive(true);
+                SwichPackageCatgory(1);
                 break;
 
 

@@ -511,41 +511,36 @@ public class ListModel : MonoBehaviour
     void ReleaseRuneStat(int _dc, int equipIndex)
     {
         /// 선택된 스탯 적용 수 만큼 더해줌.
-        for (int i = 0; i < _dc; i++)
+        switch (_dc)
         {
-            switch (i)
-            {
-                case 0:
-                    SelectMainSubStat(tmpRuneDesc[0], equipRuneList[equipIndex].main_1);
-                    break;
+            case 0:
+                SelectMainSubStat(tmpRuneDesc[0], equipRuneList[equipIndex].main_1);
+                break;
 
-                case 1:
-                    SelectMainSubStat(tmpRuneDesc[0], equipRuneList[equipIndex].main_1);
-                    break;
+            case 1:
+                SelectMainSubStat(tmpRuneDesc[0], equipRuneList[equipIndex].main_1);
+                break;
 
-                case 2:
-                    SelectMainSubStat(tmpRuneDesc[0], equipRuneList[equipIndex].main_1);
-                    SelectMainSubStat(tmpRuneDesc[1], equipRuneList[equipIndex].main_2);
-                    break;
+            case 2:
+                SelectMainSubStat(tmpRuneDesc[0], equipRuneList[equipIndex].main_1);
+                SelectMainSubStat(tmpRuneDesc[1], equipRuneList[equipIndex].main_2);
+                break;
 
-                case 3:
-                    SelectMainSubStat(tmpRuneDesc[0], equipRuneList[equipIndex].main_1);
-                    SelectMainSubStat(tmpRuneDesc[1], equipRuneList[equipIndex].main_2);
-                    SelectMainSubStat(tmpRuneDesc[2], equipRuneList[equipIndex].sub_1);
-                    break;
+            case 3:
+                SelectMainSubStat(tmpRuneDesc[0], equipRuneList[equipIndex].main_1);
+                SelectMainSubStat(tmpRuneDesc[1], equipRuneList[equipIndex].main_2);
+                SelectMainSubStat(tmpRuneDesc[2], equipRuneList[equipIndex].sub_1);
+                break;
 
-                case 4:
-                    SelectMainSubStat(tmpRuneDesc[0], equipRuneList[equipIndex].main_1);
-                    SelectMainSubStat(tmpRuneDesc[1], equipRuneList[equipIndex].main_2);
-                    SelectMainSubStat(tmpRuneDesc[2], equipRuneList[equipIndex].sub_1);
-                    SelectMainSubStat(tmpRuneDesc[3], equipRuneList[equipIndex].sub_2);
-                    break;
+            case 4:
+                SelectMainSubStat(tmpRuneDesc[0], equipRuneList[equipIndex].main_1);
+                SelectMainSubStat(tmpRuneDesc[1], equipRuneList[equipIndex].main_2);
+                SelectMainSubStat(tmpRuneDesc[2], equipRuneList[equipIndex].sub_1);
+                SelectMainSubStat(tmpRuneDesc[3], equipRuneList[equipIndex].sub_2);
+                break;
 
-                default:
-                    break;
-            }
-
-
+            default:
+                break;
         }
     }
 

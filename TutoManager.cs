@@ -130,6 +130,13 @@ public class TutoManager : MonoBehaviour
                 isDistanceMission = true;
                 break;
 
+            case 45:            // 유물 이미 30개 뽑았으면
+                ListModel.Instance.TUTO_BeforeComp(_index, 
+                    ListModel.Instance.heartList.Count < 30 
+                    ? int.Parse(ListModel.Instance.missionTUTOlist[_index].curentValue) 
+                    : 1);
+                break;
+
 
             default:
                 break;

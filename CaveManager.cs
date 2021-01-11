@@ -325,11 +325,13 @@ public class CaveManager : MonoBehaviour
     /// </summary>
     void ClickedSoTangSwamp()
     {
+        /// 소탕권 없으면 없다 팝업 띄우고 리턴
         if (PlayerInventory.ticket_cave_clear < 1)
         {
             PopUpManager.instance.ShowGrobalPopUP(3);
             return;
         }
+
         /// 소탕권 소모
         PlayerInventory.SetTicketCount("cave_clear", -1);
         /// 입장권 새로고침
@@ -350,6 +352,9 @@ public class CaveManager : MonoBehaviour
         {
             AdsIcon.sprite = AdsSprite[0];
         }
+        /// 소탕 메세지 갱신해주고
+        sotangLeaf.text = bestLeaf[0].text;
+        sotangEnchant.text = bestEnchant[0].text;
         ///팝업 표시
         getpop.SetActive(true);
     }
@@ -358,12 +363,6 @@ public class CaveManager : MonoBehaviour
     /// </summary>000000
     public void NoAdsSotang()
     {
-        /// 숨겨진 늪지 소탕하기
-        if (PlayerPrefsManager.currentTutoIndex == 26)
-        {
-            ListModel.Instance.TUTO_Update(26);
-        }
-
         /// 광고 안보고 소탕 1배
         GetSotangReword(false);
     }
@@ -493,11 +492,12 @@ public class CaveManager : MonoBehaviour
     public void EasySunDa(bool _isLeft)
     {
         _isEasySunDaLeft = _isLeft;
-        /// 팝업 호출
+        /// 이지 선다 입장
         if (_isLeft)
         {
             easyRellyText.text = LeanLocalization.GetTranslationText("Enter_The_Swapm_Enter");
         }
+        /// 이지 선다 소탕
         else
         {
             /// 소탕 기록이 있으면 소탕권 사용하실? 메세지
@@ -511,11 +511,12 @@ public class CaveManager : MonoBehaviour
                 easyRellyText.text = LeanLocalization.GetTranslationText("Enter_The_Swapm_Norecord");
             }
         }
+
         EasySunDaPop.SetActive(true);
     }
     public void InvoEasySun()
     {
-
+        /// 입장할래 클릭
         if(_isEasySunDaLeft)
         {
             if (PlayerInventory.ticket_cave_enter < 1)
@@ -531,6 +532,7 @@ public class CaveManager : MonoBehaviour
                 return;
             }
         }
+        /// 소탕할래 클릭
         else
         {
             /// 소탕 기록이 있으면 소탕권 사용하실? 메세지
@@ -590,6 +592,7 @@ public class CaveManager : MonoBehaviour
         //
         var tmpLeaf = Mathf.RoundToInt(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordLeaf * (_KC * (float)PlayerInventory.Player_Leaf_Earned));
         var tmpES = Mathf.RoundToInt(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordEnchant * (_KC * (float)PlayerInventory.EnchantStone_Earned));
+
         //
         if (_isAdsWatch)
         {
@@ -608,6 +611,12 @@ public class CaveManager : MonoBehaviour
             ListModel.Instance.ALLlist_Update(4, tmpLeaf);
             ///  강화석 업적 카운트 올리기
             ListModel.Instance.ALLlist_Update(5, tmpES);
+        }
+
+        /// 숨겨진 늪지 소탕하기 튜토리얼
+        if (PlayerPrefsManager.currentTutoIndex == 26)
+        {
+            ListModel.Instance.TUTO_Update(26);
         }
 
         PlayerPrefsManager.instance.TEST_SaveJson();
@@ -658,6 +667,10 @@ public class CaveManager : MonoBehaviour
 
     #region <Rewarded Ads> 숨겨진 늪지 동영상 광고
     bool isSotangAds;
+
+    /// <summary>
+    /// 2배 받기 버튼 누르면 소탕 들어감
+    /// </summary>
     public void Ads_Sotang()
     {
         PlayerPrefsManager.instance.TEST_SaveJson();
@@ -752,11 +765,13 @@ public class CaveManager : MonoBehaviour
     /// </summary>
     void AdsInvo()
     {
+        float _KC = float.Parse(ListModel.Instance.swampCaveData[currentMyDan - 1].killCount);
+        
         ///  광고 1회 시청 완료 카운트
         ListModel.Instance.ALLlist_Update(0, 1);
         /// 광고 시청 일일 업적
         ListModel.Instance.DAYlist_Update(7);
-
+        /// 광고 보고 소탕 보상
         if (isSotangAds)
         {
             /// 현재까지 보상 지급 2배 텍스트 세팅
@@ -768,6 +783,7 @@ public class CaveManager : MonoBehaviour
             BtnLayoutSo[0].SetActive(false);
             BtnLayoutSo[1].SetActive(true);
         }
+        /// 광고보고 클리어 보상
         else
         {
             /// 현재까지 보상 지급 2배 텍스트 세팅

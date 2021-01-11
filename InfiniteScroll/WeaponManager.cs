@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class WeaponManager : MonoBehaviour
 {
+    public BoxOpenAinm boa;
     public NestedScrollManager nsm;
     public PopInventory pi;
     [Header("- 풀 버튼 내용물")]
@@ -773,10 +774,10 @@ public class WeaponManager : MonoBehaviour
         }
         else
         {
-            fullBtnLayout.SetActive(false); Invoke(nameof(InvoXiteBtn), 3f); fullBtnExitText.SetActive(true);
+            fullBtnLayout.SetActive(false); Invoke(nameof(InvoXiteBtn), 1.1f); fullBtnExitText.SetActive(true);
         }
-        ///뽑기 팝업 호출
-        PopUpManager.instance.ShowPopUP(18);
+        //
+        boa.NormaWeaponCoupon();
         // 새로 고침
         pi.ExtraRefresh();
     }
@@ -862,37 +863,51 @@ public class WeaponManager : MonoBehaviour
             case "E":
                 if (PlayerInventory.box_E > 0) PlayerInventory.SetBoxsCount(_index, -1);
                 else return;
-                miniAmount.text = "x" + PlayerInventory.box_E.ToString("N0");    
+                miniAmount.text = "x" + PlayerInventory.box_E.ToString("N0");
+                ///뽑기 팝업 호출
+                boa.SetOnTheBox(0);
                 break;
             case "D":
                 if (PlayerInventory.box_D > 0) PlayerInventory.SetBoxsCount(_index, -1);
                 else return;
-                miniAmount.text = "x" + PlayerInventory.box_D.ToString("N0"); 
+                miniAmount.text = "x" + PlayerInventory.box_D.ToString("N0");
+                ///뽑기 팝업 호출
+                boa.SetOnTheBox(1);
                 break;
             case "C":
                 if (PlayerInventory.box_C > 0) PlayerInventory.SetBoxsCount(_index, -1);
                 else return;
-                miniAmount.text = "x" + PlayerInventory.box_C.ToString("N0");   
+                miniAmount.text = "x" + PlayerInventory.box_C.ToString("N0");
+                ///뽑기 팝업 호출
+                boa.SetOnTheBox(2);
                 break;
             case "B":
                 if (PlayerInventory.box_B > 0) PlayerInventory.SetBoxsCount(_index, -1);
                 else return;
-                miniAmount.text = "x" + PlayerInventory.box_B.ToString("N0");  
+                miniAmount.text = "x" + PlayerInventory.box_B.ToString("N0");
+                ///뽑기 팝업 호출
+                boa.SetOnTheBox(3);
                 break;
             case "A":
                 if (PlayerInventory.box_A > 0) PlayerInventory.SetBoxsCount(_index, -1);
                 else return;
-                miniAmount.text = "x" + PlayerInventory.box_A.ToString("N0");  
+                miniAmount.text = "x" + PlayerInventory.box_A.ToString("N0");
+                ///뽑기 팝업 호출
+                boa.SetOnTheBox(4);
                 break;
             case "S":
                 if (PlayerInventory.box_S > 0) PlayerInventory.SetBoxsCount(_index, -1);
                 else return;
-                miniAmount.text = "x" + PlayerInventory.box_S.ToString("N0");  
+                miniAmount.text = "x" + PlayerInventory.box_S.ToString("N0");
+                ///뽑기 팝업 호출
+                boa.SetOnTheBox(5);
                 break;
             case "L":
                 if (PlayerInventory.box_L > 0) PlayerInventory.SetBoxsCount(_index, -1);
                 else return;
-                miniAmount.text = "x" + PlayerInventory.box_L.ToString("N0");   
+                miniAmount.text = "x" + PlayerInventory.box_L.ToString("N0");
+                ///뽑기 팝업 호출
+                boa.SetOnTheBox(6);
                 break;
             default: break;
         }
@@ -921,15 +936,16 @@ public class WeaponManager : MonoBehaviour
         /// 10개 뽑기인지 확인
         if (isTooMuchOpen)
         {
-            fullBtnLayout.SetActive(true); fullBtnExit.SetActive(false); fullBtnExitText.SetActive(false);
+            fullBtnLayout.SetActive(true); 
+            fullBtnExit.SetActive(false);
+            fullBtnExitText.SetActive(false);
         }
         else
         {
-            fullBtnLayout.SetActive(false); Invoke(nameof(InvoXiteBtn), 3f); fullBtnExitText.SetActive(true);
+            fullBtnLayout.SetActive(false); 
+            Invoke(nameof(InvoXiteBtn), 1.1f); 
+            fullBtnExitText.SetActive(true);
         }
-        ///뽑기 팝업 호출
-        PopUpManager.instance.ShowPopUP(18);
-
         /// 인벤토리 새로고침
         pi.ExtraRefresh();
         ///무기창 새로고침

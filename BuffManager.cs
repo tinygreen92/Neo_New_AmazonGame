@@ -35,11 +35,17 @@ public class BuffManager : MonoBehaviour
         buffTimer[_id] = StartCoroutine(BuffTimerStart(_id));
     }
 
+
+
     /// <summary>
     /// 현금으로 버프 사면 버프 이미지 1f로 고정
     /// </summary>
     public void MoneyLoveBuff(int _id)
     {
+        if (buffTimer[_id] != null)
+        {
+            StopCoroutine(buffTimer[_id]);
+        }
         filedImgs[_id].fillAmount = 1f;
     }
 

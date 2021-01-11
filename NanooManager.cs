@@ -174,6 +174,7 @@ public class NanooManager : MonoBehaviour
                 IconText.text = "";
                 IconImg.sprite = null;
                 /// 팝업 생성
+                isCouponPost = true;
                 PostboxItemSend(item_code, int.Parse(item_count), "");
                 //
             }
@@ -188,7 +189,10 @@ public class NanooManager : MonoBehaviour
         });
     }
 
-
+    /// <summary>
+    /// 쿠폰 입력해서 받을때만 활성화.
+    /// </summary>
+    bool isCouponPost;
 
 
 
@@ -323,46 +327,51 @@ public class NanooManager : MonoBehaviour
         plugin.PostboxItemSend(_code, _amount, 365, _msg, (state, message, rawData, dictionary) => {
             if (state.Equals(Configure.PN_API_STATE_SUCCESS))
             {
-                IconText.text = "x" + _amount.ToString("N0");
-                switch (_code)
+                if (isCouponPost)
                 {
-                    case "weapon_coupon": IconImg.sprite = pm.IconSprs[0]; break;
-                    case "reinforce_box": IconImg.sprite = pm.IconSprs[1]; break;
-                    case "leaf_box": IconImg.sprite = pm.IconSprs[2]; break;
-                    case "E_box": IconImg.sprite = pm.IconSprs[3]; break;
-                    case "D_box": IconImg.sprite = pm.IconSprs[4]; break;
-                    case "C_box": IconImg.sprite = pm.IconSprs[5]; break;
-                    case "B_box": IconImg.sprite = pm.IconSprs[6]; break;
-                    case "A_box": IconImg.sprite = pm.IconSprs[7]; break;
-                    case "S_box": IconImg.sprite = pm.IconSprs[8]; break;
-                    case "L_box": IconImg.sprite = pm.IconSprs[9]; break;
-                    case "pvp": IconImg.sprite = pm.IconSprs[10]; break;
-                    case "cave": IconImg.sprite = pm.IconSprs[11]; break;
+                    IconText.text = "x" + _amount.ToString("N0");
+                    switch (_code)
+                    {
+                        case "weapon_coupon": IconImg.sprite = pm.IconSprs[0]; break;
+                        case "reinforce_box": IconImg.sprite = pm.IconSprs[1]; break;
+                        case "leaf_box": IconImg.sprite = pm.IconSprs[2]; break;
+                        case "E_box": IconImg.sprite = pm.IconSprs[3]; break;
+                        case "D_box": IconImg.sprite = pm.IconSprs[4]; break;
+                        case "C_box": IconImg.sprite = pm.IconSprs[5]; break;
+                        case "B_box": IconImg.sprite = pm.IconSprs[6]; break;
+                        case "A_box": IconImg.sprite = pm.IconSprs[7]; break;
+                        case "S_box": IconImg.sprite = pm.IconSprs[8]; break;
+                        case "L_box": IconImg.sprite = pm.IconSprs[9]; break;
+                        case "pvp": IconImg.sprite = pm.IconSprs[10]; break;
+                        case "cave": IconImg.sprite = pm.IconSprs[11]; break;
 
-                    /// 아마존 결정 조각 crystal
+                        /// 아마존 결정 조각 crystal
 
-                    case "crystal": IconImg.sprite = pm.IconSprs[12]; break;
+                        case "crystal": IconImg.sprite = pm.IconSprs[12]; break;
 
-                    case "stone": IconImg.sprite = pm.IconSprs[13]; break;
-                    case "reinforce": IconImg.sprite = pm.IconSprs[14]; break;
-                    case "gold": IconImg.sprite = pm.IconSprs[15]; break;
-                    case "leaf": IconImg.sprite = pm.IconSprs[16]; break;
-                    case "diamond": IconImg.sprite = pm.IconSprs[17]; break;
-                    case "cave_clear": IconImg.sprite = pm.IconSprs[18]; break;
-                    case "elixr": IconImg.sprite = pm.IconSprs[19]; break;
+                        case "stone": IconImg.sprite = pm.IconSprs[13]; break;
+                        case "reinforce": IconImg.sprite = pm.IconSprs[14]; break;
+                        case "gold": IconImg.sprite = pm.IconSprs[15]; break;
+                        case "leaf": IconImg.sprite = pm.IconSprs[16]; break;
+                        case "diamond": IconImg.sprite = pm.IconSprs[17]; break;
+                        case "cave_clear": IconImg.sprite = pm.IconSprs[18]; break;
+                        case "elixr": IconImg.sprite = pm.IconSprs[19]; break;
                         //
-                    case "S_leaf_box": IconImg.sprite = pm.IconSprs[20]; break;
-                    case "S_reinforce_box": IconImg.sprite = pm.IconSprs[21]; break;
-                    case "mining": IconImg.sprite = pm.IconSprs[22]; break;
-                    case "amber": IconImg.sprite = pm.IconSprs[23]; break;
+                        case "S_leaf_box": IconImg.sprite = pm.IconSprs[20]; break;
+                        case "S_reinforce_box": IconImg.sprite = pm.IconSprs[21]; break;
+                        case "mining": IconImg.sprite = pm.IconSprs[22]; break;
+                        case "amber": IconImg.sprite = pm.IconSprs[23]; break;
                         //
 
-                    case "Crazy_dia": IconImg.sprite = pm.IconSprs[24]; break;
-                    case "Crazy_elixr": IconImg.sprite = pm.IconSprs[25]; break;
-                    default: break;
+                        case "Crazy_dia": IconImg.sprite = pm.IconSprs[24]; break;
+                        case "Crazy_elixr": IconImg.sprite = pm.IconSprs[25]; break;
+                        default: break;
+                    }
+                    /// 획득팝업 SetActive
+                    GetPanel.SetActive(true);
+                    /// 쿠폰 입력 false
+                    isCouponPost = false;
                 }
-                /// 획득팝업 SetActive
-                GetPanel.SetActive(true);
                 Debug.Log("PostboxItemSend Pass");
                 //
                 PostboxCheck();

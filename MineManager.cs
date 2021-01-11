@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class MineManager : MonoBehaviour
 {
+    public Text[] AmberBtnText;
     public Transform Pet_INFINITI;
     [Header(" - 안전 운행 뉴 팝업")]
     public GameObject[] innerNewPop;
@@ -80,10 +81,12 @@ public class MineManager : MonoBehaviour
     /// 뉴 팝업 클릭할때 내부 인덱스 임시 저장
     /// </summary>
     int _index;
+    public int recentCoinSoMo;
     public void Clicked_MinningStart()
     {
-        if (PlayerInventory.mining < 1) return;
-        PlayerInventory.SetTicketCount("mining", -1);
+        if (PlayerInventory.mining < recentCoinSoMo) return;
+        /// 레벨 만큼 소모
+        PlayerInventory.SetTicketCount("mining", -recentCoinSoMo);
         /// 광산 1회 진행
         if (PlayerPrefsManager.currentTutoIndex == 29) ListModel.Instance.TUTO_Update(29);
         /// 채굴 업적  완료 카운트
@@ -130,6 +133,7 @@ public class MineManager : MonoBehaviour
         RedDotManager.instance.RedDot[6].SetActive(true);
     }
 
+
     float MAX_HP;
     float fPower;
     float fSpeed;
@@ -167,10 +171,12 @@ public class MineManager : MonoBehaviour
         if (++HoBakCnt[_index] < 10) return;
         HoBakCnt[_index] = 0;
         float randomseed = Random.Range(0, 100f);
+        Debug.LogError("호박석 파밍 시도 : " + randomseed + " 1 프로");
         /// 호박석 확률 1프로
         if (randomseed < 1.1f)
         {
-            PlayerInventory.SetTicketCount("amber", 1);
+            ListModel.Instance.axeDataList[0].Stack_Amber++;
+            Debug.LogError("호박석 파밍 성공");
         }
     }
 
@@ -227,6 +233,8 @@ public class MineManager : MonoBehaviour
             case 100:
                 InfiContents.GetChild(2).gameObject.SetActive(true);
                 autoView.content = InfiContents.GetChild(2).GetComponent<RectTransform>();
+                /// 버튼에 호박석 필요 갯수 올려 줌.
+                ShowAmberNeed();
                 /// 스크롤 바 위로 쭉 올려줌.
                 scb.value = 1f;
                 middleMoney[0].SetActive(false);
@@ -244,6 +252,16 @@ public class MineManager : MonoBehaviour
                 btnImgs[2].sprite = DisableBtn;
                 break;
         }
+    }
+
+    /// <summary>
+    /// 곡괭이 3개에 호박석 필요 갯수 적어줌.
+    /// </summary>
+    private void ShowAmberNeed()
+    {
+        AmberBtnText[0].text = PlayerPrefsManager.instance.DoubleToStringNumber(ListModel.Instance.axeDataList[0].Axe_Power + 1);
+        AmberBtnText[1].text = PlayerPrefsManager.instance.DoubleToStringNumber(ListModel.Instance.axeDataList[0].Axe_Speed + 1);
+        AmberBtnText[2].text = PlayerPrefsManager.instance.DoubleToStringNumber(ListModel.Instance.axeDataList[0].Axe_Skill + 1);
     }
 
     /// <summary>
@@ -273,7 +291,8 @@ public class MineManager : MonoBehaviour
                 return;
             }
         }
-        /// 하나도 채굴중 아니면 곡괭 멈춰
+        //ListModel.Instance.axeDataList[0].Stack_Amber ++;
+        /// 하나도 채굴중 아니면 곡괭 멈춰 
         anim.Play("Player_Mine_Idle", -1, 0f);
     }
 
@@ -282,6 +301,7 @@ public class MineManager : MonoBehaviour
         PlayerPrefsManager.instance.TEST_SaveJson();
         /// 멈춰!!
         anim.StopPlayback();
+        anim.Play("Player_Mine_Idle", -1, 0f);
         // 공격 애니메이션 정지
         PlayerPrefsManager.isEnterTheMine = true;
         // 게임 오브젝트 덮기
@@ -334,6 +354,7 @@ public class MineManager : MonoBehaviour
         RedDotManager.instance.RedDot[6].SetActive(false);
         /// 멈춰!!
         anim.StopPlayback();
+        anim.Play("Player_Mine_Idle", -1, 0f);
         /// 메인 브금 재생
         AudioManager.instance.PlayAudio("Main", "BGM");
         // 게임 오브젝트 덮기
@@ -353,6 +374,12 @@ public class MineManager : MonoBehaviour
         {
             UI_TopBotCanvas.GetChild(i).gameObject.SetActive(true);
         }
+        /// 튜토리얼 노란 박스 싹다 클리어했으면 표시 안함
+        if (PlayerPrefsManager.isTutoAllClear)
+        {
+            UI_TopBotCanvas.GetChild(UI_TopBotCanvas.childCount-1).gameObject.SetActive(false);
+        }
+
         HP_FILL.fillAmount = 1.0f;
         PopUpManager.instance.HidePopUP(23);
         /// 보급상자 다시 켜준다
@@ -698,6 +725,8 @@ public class MineManager : MonoBehaviour
         {
             AxeDesc[_index].text = (GetMineStat(_index) * 0.5f).ToString("F1") + "%";
         }
+        /// 요구 호박석 수 갱신
+        ShowAmberNeed();
     }
 
     /// <summary>
@@ -707,27 +736,40 @@ public class MineManager : MonoBehaviour
     public void ClickedSkillUP(int _index)
     {
         /// 맥스버튼이거나 앰버 없으면 리턴
-        if (AxeBtnMax[_index].activeSelf || PlayerInventory.amber < 1) return;
-        PlayerInventory.SetTicketCount("amber", -1);
-
+        if (AxeBtnMax[_index].activeSelf) return;
+        int thisLevel;
+        ///  엘릭서처럼 소모해
         switch (_index)
         {
             /// 파워 - 능률 증가
             case 0:
+                thisLevel = (int)ListModel.Instance.axeDataList[0].Axe_Power +1;
+                if(PlayerInventory.amber < thisLevel) return;
+                PlayerInventory.SetTicketCount("amber", -thisLevel);
+                //
                 ListModel.Instance.axeDataList[0].Axe_Power++;
                 if (ListModel.Instance.axeDataList[0].Axe_Power == 9999) AxeBtnMax[_index].SetActive(true);
                 break;
             /// 스피드 - 속도 증가
             case 1:
+                thisLevel = (int)ListModel.Instance.axeDataList[0].Axe_Speed + 1;
+                if (PlayerInventory.amber < thisLevel) return;
+                PlayerInventory.SetTicketCount("amber", -thisLevel);
+
                 ListModel.Instance.axeDataList[0].Axe_Speed++;
                 if (ListModel.Instance.axeDataList[0].Axe_Speed == 9999) AxeBtnMax[_index].SetActive(true);
                 break;
             /// 스킬 - 획득량 증가
             case 2:
+                thisLevel = (int)ListModel.Instance.axeDataList[0].Axe_Skill + 1;
+                if (PlayerInventory.amber < thisLevel) return;
+                PlayerInventory.SetTicketCount("amber", -thisLevel);
+
                 ListModel.Instance.axeDataList[0].Axe_Skill++;
                 if (ListModel.Instance.axeDataList[0].Axe_Skill == 9999) AxeBtnMax[_index].SetActive(true);
                 break;
         }
+
         RefreshAxe(_index);
         RefreshAxe(-1);
     }

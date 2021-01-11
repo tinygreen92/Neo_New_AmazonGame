@@ -5,7 +5,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -84,7 +86,9 @@ public class PlayFabManage : MonoBehaviour
         else
         {
             /// 플레이어 개인 데이터 호출
-            GetUserData();
+            //GetUserData();
+            /// 플레이팹 로딩 완료
+            PlayerPrefsManager.isLoadingComp = true;
             /// 닉네임 설정되어 있네? 바로 접속
             pcm.PhotonStart(myDisplayName);
             nm.SetReNickName(myDisplayName);
@@ -246,7 +250,13 @@ public class PlayFabManage : MonoBehaviour
                     break;
             }
         },
-        (error) => Debug.LogError(error.GenerateErrorReport()));
+        (error) =>
+        {
+            Debug.LogError(error.GenerateErrorReport());
+            SceneManager.LoadScene(0);
+        }
+
+        );
 
         return iResult;
     }
@@ -258,9 +268,14 @@ public class PlayFabManage : MonoBehaviour
     /// <returns></returns>
     public bool IsEnoughVC(string _CurrCode, int _amount)
     {
-        bool isEnough = false;
-        if (GetVirtualCurrency(_CurrCode) >= _amount) isEnough = true;
-        return isEnough;
+        if (GetVirtualCurrency(_CurrCode) >= _amount)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 
@@ -277,7 +292,12 @@ public class PlayFabManage : MonoBehaviour
                                                     /// 재화  표시기에 표기
                                                     GetVirtualCurrency("");
                                                 },
-                                                (error) => Debug.LogWarning("돈 추가 에러"));
+                                                (error) => 
+                                                {
+                                                    Debug.LogWarning("돈 추가 에러");
+                                                    SceneManager.LoadScene(0);
+                                                }
+                                                );
     }
 
     /// <summary>
@@ -290,7 +310,7 @@ public class PlayFabManage : MonoBehaviour
             Debug.LogError(_Amount + "보다 재화가 적음! 강제 return");
             return;
         }
-
+        /// 서버에서 돈 소모
         PlayFabClientAPI.SubtractUserVirtualCurrency(new SubtractUserVirtualCurrencyRequest() { VirtualCurrency = _CurrCode, Amount = _Amount },
                                                 (result) =>
                                                 {
@@ -298,10 +318,22 @@ public class PlayFabManage : MonoBehaviour
                                                     /// 재화  표시기에 표기
                                                     GetVirtualCurrency("");
                                                 },
-                                                (error) => Debug.LogWarning("돈 소모 에러"));
+                                                (error) =>
+                                                {
+                                                    Debug.LogWarning("돈 소모 에러");
+                                                    SceneManager.LoadScene(0);
+                                                }
+                                                );
     }
 
 
+    public void SaveTunaMayo(string _mamayoyo)
+    {
+        mamayoyo = _mamayoyo;
+        SetUserData();
+    }
+
+    string mamayoyo;
 
     /// <summary>
     /// 데이터 밀어넣기 -> 서버에 저장 생각날때마다 해줄 것
@@ -314,14 +346,14 @@ public class PlayFabManage : MonoBehaviour
             {
                 /// 알파벳 순서 enemyAllData 에 차곡 차곡 10개씩 cnt / 10 == index 0 부터 시작
                 /// { "SECTOR_0", PlayerPrefsManager.instance.LoadStringJsonn("isilpus")}, 
-                { "SECTOR_0", PlayerInventory.isSuperUser.ToString() },                                         ///  광고 제거 구매 여부 저장
-                { "SECTOR_1", "1" },                                          ///  
-                { "SECTOR_2", "2"},                             /// 
-                { "SECTOR_3", "3" },
-                { "SECTOR_4", "4"},
-                { "SECTOR_5", "5"},
-                { "SECTOR_6", "6"},
-                { "SECTOR_7", "7"},
+                { "SECTOR_0", Application.version},
+                { "SECTOR_1", PlayerInventory.Money_Dia.ToString() },
+                { "SECTOR_2", PlayerInventory.Money_Leaf.ToString()},
+                { "SECTOR_3", PlayerInventory.Money_EnchantStone.ToString() },
+                { "SECTOR_4", PlayerPrefsManager.instance.ZZoGGoMiDataSave() },              /// 쪼꼬미 데이터
+                { "SECTOR_5", mamayoyo},                                                                                            /// 제이와이피 저장
+                { "SECTOR_6", PlayerInventory.isSuperUser.ToString() },                                         ///  광고 제거 구매 여부 저장
+                { "SECTOR_7",  PlayerInventory.RecentDistance.ToString() },
                 { "SECTOR_8", "8"},
                 { "SECTOR_9", "9"},
             },
@@ -331,38 +363,93 @@ public class PlayFabManage : MonoBehaviour
         PlayFabClientAPI.UpdateUserData(request,
             (result) =>
             {
-                Debug.LogWarning("SECTOR_9 데이터 저장 성공!! " + myPlayFabId);
+                Debug.LogError("SECTOR_데이터 저장 성공!! " + myPlayFabId);
                 CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
             },
-            (error) => Debug.LogWarning("데이터 저장 실패")
+            (error) => Debug.LogError("SECTOR_데이터 저장 실패")
             );
     }
 
-    /// <summary> 
-    /// 데이터 가져오기 - 섹터를 가져오든 
-    /// 가져온 섹터에서 게임 값 떼내어서 밀어 넣든.
+
+    /// <summary>
+    ///  true - 쪼꼬미만 떼오기
+    /// false - 서버 데이터로 덮어씌우고 재실행
     /// </summary>
-    /// <param name="_playFabId"></param>
-    public void GetUserData()
+    /// <param name="_isZZOgomi"></param>
+    public void GetUserData(bool _isZZOgomi)
     {
+        long tryResult;
+        int tryResultt;
+        SystemPopUp.instance.LoopLoadingImg();
         var request = new GetUserDataRequest() { PlayFabId = myPlayFabId };
         PlayFabClientAPI.GetUserData(request, (result) =>
         {
-            if (result.Data == null || !result.Data.ContainsKey("SECTOR_0"))        /// 예외처리
+            //if (result.Data == null || !result.Data.ContainsKey("SECTOR_0"))        /// 예외처리
+            if (result.Data == null || !result.Data.ContainsKey("SECTOR_4"))        /// 예외처리
             {
-                Debug.LogWarning("No SECTOR_0 텅텅 비어있음");
+                Debug.LogError("No SECTOR_0 텅텅 비어있음");
+                PlayerPrefsManager.instance.ZZoGGoMiDataLoad(null);
                 PlayerPrefsManager.isLoadingComp = true;
-
+                SystemPopUp.instance.StopLoopLoading();
             }
             else  /// 실제로 실행할 동작 !!! 여기 리스트 형식 바뀌면 실행 오류 남(PC에서 안 잡힘)
             {
-                Debug.LogWarning("SECTOR_0: " + result.Data["SECTOR_0"].Value);
-                ///PlayerInventory.Money_Gold = double.Parse(result.Data["SECTOR_1"].Value);
+                if (_isZZOgomi)
+                {
+                    //Debug.LogError("SECTOR_4 (isSuperUser): " + result.Data["SECTOR_4"].Value);
+                    PlayerPrefsManager.instance.ZZoGGoMiDataLoad(result.Data["SECTOR_4"].Value);
+                    SystemPopUp.instance.StopLoopLoading();
+                }
+                else
+                {
+                    Debug.LogError("SECTOR_0 (버전정보): " + result.Data["SECTOR_0"].Value);
 
-                PlayerPrefsManager.isLoadingComp = true;
+                    Debug.LogError("SECTOR_1 (Money_Dia): " + result.Data["SECTOR_1"].Value);
+                    long.TryParse(result.Data["SECTOR_1"].Value, out tryResult);
+                    PlayerInventory.Money_Dia = tryResult;
+                    tryResult = 0;
+                    Debug.LogError("SECTOR_2 (Money_Leaf): " + result.Data["SECTOR_2"].Value);
+                    long.TryParse(result.Data["SECTOR_2"].Value, out tryResult);
+                    PlayerInventory.Money_Leaf = tryResult;
+                    tryResult = 0;
+                    Debug.LogError("SECTOR_3 (Money_EnchantStone): " + result.Data["SECTOR_3"].Value);
+                    long.TryParse(result.Data["SECTOR_3"].Value, out tryResult);
+                    PlayerInventory.Money_EnchantStone = tryResult;
+
+                    //Debug.LogError("SECTOR_5 (isSuperUser): " + result.Data["SECTOR_5"].Value); // 제이와피
+                    File.WriteAllText(Application.persistentDataPath + "/_data_", result.Data["SECTOR_5"].Value); // 생성된 string을  _data_ 파일에 쓴다 
+
+                    tryResult = 0;
+                    Debug.LogError("SECTOR_6 (isSuperUser): " + result.Data["SECTOR_6"].Value);
+                    int.TryParse(result.Data["SECTOR_3"].Value, out tryResultt);
+                    PlayerInventory.isSuperUser = tryResultt;
+
+
+                    //Debug.LogError("SECTOR_7 (isSuperUser): " + result.Data["SECTOR_7"].Value);
+                    long.TryParse(result.Data["SECTOR_7"].Value, out tryResult);
+                    PlayerInventory.RecentDistance = tryResult;
+
+                    //Debug.LogError("SECTOR_8 (isSuperUser): " + result.Data["SECTOR_8"].Value);
+                    //Debug.LogError("SECTOR_9 (isSuperUser): " + result.Data["SECTOR_9"].Value);
+
+
+                    /// 파일에서 데이터 불러와서 리스트에 대입
+                    PlayerPrefsManager.instance.TEST_SaveJson();
+                    PlayerPrefsManager.isLoadingComp = true;
+                    SystemPopUp.instance.StopLoopLoading();
+                    SceneManager.LoadScene(0);
+                }
             }
+
         },
-        (error) => Debug.LogWarning("데이터 불러오기 실패"));
+        (error) =>
+        {
+            SystemPopUp.instance.StopLoopLoading();
+            Debug.LogWarning("데이터 불러오기 실패");
+            SceneManager.LoadScene(0);
+        }
+         );
+
     }
 
 

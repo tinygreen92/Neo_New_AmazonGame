@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class AutoItem : MonoBehaviour
 {
+    public Text miningCoin;
     public MineManager sm;
     [Header("- 회색 커버 오브젝트")]
     public GameObject GrayImage;
@@ -46,24 +47,35 @@ public class AutoItem : MonoBehaviour
     }
     /// <summary>
     /// 버튼 색 노랑 <-> 회색 체인지
+    /// ListModel.Instance.mineCraft[_index].stage
     /// </summary>
     void ChangeBtnColor()
     {
-        if (PlayerInventory.mining >= 1) TargetImage[0].sprite = BtnSprite[1]; //  On 이미지\
-        else if (TargetImage[0].sprite != BtnSprite[2]) TargetImage[0].sprite = BtnSprite[2]; //  OFF 이미지
+        if (PlayerInventory.mining >= thisStageCoin)
+        {
+            TargetImage[0].sprite = BtnSprite[1]; //  On 이미지
+        }
+        else if (TargetImage[0].sprite != BtnSprite[2])
+        {
+            TargetImage[0].sprite = BtnSprite[2]; //  OFF 이미지
+        }
     }
 
     int _index;
     Coroutine c_time;
     Coroutine d_time;
     private bool isInit;
+    int thisStageCoin;
 
     public void BoxInfoUpdate(int cnt)
     {
         /// 인덱스 설정 -> 이 스크립트 전체
         _index = cnt;
+        /// 소모 코인
+        thisStageCoin = _index + 1;
+        miningCoin.text = PlayerPrefsManager.instance.DoubleToStringNumber(thisStageCoin);
         // 코루틴 타이머 관련 갱신
-        if(c_time != null) StopCoroutine(c_time);
+        if (c_time != null) StopCoroutine(c_time);
         if (d_time != null) StopCoroutine(d_time);
         c_time = null;
         d_time = null;
@@ -172,8 +184,9 @@ public class AutoItem : MonoBehaviour
         if (TargetImage[0].gameObject.activeSelf)
         {
             /// 채굴권이 존재하면 팝업 켜준다.
-            if (PlayerInventory.mining > 0)
+            if (PlayerInventory.mining >= thisStageCoin)
             {
+                sm.recentCoinSoMo = _index + 1;
                 sm.PopWarnningUp(true, _index);
             }
             

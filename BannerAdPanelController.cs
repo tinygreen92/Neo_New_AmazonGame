@@ -63,7 +63,6 @@ public class BannerAdPanelController : MonoBehaviour
         /// 광고제거 구매했니?
         if (PlayerInventory.isSuperUser != 0)
         {
-            isSuperUser = true;
             isBannerDown = true;
             isOn = !isOn;
             em.DestroyBanner();
@@ -72,20 +71,20 @@ public class BannerAdPanelController : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// http://cheongbok.blogspot.com/2018/07/dp-pixel.html
-    /// </summary>
-    /// <param name="fFixedResoulutionHeight">내가 고정한 해상도 높이 :: 1980</param>
-    /// <param name="fdpHeight">바꾸고자 하는 dp (애드몹 배너 320x50일 때 50)</param>
-    /// <returns></returns>
-    public float DPToPixel(float fFixedResoulutionHeight, float fdpHeight)
-    {
-        float fNowDpi = (Screen.dpi * fFixedResoulutionHeight) / Screen.height;
-        float scale = fNowDpi / 160;
-        float pixel = fdpHeight * scale;
+    ///// <summary>
+    ///// http://cheongbok.blogspot.com/2018/07/dp-pixel.html
+    ///// </summary>
+    ///// <param name="fFixedResoulutionHeight">내가 고정한 해상도 높이 :: 1980</param>
+    ///// <param name="fdpHeight">바꾸고자 하는 dp (애드몹 배너 320x50일 때 50)</param>
+    ///// <returns></returns>
+    //public float DPToPixel(float fFixedResoulutionHeight, float fdpHeight)
+    //{
+    //    float fNowDpi = (Screen.dpi * fFixedResoulutionHeight) / Screen.height;
+    //    float scale = fNowDpi / 160;
+    //    float pixel = fdpHeight * scale;
 
-        return pixel;
-    }
+    //    return pixel;
+    //}
 
     void Update()
     {
@@ -130,6 +129,10 @@ public class BannerAdPanelController : MonoBehaviour
                 }
 
                 isBannerDown = false;
+                if (PlayerInventory.isSuperUser != 0)
+                {
+                    isSuperUser = true;
+                }
             }
         }
     }

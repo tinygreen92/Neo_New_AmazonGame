@@ -105,6 +105,7 @@ public class QuestManager : MonoBehaviour
     /// </summary>
     public void GetDayAllReword()
     {
+        isAllaceptLoop = true;
         isAceptEnable = false;
         dayAllBtnImg[0].sprite = allBtnSprs[0];
         for (int i = 0; i < C5.childCount; i++)
@@ -123,20 +124,33 @@ public class QuestManager : MonoBehaviour
                 C5.GetChild(i).GetComponent<MissionItem>().UpdateMission();
             }
         }
-        /// 0번 인덱스 새로고침
-        C5.GetChild(0).GetComponent<MissionItem>().UpdateMission();
+        ///// 0번 인덱스 새로고침
+        //C5.GetChild(0).GetComponent<MissionItem>().UpdateMission();
+        for (int i = 0; i < C5.childCount; i++)
+        {
+            /// 새로고침
+            C5.GetChild(i).GetComponent<MissionItem>().UpdateMission();
+        }
         /// 레드닷 끄기
         RedDotManager.instance.RedDot[5].SetActive(false);
+        /// 다시 상단 정렬
+        isAllaceptLoop = false;
         if (!isAceptEnable) return;
         /// 일일 미션 0 모두 받기 파랑 1
         dayAllBtnImg[0].sprite = allBtnSprs[1];
     }
 
     /// <summary>
+    /// 모두 받기 루프중에는 상단 정렬 중단~
+    /// </summary>
+    public bool isAllaceptLoop;
+
+    /// <summary>
     /// ALL 미션에 붙이는 모두 받기
     /// </summary>
     public void GetALLAllReword()
     {
+        isAllaceptLoop = true;
         isAceptEnable = false;
         dayAllBtnImg[1].sprite = allBtnSprs[0];
         /// 지금 활성화된 자식만큼 배수 적용해줌. -> 배수 적용된 뒤에 새로고침.
@@ -160,6 +174,8 @@ public class QuestManager : MonoBehaviour
         }
         /// 레드닷 끄기
         RedDotManager.instance.RedDot[5].SetActive(false);
+        /// 다시 상단 정렬
+        isAllaceptLoop = false;
         if (!isAceptEnable) return;
         /// 평생 미션 1 모두 받기 파랑 1
         dayAllBtnImg[1].sprite = allBtnSprs[1];

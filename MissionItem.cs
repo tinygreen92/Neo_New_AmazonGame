@@ -74,14 +74,12 @@ public class MissionItem : MonoBehaviour
                 qm.isAceptEnable = true;
                 qm.dayAllBtnImg[1].sprite = qm.allBtnSprs[1];
                 /// 보상 수령가능 아이템 최상단으로 재설정
-                //transform.SetAsFirstSibling();
+                if (!qm.isAllaceptLoop) transform.SetAsFirstSibling();
             }
             else
             {
                 thisBtn.sprite = qm.BtnSprite[0];
                 sd.value = (float)(double.Parse(ListModel.Instance.missionALLlist[index].curentValue) / double.Parse(ListModel.Instance.missionALLlist[index].maxValue));
-                /// 보상 안받은건 밑으로
-                //transform.SetAsLastSibling();
             }
 
 
@@ -119,27 +117,15 @@ public class MissionItem : MonoBehaviour
         else
         {
             sd.wholeNumbers = true;
-            if (ListModel.Instance.missionDAYlist[index].maxValue == ListModel.Instance.missionDAYlist[index].curentValue)
-            {
-                thisBtn.sprite = qm.BtnSprite[1];
-                RedDotManager.instance.RedDot[5].SetActive(true);
-                /// 일일 미션 0 모두 받기 파랑 1
-                qm.isAceptEnable = true;
-                qm.dayAllBtnImg[0].sprite = qm.allBtnSprs[1];
-                /// 보상 수령가능 아이템 최상단으로 재설정
-                //transform.SetAsFirstSibling();
-            }
-            else
-            {
-                thisBtn.sprite = qm.BtnSprite[0];
-            }
+
+
             /// 일퀘 완료했을때 예외처리 -> 그레이 씌워줌
             if (ListModel.Instance.missionDAYlist[index].curentValue == "-1")
             {
                 maxBtn.SetActive(true);
                 transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
                 /// 완료된 아이템 최하단으로 재설정
-                //transform.SetAsLastSibling();
+                if (!qm.isAllaceptLoop) transform.SetAsLastSibling();
                 /// 슬라이더 설정
                 sd.maxValue = int.Parse(ListModel.Instance.missionDAYlist[index].maxValue);
                 sd.value = int.Parse(ListModel.Instance.missionDAYlist[index].maxValue);
@@ -153,6 +139,7 @@ public class MissionItem : MonoBehaviour
                 {
                     titleText.text = ListModel.Instance.missionDAYlist[index].engDesc;
                 }
+                return;
             }
             else
             {
@@ -173,6 +160,21 @@ public class MissionItem : MonoBehaviour
                 }
             }
 
+            /// 완료한 퀘 있니?
+            if (ListModel.Instance.missionDAYlist[index].maxValue == ListModel.Instance.missionDAYlist[index].curentValue)
+            {
+                thisBtn.sprite = qm.BtnSprite[1];
+                RedDotManager.instance.RedDot[5].SetActive(true);
+                /// 일일 미션 0 모두 받기 파랑 1
+                qm.isAceptEnable = true;
+                qm.dayAllBtnImg[0].sprite = qm.allBtnSprs[1];
+                /// 보상 수령가능 아이템 최상단으로 재설정
+                if (!qm.isAllaceptLoop) transform.SetAsFirstSibling();
+            }
+            else
+            {
+                thisBtn.sprite = qm.BtnSprite[0];
+            }
 
         }
     }

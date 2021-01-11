@@ -643,7 +643,6 @@ public static class PlayerInventory
 
             if (isbuff_gold_earned_up || dia_gold_earned_up) tmp2 += buff_gold_earned_up;
             if (ispet_equiped_gold_earned) tmp2 += pet_equiped_gold_earned;
-
             return tmp2;
         }
     }
@@ -1138,15 +1137,38 @@ public static class PlayerInventory
     ///--------------------------------  DIAMOND 유료 재화  -------------------------------------/// 
 
 
-    public static ObscuredLong Money_Dia     {
+    //public static ObscuredLong Money_Dia     {
+    //    get { return MoneyManager.instance.PFM.GetVirtualCurrency("DA"); }
+    //    set 
+    //    { 
+    //        money_Dia = value;
+    //        /// 다이아 감산
+    //        if (value < 0)
+    //        {
+    //            MoneyManager.instance.PFM.SubVirtualCurrency("DA", (int)money_Dia);
+    //        }
+    //        /// 다이아 가산
+    //        else
+    //        {
+    //            if (money_Dia > 2000000000) money_Dia = 2000000000;
+    //            MoneyManager.instance.PFM.AddVirtualCurrency("DA", (int)money_Dia);
+    //        }
+
+    //        MoneyManager.instance.DisplayDia();
+    //    }
+    //}
+
+    public static ObscuredLong Money_Dia
+    {
         get { if (money_Dia > 0) return money_Dia; else return 0; }
-        set 
-        { 
+        set
+        {
             money_Dia = value;
             if (money_Dia > 2000000000) money_Dia = 2000000000;
             MoneyManager.instance.DisplayDia();
         }
     }
+
     public static ObscuredLong Money_Leaf    {
         get { if (money_Leaf > 0) return money_Leaf; else return 0; }
         set
@@ -1243,6 +1265,11 @@ public static class PlayerInventory
 
 
     #endregion
+
+
+
+
+
 
 
 }
