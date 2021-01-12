@@ -121,6 +121,7 @@ enum EnumNumber
 
 public class PlayerPrefsManager : MonoBehaviour
 {
+    public TextAsset mayo;
     [Header("- 무기 애니메이션 뭉태기")]
     public GameObject[] WeaponAnims;
     [Header("- 매니저들")]
@@ -592,7 +593,7 @@ public class PlayerPrefsManager : MonoBehaviour
         /// 첫시작 파일은 리소시즈
         if (_isInit)
         {
-            loadstring = File.ReadAllText(Application.dataPath + "/__data__"); // string을 읽음 
+            loadstring = mayo.text;
         }
         /// 이후 파일은 여기서 불러와
         else

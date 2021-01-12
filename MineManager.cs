@@ -259,9 +259,9 @@ public class MineManager : MonoBehaviour
     /// </summary>
     private void ShowAmberNeed()
     {
-        AmberBtnText[0].text = PlayerPrefsManager.instance.DoubleToStringNumber(ListModel.Instance.axeDataList[0].Axe_Power + 1);
-        AmberBtnText[1].text = PlayerPrefsManager.instance.DoubleToStringNumber(ListModel.Instance.axeDataList[0].Axe_Speed + 1);
-        AmberBtnText[2].text = PlayerPrefsManager.instance.DoubleToStringNumber(ListModel.Instance.axeDataList[0].Axe_Skill + 1);
+        AmberBtnText[0].text = PlayerPrefsManager.instance.DoubleToStringNumber(ListModel.Instance.axeDataList[0].Axe_Power);
+        AmberBtnText[1].text = PlayerPrefsManager.instance.DoubleToStringNumber(ListModel.Instance.axeDataList[0].Axe_Speed);
+        AmberBtnText[2].text = PlayerPrefsManager.instance.DoubleToStringNumber(ListModel.Instance.axeDataList[0].Axe_Skill);
     }
 
     /// <summary>
@@ -743,7 +743,7 @@ public class MineManager : MonoBehaviour
         {
             /// 파워 - 능률 증가
             case 0:
-                thisLevel = (int)ListModel.Instance.axeDataList[0].Axe_Power +1;
+                thisLevel = (int)ListModel.Instance.axeDataList[0].Axe_Power;
                 if(PlayerInventory.amber < thisLevel) return;
                 PlayerInventory.SetTicketCount("amber", -thisLevel);
                 //
@@ -752,7 +752,7 @@ public class MineManager : MonoBehaviour
                 break;
             /// 스피드 - 속도 증가
             case 1:
-                thisLevel = (int)ListModel.Instance.axeDataList[0].Axe_Speed + 1;
+                thisLevel = (int)ListModel.Instance.axeDataList[0].Axe_Speed;
                 if (PlayerInventory.amber < thisLevel) return;
                 PlayerInventory.SetTicketCount("amber", -thisLevel);
 
@@ -761,7 +761,7 @@ public class MineManager : MonoBehaviour
                 break;
             /// 스킬 - 획득량 증가
             case 2:
-                thisLevel = (int)ListModel.Instance.axeDataList[0].Axe_Skill + 1;
+                thisLevel = (int)ListModel.Instance.axeDataList[0].Axe_Skill;
                 if (PlayerInventory.amber < thisLevel) return;
                 PlayerInventory.SetTicketCount("amber", -thisLevel);
 
