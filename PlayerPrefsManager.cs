@@ -247,7 +247,7 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 갓 모드에서 사용하는 것 _ 버튼 눌러서 데이터 저장 ?//  임시로 재화 저장
+    /// JSon 화 시켜서 로컬 초벌 저장
     /// </summary>
     public void TEST_SaveJson()
     {
@@ -309,12 +309,17 @@ public class PlayerPrefsManager : MonoBehaviour
 
         ObscuredPrefs.SetString("mining", PlayerInventory.mining.ToString());
         ObscuredPrefs.SetString("amber", PlayerInventory.amber.ToString());
+
+        ObscuredPrefs.SetInt("isTutoAllClear", isTutoAllClear ? 525 : 0);
+
+        /// ------------------------------ 이 아래는 버려도 된다. isTutoAllClear 는 한번 더 체크
+
         ObscuredPrefs.SetInt("ZogarkMissionCnt", ZogarkMissionCnt);
         ObscuredPrefs.SetInt("AmaAdsTimer", AmaAdsTimer);
         ObscuredPrefs.SetInt("FreeDiaCnt", FreeDiaCnt);
         ObscuredPrefs.SetInt("FreeWeaponCnt", FreeWeaponCnt);
         ObscuredPrefs.SetInt("isDailyCheak", isDailyCheak ? 525 : 0);
-        ObscuredPrefs.SetInt("isTutoAllClear", isTutoAllClear ? 525 : 0);
+        ObscuredPrefs.Save();
 
 
         /// 아직 오프라인 체크 안함
@@ -330,10 +335,8 @@ public class PlayerPrefsManager : MonoBehaviour
         //ObscuredPrefs.SetString("Check_Daily", tmp);
         //ObscuredPrefs.SetString("FreeWeapon", tmp);
         //ObscuredPrefs.SetString("FreeDia", tmp);
-        /// 임시 골드 저장.
 
         ObscuredPrefs.Save();
-
         Debug.LogWarning("세이브 데이터 타임 " + tmp);
     }
 
@@ -563,6 +566,51 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 확장 가능한 NonJson 리스트
+    /// </summary>
+    /// <returns></returns>
+    public string NonJsonDataOutput()
+    {
+        string savestring = JsonConvert.SerializeObject(ListModel.Instance.nonSaveJsonMoney);
+        return AESEncrypt128(savestring);
+    }
+
+    public void NonJsonDataLoad(string Mormo)
+    {
+        /// 배열 복구
+        ListModel.Instance.nonSaveJsonMoney = JsonConvert.DeserializeObject<List<NonJson>>(AESDecrypt128(Mormo));
+        ///
+        /// 임시 골드 등등 저장
+        ObscuredPrefs.SetString("RecentDistance", ListModel.Instance.nonSaveJsonMoney[0].RecentDistance.ToString());
+        ObscuredPrefs.SetString("Money_Gold", ListModel.Instance.nonSaveJsonMoney[0].Money_Gold.ToString());
+        ObscuredPrefs.SetString("Money_Elixir", ListModel.Instance.nonSaveJsonMoney[0].Money_Elixir.ToString());
+        ObscuredPrefs.SetString("Money_AmazonCoin", ListModel.Instance.nonSaveJsonMoney[0].Money_AmazonCoin.ToString());
+        ObscuredPrefs.SetString("AmazonStoneCount", ListModel.Instance.nonSaveJsonMoney[0].AmazonStoneCount.ToString());
+        ObscuredPrefs.SetString("CurrentAmaLV", ListModel.Instance.nonSaveJsonMoney[0].CurrentAmaLV.ToString());
+        ObscuredPrefs.SetString("box_Coupon", ListModel.Instance.nonSaveJsonMoney[0].box_Coupon.ToString());
+        ObscuredPrefs.SetString("box_E", ListModel.Instance.nonSaveJsonMoney[0].box_E.ToString());
+        ObscuredPrefs.SetString("box_D", ListModel.Instance.nonSaveJsonMoney[0].box_D.ToString());
+        ObscuredPrefs.SetString("box_C", ListModel.Instance.nonSaveJsonMoney[0].box_C.ToString());
+        ObscuredPrefs.SetString("box_B", ListModel.Instance.nonSaveJsonMoney[0].box_B.ToString());
+        ObscuredPrefs.SetString("box_A", ListModel.Instance.nonSaveJsonMoney[0].box_A.ToString());
+        ObscuredPrefs.SetString("box_S", ListModel.Instance.nonSaveJsonMoney[0].box_S.ToString());
+        ObscuredPrefs.SetString("box_L", ListModel.Instance.nonSaveJsonMoney[0].box_L.ToString());
+        ObscuredPrefs.SetString("ticket_reinforce_box", ListModel.Instance.nonSaveJsonMoney[0].ticket_reinforce_box.ToString());
+        ObscuredPrefs.SetString("ticket_leaf_box", ListModel.Instance.nonSaveJsonMoney[0].ticket_leaf_box.ToString());
+        ObscuredPrefs.SetString("ticket_pvp_enter", ListModel.Instance.nonSaveJsonMoney[0].ticket_pvp_enter.ToString());
+        ObscuredPrefs.SetString("ticket_cave_enter", ListModel.Instance.nonSaveJsonMoney[0].ticket_cave_enter.ToString());
+        ObscuredPrefs.SetString("ticket_cave_clear", ListModel.Instance.nonSaveJsonMoney[0].ticket_cave_clear.ToString());
+        ObscuredPrefs.SetString("S_reinforce_box", ListModel.Instance.nonSaveJsonMoney[0].S_reinforce_box.ToString());
+        ObscuredPrefs.SetString("S_leaf_box", ListModel.Instance.nonSaveJsonMoney[0].S_leaf_box.ToString());
+        ObscuredPrefs.SetString("mining", ListModel.Instance.nonSaveJsonMoney[0].mining.ToString());
+        ObscuredPrefs.SetString("amber", ListModel.Instance.nonSaveJsonMoney[0].amber.ToString());
+        //
+        ObscuredPrefs.SetInt("isTutoAllClear", ListModel.Instance.nonSaveJsonMoney[0].isTutoAllClear);
+    }
+
+
+
+    /// <summary>
     /// 리스트를 Json으로 저장
     /// </summary>
     public void JObjectSave(bool _isSeverSave)
@@ -639,7 +687,7 @@ public class PlayerPrefsManager : MonoBehaviour
         }
         /// 장착 룬 스탯 새로고침
         ListModel.Instance.SetEquipedRuneEffect();
-        /// 유료 재화 구매 여부 로드
+        /// 광고 제거 로드
         PlayerInventory.isSuperUser = ListModel.Instance.mvpDataList[0].SuperUser;
         /// TODO : 영구적인 버프 효과 아이콘 활성화
         PlayerInventory.isbuff_power_up = ListModel.Instance.mvpDataList[0].buff_power_up != 0 ? true : false;
@@ -650,10 +698,6 @@ public class PlayerPrefsManager : MonoBehaviour
         if (PlayerInventory.isbuff_move_speed_up) bm.MoneyLoveBuff(2);
         PlayerInventory.isbuff_gold_earned_up = ListModel.Instance.mvpDataList[0].buff_gold_earned_up != 0 ? true : false;
         if (PlayerInventory.isbuff_gold_earned_up) bm.MoneyLoveBuff(3);
-        /// 1회 한정 패키지 구매 여부 필요 한지?
-        
-
-
 
         /// 장착 무기 스탯 새로고침
         for (int i = 0; i < ListModel.Instance.weaponList.Count; i++)
@@ -668,14 +712,16 @@ public class PlayerPrefsManager : MonoBehaviour
                 break;
             }
         }
-        /// 초반 초기화 완료 됐을때 키 초기화
-        ObscuredPrefs.SetInt("tunamayo", 525);
+
         /// 로딩바 올려주는 걸 허락한다.
         isJObjectLoad = true;
 
-        ///
+        /// 초창기 초기화 후 호출할때만 데이터 세이브
         if (_isInit)
         {
+            /// 초반 초기화 완료 됐을때 키 초기화
+            ObscuredPrefs.SetInt("tunamayo", 525);
+            /// 초창기 초기화 후 호출할때만 데이터 세이브
             TEST_SaveJson();
         }
     }

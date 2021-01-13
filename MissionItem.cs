@@ -97,11 +97,25 @@ public class MissionItem : MonoBehaviour
 
             if (Lean.Localization.LeanLocalization.CurrentLanguage == "Korean")
             {
-                titleText.text = ListModel.Instance.missionALLlist[index].korDesc;
+                if (index == 2)
+                {
+                    titleText.text = Lean.Localization.LeanLocalization.GetTranslationText("HotFix_Potion_Desc");
+                }
+                else
+                {
+                    titleText.text = ListModel.Instance.missionALLlist[index].korDesc;
+                }
             }
             else
             {
-                titleText.text = ListModel.Instance.missionALLlist[index].engDesc;
+                if (index == 2)
+                {
+                    titleText.text = Lean.Localization.LeanLocalization.GetTranslationText("HotFix_Potion_Desc");
+                }
+                else
+                {
+                    titleText.text = ListModel.Instance.missionALLlist[index].korDesc;
+                }
             }
         }
 

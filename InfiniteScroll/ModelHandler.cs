@@ -7,122 +7,117 @@ using CodeStage.AntiCheat.Storage;
 
 public class ModelHandler : MonoBehaviour
 {
-    public TextAsset _char;            /// 캐릭터 텍스트 파일
-    public TextAsset _weapon;            /// 무기 텍스트 파일
-    public TextAsset _Heart;            /// 유물 텍스트 파일
-    public TextAsset ta;            /// 수집 텍스트 파일
-    public TextAsset _Rune;            /// 룬 텍스트 파일
-    public TextAsset _PET;            /// 펫 텍스트 파일
-    public TextAsset SHPSHPSHOP;            /// 상점 텍스트 파일
-    public TextAsset Misson;            /// 미션 텍스트 파일
-    public TextAsset _mine;            /// 광산 텍스트 파일
-    public TextAsset _Swamp;            /// 숨겨진 늪지 텍스트 파일
+    //public TextAsset _char;            /// 캐릭터 텍스트 파일
+    //public TextAsset _weapon;            /// 무기 텍스트 파일
+    //public TextAsset _Heart;            /// 유물 텍스트 파일
+    //public TextAsset ta;            /// 수집 텍스트 파일
+    //public TextAsset _Rune;            /// 룬 텍스트 파일
+    //public TextAsset _PET;            /// 펫 텍스트 파일
+    //public TextAsset SHPSHPSHOP;            /// 상점 텍스트 파일
+    //public TextAsset Misson;            /// 미션 텍스트 파일
+    //public TextAsset _mine;            /// 광산 텍스트 파일
+    //public TextAsset _Swamp;            /// 숨겨진 늪지 텍스트 파일
 
 
 
     private void Start()
     {
+        /// 210113 _ 추가 데이터 파일 초기화 - >nonSaveJsonMoney [0]
+        ListModel.Instance.InitNonJsonData();
+
+
+
+
+
+
+
+
         /// 완전 초기화 후에 쌔삥 데이터로 갈아 끼워줌
         if (!ObscuredPrefs.HasKey("tunamayo"))
         {
-            /// 초반 초기화 완료 됐을때 키 초기화 TEST_Save 로 옮긴다
-            //ObscuredPrefs.SetInt("TEST_Key", 525);
-            //if (ListModel.Instance.charatorList.Count == 0) TA_Parse_Charr();
-            //if (ListModel.Instance.supList.Count == 0) TA_Parser();
-            //if (ListModel.Instance.invisibleheartList.Count == 0) TA_Parser_HV();
-            //if (ListModel.Instance.invisibleruneList.Count == 0) TA_Parser_Rune();
-            //if (ListModel.Instance.weaponList.Count == 0) TA_Parser_Weapon();
-            //if (ListModel.Instance.petList.Count == 0) TA_Parser_Pet();
-            //if (ListModel.Instance.shopList.Count == 0) TA_Parser_Shop();
-            //if (ListModel.Instance.missionDAYlist.Count == 0) TA_Parser_Mission();
-            //if (ListModel.Instance.mineCraft.Count == 0) TA_Parser_Mine();
-            //if (ListModel.Instance.swampCaveData.Count == 0) TA_Parser_Swamp();
-            //// 유료 상품 구매 
-            //ListModel.Instance.mvpDataList.Add(new MVP
-            //{
-            //    SuperUser = 0,
-            //    buff_power_up = 0,
-            //    buff_attack_speed_up = 0,
-            //    buff_gold_earned_up = 0,
-            //    buff_move_speed_up = 0,
-            //    pack_06 = 0,
-            //    pack_07 = 0,
-            //    pack_08 = 0,
-            //    pack_09 = 0,
-            //    pack_10 = 0,
-            //    daily_10 = 0,
-            //    daily_11 = 0,
-            //    daily_12 = 0,
-            //    daily_13 = 0,
-            //    weekend_14 = 0,
-            //    weekend_15 = 0,
-            //    weekend_16 = 0,
-            //    weekend_17 = 0,
-            //    mouth_18 = 0,
-            //    mouth_19 = 0,
-            //    mouth_20 = 0,
-            //    mouth_21 = 0,
-            //    mouth_22 = 0,
-            //    mouth_23 = 0,
-            //    weekend_Day = 0,
-            //    mouth_Day = 0,
-            //});
-            //// 수정 동굴 초기 수치 세팅
-            //ListModel.Instance.axeDataList.Add(new AxeStat
-            //{
-            //    Stack_EnStone = 0,
-            //    Stack_AmaCystal = 0,
-            //    Stack_Amber = 0,
-            //    Axe_Power = 1,
-            //    Axe_Speed = 1,
-            //    Axe_Skill = 1,
-            //});
-
-
             /// 파일에서 데이터 불러와서 리스트에 대입
             PlayerPrefsManager.instance.JObjectLoad(true);
 
-            //// 초기 무기 1렙 짜리 장착
-            //Invoke(nameof(InvoFirstWeapon), 2.2f);
+
         }
         else
         {
             /// TODO :  임시 데이터 로드
-            PlayerInventory.RecentDistance = double.Parse(ObscuredPrefs.GetString("RecentDistance"));
-            PlayerInventory.Money_Gold = double.Parse(ObscuredPrefs.GetString("Money_Gold"));
-            PlayerInventory.Money_Elixir = long.Parse(ObscuredPrefs.GetString("Money_Elixir"));
-            PlayerInventory.Money_Dia = long.Parse(ObscuredPrefs.GetString("Money_Dia"));
-            PlayerInventory.Money_Leaf = long.Parse(ObscuredPrefs.GetString("Money_Leaf"));
-            PlayerInventory.Money_EnchantStone = long.Parse(ObscuredPrefs.GetString("Money_EnchantStone"));
-            PlayerInventory.Money_AmazonCoin = long.Parse(ObscuredPrefs.GetString("Money_AmazonCoin"));
-            PlayerInventory.AmazonStoneCount = long.Parse(ObscuredPrefs.GetString("AmazonStoneCount"));
-            PlayerInventory.CurrentAmaLV = int.Parse(ObscuredPrefs.GetString("CurrentAmaLV"));
-            PlayerInventory.box_Coupon = int.Parse(ObscuredPrefs.GetString("box_Coupon"));
-            PlayerInventory.box_E = int.Parse(ObscuredPrefs.GetString("box_E"));
-            PlayerInventory.box_D = int.Parse(ObscuredPrefs.GetString("box_D"));
-            PlayerInventory.box_C = int.Parse(ObscuredPrefs.GetString("box_C"));
-            PlayerInventory.box_B = int.Parse(ObscuredPrefs.GetString("box_B"));
-            PlayerInventory.box_A = int.Parse(ObscuredPrefs.GetString("box_A"));
-            PlayerInventory.box_S = int.Parse(ObscuredPrefs.GetString("box_S"));
-            PlayerInventory.box_L = int.Parse(ObscuredPrefs.GetString("box_L"));
-            PlayerInventory.ticket_reinforce_box = int.Parse(ObscuredPrefs.GetString("ticket_reinforce_box"));
-            PlayerInventory.ticket_leaf_box = int.Parse(ObscuredPrefs.GetString("ticket_leaf_box"));
-            PlayerInventory.ticket_pvp_enter = int.Parse(ObscuredPrefs.GetString("ticket_pvp_enter"));
-            PlayerInventory.ticket_cave_enter = int.Parse(ObscuredPrefs.GetString("ticket_cave_enter"));
-            PlayerInventory.ticket_cave_clear = int.Parse(ObscuredPrefs.GetString("ticket_cave_clear"));
-            PlayerInventory.S_reinforce_box = int.Parse(ObscuredPrefs.GetString("S_reinforce_box"));
+            if (double.TryParse(ObscuredPrefs.GetString("RecentDistance"), out dTryResult)) PlayerInventory.RecentDistance = dTryResult;
+            else PlayerInventory.RecentDistance = 0;
+            if (double.TryParse(ObscuredPrefs.GetString("Money_Gold"), out dTryResult)) PlayerInventory.Money_Gold = dTryResult;
+            else PlayerInventory.Money_Gold = 0;
 
-            PlayerInventory.S_leaf_box = int.Parse(ObscuredPrefs.GetString("S_leaf_box"));
-            
-            PlayerInventory.mining = int.Parse(ObscuredPrefs.GetString("mining"));
-            PlayerInventory.amber = int.Parse(ObscuredPrefs.GetString("amber"));
-            PlayerPrefsManager.DailyCount_Cheak = ObscuredPrefs.GetInt("DailyCount_Cheak");
-            PlayerPrefsManager.isDailyCheak = ObscuredPrefs.GetInt("isDailyCheak") != 0? true : false;
+            /// --------------------------------------------------------------------------------------------------------------------
+
+            if (long.TryParse(ObscuredPrefs.GetString("Money_Elixir"), out lTryResult)) PlayerInventory.Money_Elixir = lTryResult;
+            else PlayerInventory.Money_Elixir = 0;
+            if (long.TryParse(ObscuredPrefs.GetString("Money_Dia"), out lTryResult))
+            {
+                Debug.LogError("lTryResult : " + lTryResult);
+                PlayerInventory.Money_Dia = lTryResult;
+            }
+            else PlayerInventory.Money_Dia = 0;
+            if (long.TryParse(ObscuredPrefs.GetString("Money_Leaf"), out lTryResult)) PlayerInventory.Money_Leaf = lTryResult;
+            else PlayerInventory.Money_Leaf = 0;
+            if (long.TryParse(ObscuredPrefs.GetString("Money_EnchantStone"), out lTryResult)) PlayerInventory.Money_EnchantStone = lTryResult;
+            else PlayerInventory.Money_EnchantStone = 0;
+            if (long.TryParse(ObscuredPrefs.GetString("Money_AmazonCoin"), out lTryResult)) PlayerInventory.Money_AmazonCoin = lTryResult;
+            else PlayerInventory.Money_AmazonCoin = 0;
+            if (long.TryParse(ObscuredPrefs.GetString("AmazonStoneCount"), out lTryResult)) PlayerInventory.AmazonStoneCount = lTryResult;
+            else PlayerInventory.AmazonStoneCount = 0;
+
+            /// --------------------------------------------------------------------------------------------------------------------
+
+            if (int.TryParse(ObscuredPrefs.GetString("CurrentAmaLV"), out iTryResult)) PlayerInventory.CurrentAmaLV = iTryResult;
+            else PlayerInventory.CurrentAmaLV = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("box_Coupon"), out iTryResult)) PlayerInventory.box_Coupon = iTryResult;
+            else PlayerInventory.box_Coupon = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("box_E"), out iTryResult)) PlayerInventory.box_E = iTryResult;
+            else PlayerInventory.box_E = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("box_D"), out iTryResult)) PlayerInventory.box_D = iTryResult;
+            else PlayerInventory.box_D = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("box_C"), out iTryResult)) PlayerInventory.box_C = iTryResult;
+            else PlayerInventory.box_C = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("box_B"), out iTryResult)) PlayerInventory.box_B = iTryResult;
+            else PlayerInventory.box_B = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("box_A"), out iTryResult)) PlayerInventory.box_A = iTryResult;
+            else PlayerInventory.box_A = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("box_S"), out iTryResult)) PlayerInventory.box_S = iTryResult;
+            else PlayerInventory.box_S = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("box_L"), out iTryResult)) PlayerInventory.box_L = iTryResult;
+            else PlayerInventory.box_L = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("ticket_reinforce_box"), out iTryResult)) PlayerInventory.ticket_reinforce_box = iTryResult;
+            else PlayerInventory.ticket_reinforce_box = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("ticket_leaf_box"), out iTryResult)) PlayerInventory.ticket_leaf_box = iTryResult;
+            else PlayerInventory.ticket_leaf_box = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("ticket_pvp_enter"), out iTryResult)) PlayerInventory.ticket_pvp_enter = iTryResult;
+            else PlayerInventory.ticket_pvp_enter = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("ticket_cave_enter"), out iTryResult)) PlayerInventory.ticket_cave_enter = iTryResult;
+            else PlayerInventory.ticket_cave_enter = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("ticket_cave_clear"), out iTryResult)) PlayerInventory.ticket_cave_clear = iTryResult;
+            else PlayerInventory.ticket_cave_clear = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("S_reinforce_box"), out iTryResult)) PlayerInventory.S_reinforce_box = iTryResult;
+            else PlayerInventory.S_reinforce_box = 0;
+
+            if (int.TryParse(ObscuredPrefs.GetString("S_leaf_box"), out iTryResult)) PlayerInventory.S_leaf_box = iTryResult;
+            else PlayerInventory.S_leaf_box = 0;
+
+            if (int.TryParse(ObscuredPrefs.GetString("mining"), out iTryResult)) PlayerInventory.mining = iTryResult;
+            else PlayerInventory.mining = 0;
+            if (int.TryParse(ObscuredPrefs.GetString("amber"), out iTryResult)) PlayerInventory.amber = iTryResult;
+            else PlayerInventory.amber = 0;
+
+            PlayerPrefsManager.isTutoAllClear = ObscuredPrefs.GetInt("isTutoAllClear", 0) != 0 ? true : false;
+
+            /// -------------------------- 버려두 댐
+
+            PlayerPrefsManager.DailyCount_Cheak = ObscuredPrefs.GetInt("DailyCount_Cheak", 0);
+            PlayerPrefsManager.isDailyCheak = ObscuredPrefs.GetInt("isDailyCheak", 0) != 0 ? true : false;
             PlayerPrefsManager.ZogarkMissionCnt = ObscuredPrefs.GetInt("ZogarkMissionCnt", 0);
             PlayerPrefsManager.AmaAdsTimer = ObscuredPrefs.GetInt("AmaAdsTimer", 0);
             PlayerPrefsManager.FreeDiaCnt = ObscuredPrefs.GetInt("FreeDiaCnt", 0);
             PlayerPrefsManager.FreeWeaponCnt = ObscuredPrefs.GetInt("FreeWeaponCnt", 0);
-            PlayerPrefsManager.isTutoAllClear = ObscuredPrefs.GetInt("isTutoAllClear") != 0 ? true : false;
 
             /// 파일에서 데이터 불러와서 리스트에 대입
             PlayerPrefsManager.instance.JObjectLoad(false);
@@ -130,6 +125,11 @@ public class ModelHandler : MonoBehaviour
 
 
     }
+
+
+    int iTryResult;
+    long lTryResult;
+    double dTryResult;
 
     ///// <summary>
     ///// 인보크로 불러와줄것

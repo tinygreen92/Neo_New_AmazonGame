@@ -105,14 +105,18 @@ public class SupplyBoxManager : MonoBehaviour
     void AdsInvo()
     {
         SystemPopUp.instance.StopLoopLoading();
+
+        /// 10배 보급 상자인가?
+        if (isSuperBox) AcceptSuperBox(1);
+        else AcceptNormalBox(1);
+
+        _AdsComp = false;
+
+        if (PlayerInventory.isSuperUser != 0) return;
         ///  광고 1회 시청 완료 카운트
         ListModel.Instance.ALLlist_Update(0, 1);
         /// 광고 시청 일일 업적
         ListModel.Instance.DAYlist_Update(7);
-        /// 10배 보급 상자인가?
-        if (isSuperBox) AcceptSuperBox(1);
-        else AcceptNormalBox(1);
-        _AdsComp = false;
     }
 
     #endregion

@@ -516,13 +516,17 @@ public class MineManager : MonoBehaviour
     void AdsInvo()
     {
         SystemPopUp.instance.StopLoopLoading();
+
+        /// 2배 뻥튀기
+        StackOverNormalGet(true);
+        _AdsComp = false;
+
+        if (PlayerInventory.isSuperUser != 0) return;
+
         ///  광고 1회 시청 완료 카운트
         ListModel.Instance.ALLlist_Update(0, 1);
         /// 광고 시청 일일 업적
         ListModel.Instance.DAYlist_Update(7);
-        /// 2배 뻥튀기
-        StackOverNormalGet(true);
-        _AdsComp = false;
     }
 
     #endregion
@@ -701,16 +705,30 @@ public class MineManager : MonoBehaviour
         /// 업그레이드 가능 불가능 버튼 색 바꿔주기
         if (_index == -1)
         {
-            if(PlayerInventory.amber < 1)
+            if (PlayerInventory.amber < (int)ListModel.Instance.axeDataList[0].Axe_Power)
             {
                 BtnImage[0].sprite = BtnSprs[0];
-                BtnImage[1].sprite = BtnSprs[0];
-                BtnImage[2].sprite = BtnSprs[0];
             }
             else
             {
                 BtnImage[0].sprite = BtnSprs[1];
+            }
+
+            if (PlayerInventory.amber < (int)ListModel.Instance.axeDataList[0].Axe_Speed)
+            {
+                BtnImage[1].sprite = BtnSprs[0];
+            }
+            else
+            {
                 BtnImage[1].sprite = BtnSprs[1];
+            }
+
+            if (PlayerInventory.amber < (int)ListModel.Instance.axeDataList[0].Axe_Skill)
+            {
+                BtnImage[2].sprite = BtnSprs[0];
+            }
+            else
+            {
                 BtnImage[2].sprite = BtnSprs[1];
             }
             return;

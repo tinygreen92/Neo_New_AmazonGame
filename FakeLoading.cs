@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using CodeStage.AntiCheat.Storage;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -119,6 +120,41 @@ public class FakeLoading : MonoBehaviour
 
         /// 무료 구매 몽땅하면 레드닷 꺼줌.
         var tmpppmt = ListModel.Instance.mvpDataList[0];
+
+        /// 일간
+        if (tmpppmt.daily_10 !=0)
+        {
+            RedDotManager.instance.RedDot[9].SetActive(false);
+            RedDotManager.instance.RedDot[10].SetActive(false);
+        }
+        else
+        {
+            RedDotManager.instance.RedDot[9].SetActive(true);
+            RedDotManager.instance.RedDot[10].SetActive(true);
+        }
+        /// 주간
+        if (tmpppmt.weekend_14 != 0)
+        {
+            RedDotManager.instance.RedDot[11].SetActive(false);
+            RedDotManager.instance.RedDot[12].SetActive(false);
+        }
+        else
+        {
+            RedDotManager.instance.RedDot[11].SetActive(true);
+            RedDotManager.instance.RedDot[12].SetActive(true);
+        }
+        /// 월간
+        if (tmpppmt.mouth_18 != 0)
+        {
+            RedDotManager.instance.RedDot[13].SetActive(false);
+            RedDotManager.instance.RedDot[14].SetActive(false);
+        }
+        else
+        {
+            RedDotManager.instance.RedDot[13].SetActive(true);
+            RedDotManager.instance.RedDot[14].SetActive(true);
+        }
+        /// 최상단
         if (tmpppmt.daily_10 != 0 && tmpppmt.weekend_14 != 0 && tmpppmt.mouth_18 != 0)
         {
             /// 패키지 레드닷  꺼줌
@@ -129,6 +165,14 @@ public class FakeLoading : MonoBehaviour
             /// 패키지 레드닷  꺼줌
             RedDotManager.instance.RedDot[8].SetActive(true);
         }
+
+
+
+
+
+
+
+
         /// 튜토리얼 새로고침
         tm.InitTutorial();
 
@@ -151,6 +195,14 @@ public class FakeLoading : MonoBehaviour
         {
             yield return new WaitForFixedUpdate();
         }
+
+        /// 데이터 불러오기 재실행이면 우편함 날려줌
+        if (ObscuredPrefs.GetInt("isSeverDataLoad") != 0)
+        {
+            GameObject.Find("NanooManager").GetComponent<NanooManager>().PostboxDelete();
+            GameObject.Find("NanooManager").GetComponent<NanooManager>().PostboxRedDot();
+        }
+
         /// 페이크 로딩창 끄기.
         gameObject.SetActive(false);
         /// 광고제거 했으면 배너 제거 + 속도 1.1배

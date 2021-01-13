@@ -931,6 +931,9 @@ public class RuneManager : MonoBehaviour
 
         /// 임시 리스트에 저장
         tmpRuneList.Add(ListModel.Instance.runeList.Last());
+
+        /// 플레이팹에 상태 저장
+        GameObject.FindWithTag("PFM").GetComponent<PlayFabManage>().SetUserData();
     }
 
     ///// <summary>

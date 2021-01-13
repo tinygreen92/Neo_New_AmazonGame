@@ -11,7 +11,8 @@ public class FreeWeaponManager : MonoBehaviour
     public NanooManager nm;
     public Text TimerText;
     public GameObject FreeDiaRewordPop;
-
+    [Space]
+    public GameObject[] GuardImgs;
     // 조작 불가 타이머 스탬프
     private DateTime dailyEndTimestamp;
     private TimeSpan dailydRemaining;
@@ -55,7 +56,7 @@ public class FreeWeaponManager : MonoBehaviour
 
     public void ShowPopUP()
     {
-        if (isTimerOn)
+        if (isTimerOn || GuardImgs[1].activeSelf)
         {
             return;
         }
@@ -174,6 +175,23 @@ public class FreeWeaponManager : MonoBehaviour
         nm.PostboxDailySend("weapon_coupon", 3);
         /// 보상 팝업
         FreeDiaRewordPop.SetActive(true);
+    }
+
+    /// <summary>
+    /// 무료 다이아 / 무료 뽑기 / 무료 포션 받기 하면 20초 대기.
+    /// </summary>
+    public void AdsHolding20s()
+    {
+        GuardImgs[0].SetActive(true);
+        GuardImgs[1].SetActive(true);
+        //
+        Invoke(nameof(InvoHold), 20f);
+    }
+
+    void InvoHold()
+    {
+        GuardImgs[0].SetActive(false);
+        GuardImgs[1].SetActive(false);
     }
 
     #endregion

@@ -566,6 +566,7 @@ public class NanooManager : MonoBehaviour
             if (state.Equals(Configure.PN_API_STATE_SUCCESS))
             {
                 Debug.Log("Success");
+                PostboxCheck();
             }
             else
             {

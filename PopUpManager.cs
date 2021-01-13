@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CodeStage.AntiCheat.Storage;
+using Lean.Localization;
 
 public class PopUpManager : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class PopUpManager : MonoBehaviour
     [Header("- 프리다이아몬드 남은시간")]
     public Text FreeDiaRemainBox;
     public GameObject FreeDiaRewordPop;
+    [Space]
+    public GameObject[] GuardImgs;
+
     [Header("- 팝업 게임 오브젝트 배열")]
     [SerializeField]
     private GameObject[] Pops;
@@ -162,7 +166,15 @@ public class PopUpManager : MonoBehaviour
         nickCheckTxt.text = "\""+ _name +"\"" + "(으)로 생성하시겠습니까?";
     }
 
-
+    public void ShowPopUPdiaFree()
+    {
+        if (isTimerOn || GuardImgs[0].activeSelf)
+        {
+            return;
+        }
+        /// 타이머 안돌면  팝업
+        ShowPopUP(2);
+    }
 
     #region <Rewarded Ads> 2.FreeDiaCanvas 동영상 광고
 
@@ -185,6 +197,7 @@ public class PopUpManager : MonoBehaviour
         else
         {
             _AdsComp = false;
+            //AdsDesc.text = LeanLocalization.GetTranslationText("Config_Ads_Nope");
             Invoke(nameof(AdsInvo), 0.5f);
         }
 
@@ -220,7 +233,7 @@ public class PopUpManager : MonoBehaviour
         SaveDateTime( dailyEndTimestamp);
         isTimerOn = true;
         /// 보상 지급
-        nm.PostboxDailySend("diamond", 50);
+        nm.PostboxDailySend("diamond", 100);
         ///  광고 1회 시청 완료 카운트
         ListModel.Instance.ALLlist_Update(0, 1);
         /// 광고 시청 일일 업적
@@ -234,7 +247,22 @@ public class PopUpManager : MonoBehaviour
     #endregion
 
     
+    /// <summary>
+    /// 무료 다이아 / 무료 뽑기 / 무료 포션 받기 하면 20초 대기.
+    /// </summary>
+    public void AdsHolding20s()
+    {
+        GuardImgs[0].SetActive(true);
+        GuardImgs[1].SetActive(true);
+        //
+        Invoke(nameof(InvoHold), 20f);
+    }
 
+    void InvoHold()
+    {
+        GuardImgs[0].SetActive(false);
+        GuardImgs[1].SetActive(false);
+    }
 
 
 

@@ -766,11 +766,7 @@ public class CaveManager : MonoBehaviour
     void AdsInvo()
     {
         float _KC = float.Parse(ListModel.Instance.swampCaveData[currentMyDan - 1].killCount);
-        
-        ///  광고 1회 시청 완료 카운트
-        ListModel.Instance.ALLlist_Update(0, 1);
-        /// 광고 시청 일일 업적
-        ListModel.Instance.DAYlist_Update(7);
+
         /// 광고 보고 소탕 보상
         if (isSotangAds)
         {
@@ -799,6 +795,14 @@ public class CaveManager : MonoBehaviour
         _AdsComp = false;
         isSotangAds = false;
         SystemPopUp.instance.StopLoopLoading();
+
+        if (PlayerInventory.isSuperUser != 0) return;
+
+        ///  광고 1회 시청 완료 카운트
+        ListModel.Instance.ALLlist_Update(0, 1);
+        /// 광고 시청 일일 업적
+        ListModel.Instance.DAYlist_Update(7);
+
         PlayerPrefsManager.instance.TEST_SaveJson();
 
     }

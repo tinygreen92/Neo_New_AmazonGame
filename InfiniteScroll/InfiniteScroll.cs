@@ -142,6 +142,9 @@ public class InfiniteScroll : MonoBehaviour
             m_Content.GetChild(m_Content.childCount - i).GetComponent<HeartItem>().enabled = false;
             Destroy(m_Content.GetChild(m_Content.childCount - i).gameObject);
         }
+
+        /// 플레이팹에 상태 저장
+        GameObject.FindWithTag("PFM").GetComponent<PlayFabManage>().SetUserData();
     }
     /// <summary>
     /// 그 다음에 리스트 추가한 만큼 오브젝트 추가하기

@@ -205,6 +205,44 @@ public class SwampCave                 /// 숨겨진 늪지
     public string killCount;
 }
 
+[System.Serializable]
+public class NonJson                 /// 계속 추가 수정 가능한 돈
+{
+    public string RecentDistance;
+    public string Money_Gold;
+    ///
+    public string Money_Elixir;
+    public string Money_AmazonCoin;
+    public string AmazonStoneCount;
+    ///
+    public string CurrentAmaLV;
+    public string box_Coupon;
+    public string box_E;
+    public string box_D;
+    public string box_C;
+    public string box_B;
+    public string box_A;
+    public string box_S;
+    public string box_L;
+    //
+    public string ticket_reinforce_box;
+    public string ticket_leaf_box;
+    public string ticket_pvp_enter;
+    public string ticket_cave_enter;
+    public string ticket_cave_clear;
+    //
+    public string S_reinforce_box;
+    public string S_leaf_box;
+    public string mining;
+    public string amber;
+
+    /// <summary>
+    ///  [int] 튜토리얼 클리어 트리거
+    /// </summary>
+    public int isTutoAllClear;
+
+}
+
 
 
 
@@ -1193,8 +1231,6 @@ public class ListModel : MonoBehaviour
     }
 
 
-
-
     ///--------------------------------  유료 구매 데이터 저장용 -------------------------------------///
 
     public List<MVP> mvpDataList = new List<MVP>();
@@ -1206,7 +1242,43 @@ public class ListModel : MonoBehaviour
     public List<SwampCave> swampCaveData = new List<SwampCave>();
 
 
-    
+    /// <summary>
+    ///     /// 덮어쓰기용 재화 저장용 
+    ///     nonSaveJsonMoney[0]은 21-01-13 에 사용
+    ///     nonSaveJsonMoney[1]은 -- -- -- 에 사용 하는 식으로?
+    /// </summary>
+    public List<NonJson> nonSaveJsonMoney = new List<NonJson>();
+
+    public void InitNonJsonData()
+    {
+        nonSaveJsonMoney.Add(new NonJson
+        {
+            RecentDistance = "",
+            Money_Gold = "",
+            Money_Elixir = "",
+            Money_AmazonCoin = "",
+            AmazonStoneCount = "",
+            CurrentAmaLV = "",
+            box_Coupon = "",
+            box_E = "",
+            box_D = "",
+            box_C = "",
+            box_B = "",
+            box_A = "",
+            box_S = "",
+            box_L = "",
+            ticket_reinforce_box = "",
+            ticket_leaf_box = "",
+            ticket_pvp_enter = "",
+            ticket_cave_enter = "",
+            ticket_cave_clear = "",
+            S_reinforce_box = "",
+            S_leaf_box = "",
+            mining = "",
+            amber = "",
+            isTutoAllClear = 0,
+        });
+    }
 
 
 }

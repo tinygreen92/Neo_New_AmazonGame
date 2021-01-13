@@ -123,6 +123,7 @@ public class IAPManager : MonoBehaviour
                 btnImgs[2].sprite = EnableBtn;
                 btnImgs[3].sprite = DisableBtn;
                 btnImgs[4].sprite = DisableBtn;
+                RedDotManager.instance.RedDot[9].SetActive(false);
                 break;
 
             case 3:
@@ -131,7 +132,9 @@ public class IAPManager : MonoBehaviour
                 btnImgs[2].sprite = DisableBtn;
                 btnImgs[3].sprite = EnableBtn;
                 btnImgs[4].sprite = DisableBtn;
-                break;
+                RedDotManager.instance.RedDot[11].SetActive(false);
+                break; 
+
 
             case 4:
                 btnImgs[0].sprite = DisableBtn;
@@ -139,6 +142,7 @@ public class IAPManager : MonoBehaviour
                 btnImgs[2].sprite = DisableBtn;
                 btnImgs[3].sprite = DisableBtn;
                 btnImgs[4].sprite = EnableBtn;
+                RedDotManager.instance.RedDot[13].SetActive(false);
                 break;
 
             default:
@@ -495,6 +499,24 @@ public class IAPManager : MonoBehaviour
         StartCoroutine(InvoFree(_index));
         /// 무료 구매 몽땅하면 레드닷 꺼줌.
         var tmpppmt = ListModel.Instance.mvpDataList[0];
+        /// 일간
+        if (tmpppmt.daily_10 != 0)
+        {
+            RedDotManager.instance.RedDot[9].SetActive(false);
+            RedDotManager.instance.RedDot[10].SetActive(false);
+        }
+        /// 주간
+        if (tmpppmt.weekend_14 != 0)
+        {
+            RedDotManager.instance.RedDot[11].SetActive(false);
+            RedDotManager.instance.RedDot[12].SetActive(false);
+        }
+        /// 월간
+        if (tmpppmt.mouth_18 != 0)
+        {
+            RedDotManager.instance.RedDot[13].SetActive(false);
+            RedDotManager.instance.RedDot[14].SetActive(false);
+        }
         if (tmpppmt.daily_10 != 0 && tmpppmt.weekend_14 != 0 && tmpppmt.mouth_18 != 0)
         {
             /// 패키지 레드닷  꺼줌
@@ -952,7 +974,6 @@ public class IAPManager : MonoBehaviour
                 bac.Banner525Hide();
                 /// 플레이팹에 상태 저장
                 GameObject.FindWithTag("PFM").GetComponent<PlayFabManage>().SetUserData();
-
                 sim.ChangeSection();
                 break;
             case EM_IAPConstants.Product_buff_attack:

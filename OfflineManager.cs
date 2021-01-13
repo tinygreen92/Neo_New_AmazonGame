@@ -85,8 +85,10 @@ public class OfflineManager : MonoBehaviour
 
     public void OfflineInit()
     {
-        if (PlayerInventory.RecentDistance < 1.0d)
+        /// 거리 짧을때 혹은 서버 데이터 로드해서 재실행하면 오프라인 보상 패스. 
+        if (PlayerInventory.RecentDistance < 1.0d || ObscuredPrefs.GetInt("isSeverDataLoad") != 0)
         {
+            ObscuredPrefs.SetInt("isSeverDataLoad", 0);
             PlayerPrefsManager.isGetOfflineReword = true;
             return;
         }
@@ -430,11 +432,15 @@ public class OfflineManager : MonoBehaviour
         /// 버튼 바꿔줌
         BtnLayouts[0].SetActive(false);
         BtnLayouts[1].SetActive(true);
+        _AdsComp = false;
+        PlayerPrefsManager.isGetOfflineReword = true;
+
+        if (PlayerInventory.isSuperUser != 0) return;
+
         ///  광고 1회 시청 완료 카운트
         ListModel.Instance.ALLlist_Update(0, 1);
         /// 광고 시청 일일 업적
         ListModel.Instance.DAYlist_Update(7);
-        _AdsComp = false;
     }
 
     #endregion

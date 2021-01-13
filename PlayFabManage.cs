@@ -1,4 +1,5 @@
-﻿using Lean.Localization;
+﻿using CodeStage.AntiCheat.Storage;
+using Lean.Localization;
 using PlayFab;
 using PlayFab.ClientModels;
 using System;
@@ -340,6 +341,38 @@ public class PlayFabManage : MonoBehaviour
     /// </summary>
     public void SetUserData()
     {
+        ListModel.Instance.nonSaveJsonMoney[0].RecentDistance = PlayerInventory.RecentDistance.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].Money_Gold = PlayerInventory.Money_Gold.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].Money_Elixir = PlayerInventory.Money_Elixir.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].Money_AmazonCoin = PlayerInventory.Money_AmazonCoin.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].AmazonStoneCount = PlayerInventory.AmazonStoneCount.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].CurrentAmaLV = PlayerInventory.CurrentAmaLV.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_Coupon = PlayerInventory.box_Coupon.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_E = PlayerInventory.box_E.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_D = PlayerInventory.box_D.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_C = PlayerInventory.box_C.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_B = PlayerInventory.box_B.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_A = PlayerInventory.box_A.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_S = PlayerInventory.box_S.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_L = PlayerInventory.box_L.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].ticket_reinforce_box = PlayerInventory.ticket_reinforce_box.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].ticket_leaf_box = PlayerInventory.ticket_leaf_box.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].ticket_pvp_enter = PlayerInventory.ticket_pvp_enter.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].ticket_cave_enter = PlayerInventory.ticket_cave_enter.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].ticket_cave_clear = PlayerInventory.ticket_cave_clear.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].S_reinforce_box = PlayerInventory.S_reinforce_box.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].S_leaf_box = PlayerInventory.S_leaf_box.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].mining = PlayerInventory.mining.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].amber = PlayerInventory.amber.ToString();
+        ///  인트 저장
+        ListModel.Instance.nonSaveJsonMoney[0].isTutoAllClear = PlayerPrefsManager. isTutoAllClear ? 525 : 0;
+
+        ///... [1] [2] 쭉쭉 저장 가능하게
+
+
+        
+
+        /// 여기는 인터넷 연결 해서 처리하는 구간
         var request = new UpdateUserDataRequest()
         {
             Data = new Dictionary<string, string>()
@@ -351,10 +384,10 @@ public class PlayFabManage : MonoBehaviour
                 { "SECTOR_2", PlayerInventory.Money_Leaf.ToString()},
                 { "SECTOR_3", PlayerInventory.Money_EnchantStone.ToString() },
                 { "SECTOR_4", PlayerPrefsManager.instance.ZZoGGoMiDataSave() },              /// 쪼꼬미 데이터
-                { "SECTOR_5", mamayoyo},                                                                                            /// 제이와이피 저장
+                { "SECTOR_5", mamayoyo},                                                                                            /// json 저장
                 { "SECTOR_6", PlayerInventory.isSuperUser.ToString() },                                         ///  광고 제거 구매 여부 저장
-                { "SECTOR_7",  PlayerInventory.RecentDistance.ToString() },
-                { "SECTOR_8", "8"},
+                { "SECTOR_7",  PlayerInventory.RecentDistance.ToString() },                                  /// 거리
+                { "SECTOR_8", PlayerPrefsManager.instance.NonJsonDataOutput() },                /// 확장 가능한 NonJson 리스트
                 { "SECTOR_9", "9"},
             },
             Permission = UserDataPermission.Public
@@ -378,8 +411,8 @@ public class PlayFabManage : MonoBehaviour
     /// <param name="_isZZOgomi"></param>
     public void GetUserData(bool _isZZOgomi)
     {
-        long tryResult;
-        int tryResultt;
+        long tryResult = 0;
+        int tryResultt = 0;
         SystemPopUp.instance.LoopLoadingImg();
         var request = new GetUserDataRequest() { PlayFabId = myPlayFabId };
         PlayFabClientAPI.GetUserData(request, (result) =>
@@ -404,38 +437,41 @@ public class PlayFabManage : MonoBehaviour
                 {
                     Debug.LogError("SECTOR_0 (버전정보): " + result.Data["SECTOR_0"].Value);
 
-                    Debug.LogError("SECTOR_1 (Money_Dia): " + result.Data["SECTOR_1"].Value);
-                    long.TryParse(result.Data["SECTOR_1"].Value, out tryResult);
-                    PlayerInventory.Money_Dia = tryResult;
-                    tryResult = 0;
-                    Debug.LogError("SECTOR_2 (Money_Leaf): " + result.Data["SECTOR_2"].Value);
-                    long.TryParse(result.Data["SECTOR_2"].Value, out tryResult);
-                    PlayerInventory.Money_Leaf = tryResult;
-                    tryResult = 0;
-                    Debug.LogError("SECTOR_3 (Money_EnchantStone): " + result.Data["SECTOR_3"].Value);
-                    long.TryParse(result.Data["SECTOR_3"].Value, out tryResult);
-                    PlayerInventory.Money_EnchantStone = tryResult;
-
-                    //Debug.LogError("SECTOR_5 (isSuperUser): " + result.Data["SECTOR_5"].Value); // 제이와피
+                    Debug.LogError("SECTOR_5 (JsonData): " + result.Data["SECTOR_5"].Value); // 제이와피
                     File.WriteAllText(Application.persistentDataPath + "/_data_", result.Data["SECTOR_5"].Value); // 생성된 string을  _data_ 파일에 쓴다 
 
+                    Debug.LogError("SECTOR_1 (Money_Dia): " + result.Data["SECTOR_1"].Value);
+                    if (long.TryParse(result.Data["SECTOR_1"].Value, out tryResult)) ObscuredPrefs.SetString("Money_Dia", tryResult.ToString());
+                    else ObscuredPrefs.SetString("Money_Dia", "0");
                     tryResult = 0;
+                    Debug.LogError("SECTOR_2 (Money_Leaf): " + result.Data["SECTOR_2"].Value);
+                    if(long.TryParse(result.Data["SECTOR_2"].Value, out tryResult)) ObscuredPrefs.SetString("Money_Leaf", tryResult.ToString());
+                    else ObscuredPrefs.SetString("Money_Leaf", "0");
+                    tryResult = 0;
+                    Debug.LogError("SECTOR_3 (Money_EnchantStone): " + result.Data["SECTOR_3"].Value);
+                    if(long.TryParse(result.Data["SECTOR_3"].Value, out tryResult)) ObscuredPrefs.SetString("Money_EnchantStone", tryResult.ToString());
+                    else ObscuredPrefs.SetString("Money_EnchantStone", "0");
+                    tryResult = 0;
+
                     Debug.LogError("SECTOR_6 (isSuperUser): " + result.Data["SECTOR_6"].Value);
-                    int.TryParse(result.Data["SECTOR_3"].Value, out tryResultt);
-                    PlayerInventory.isSuperUser = tryResultt;
+                    if(int.TryParse(result.Data["SECTOR_6"].Value, out tryResultt)) PlayerInventory.isSuperUser = tryResultt;
+                    else PlayerInventory.isSuperUser = 0;
 
+                    Debug.LogError("SECTOR_7 (RecentDistance): " + result.Data["SECTOR_7"].Value);
+                    if(long.TryParse(result.Data["SECTOR_7"].Value, out tryResult)) PlayerInventory.RecentDistance = tryResult;
+                    else PlayerInventory.RecentDistance = 0;
 
-                    //Debug.LogError("SECTOR_7 (isSuperUser): " + result.Data["SECTOR_7"].Value);
-                    long.TryParse(result.Data["SECTOR_7"].Value, out tryResult);
-                    PlayerInventory.RecentDistance = tryResult;
+                    Debug.LogError("SECTOR_8 (nonSaveJsonMoney): " + result.Data["SECTOR_8"].Value);
+                    PlayerPrefsManager.instance.NonJsonDataLoad(result.Data["SECTOR_8"].Value);
 
-                    //Debug.LogError("SECTOR_8 (isSuperUser): " + result.Data["SECTOR_8"].Value);
-                    //Debug.LogError("SECTOR_9 (isSuperUser): " + result.Data["SECTOR_9"].Value);
-
+                    //Debug.LogError("SECTOR_9 (_______): " + result.Data["SECTOR_9"].Value);
 
                     /// 파일에서 데이터 불러와서 리스트에 대입
-                    PlayerPrefsManager.instance.TEST_SaveJson();
                     PlayerPrefsManager.isLoadingComp = true;
+                    /// 얘는 로컬에서만 존재
+                    ObscuredPrefs.SetInt("isSeverDataLoad", 609);
+                    ObscuredPrefs.Save();
+
                     SystemPopUp.instance.StopLoopLoading();
                     SceneManager.LoadScene(0);
                 }

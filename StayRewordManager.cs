@@ -275,6 +275,9 @@ public class StayRewordManager : MonoBehaviour
         SystemPopUp.instance.StopLoopLoading();
         /// 보상 지급
         AdsClickedFirst();
+
+        if (PlayerInventory.isSuperUser != 0) return;
+
         ///  광고 1회 시청 완료 카운트
         ListModel.Instance.ALLlist_Update(0, 1);
         /// 광고 시청 일일 업적
