@@ -24,8 +24,8 @@ public class EasyMoblieManager : MonoBehaviour
         //Advertising.GrantDataPrivacyConsent(AdNetwork.MoPub);
 
         //MoPub.LoadRewardedVideoPluginsForAdUnits(MopubAdRewardedId);
-        /// 모펍 초기화 되었다면 비디오 하나 불러오기
-        Advertising.LoadRewardedAd();
+        ///// 모펍 초기화 되었다면 비디오 하나 불러오기
+        //Advertising.LoadRewardedAd();
     }
 
     public void ShowBanner()

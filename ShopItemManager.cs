@@ -63,31 +63,31 @@ public class ShopItemManager : MonoBehaviour
             /// 카테고리 무엇?
             targetList = ListModel.Instance.shopListSPEC;
             spriteBox.sprite = SpeciCons[_count];
+
             /// 세줄 짜리 설명
             BoxActivating(true);
             if (LeanLocalization.CurrentLanguage == "Korean")
             {
                 NameBox.text = targetList[_count].korDesc;
-                BotDescBox.text = targetList[_count].korTailDesc;
-                MidleDescBox.text = _count ==0? "+ BOUNUS 결정 5개" : "+ BOUNUS 결정 3개";
-                if (PlayerPrefsManager.storeIndex == 10)
+                if (_count == 0)
                 {
-                    System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("ko-KR", false).NumberFormat;
-                    KRWBox.text = System.Convert.ToInt64(targetList[_count].korPrice).ToString("C", numberFormat);
+                    BotDescBox.text = LeanLocalization.GetTranslationText("Shop_Pakage_0115_Title");
                 }
-                else PriceBox.text = targetList[_count].korPrice;
+                else
+                {
+                    BotDescBox.text = targetList[_count].korTailDesc;
+                }
+                MidleDescBox.text = _count ==0? "+ BOUNUS 결정 5개" : "+ BOUNUS 결정 3개";
+                System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("ko-KR", false).NumberFormat;
+                KRWBox.text = System.Convert.ToInt64(targetList[_count].korPrice).ToString("C", numberFormat);
             }
             else
             {
                 NameBox.text = targetList[_count].engDesc;
                 BotDescBox.text = targetList[_count].engTailDesc;
                 MidleDescBox.text = _count == 0 ? "+ Amazon Cystail 5" : "+ Amazon Cystail 3";
-                if (PlayerPrefsManager.storeIndex == 10)
-                {
-                    System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
-                    KRWBox.text = System.Convert.ToInt64(targetList[_count].engPrice).ToString("C", numberFormat);
-                }
-                else PriceBox.text = targetList[_count].engPrice;
+                System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
+                KRWBox.text = System.Convert.ToInt64(targetList[_count].engPrice).ToString("C", numberFormat);
             }
             /// 영구 버프구매시 버튼 막아둠
             switch (_index)

@@ -25,8 +25,10 @@ public class ModelHandler : MonoBehaviour
     {
         /// 210113 _ 추가 데이터 파일 초기화 - >nonSaveJsonMoney [0]
         ListModel.Instance.InitNonJsonData();
+        /// 210115 _ 추가 데이터 파일 초기화 - >nonSaveJsonMoney [1]
+        ListModel.Instance.InitNonJsonData();
 
-        /// 나중에 추가 데이터 생기면 nonSaveJsonMoney [1] 생성해서 여기에 저장하면 됨
+        /// 나중에 추가 데이터 생기면 nonSaveJsonMoney [n] 생성해서 여기에 저장하면 됨
        // ListModel.Instance.InitNonJsonData(); 
 
         /// 완전 초기화 후에 쌔삥 데이터로 갈아 끼워줌
@@ -143,11 +145,9 @@ public class ModelHandler : MonoBehaviour
 
         /// 튜토리얼 클리어 했니?
         PlayerPrefsManager.isTutoAllClear = ObscuredPrefs.GetInt("isTutoAllClear", 0) != 0 ? true : false;
-        /// 튜토리얼 단계 어디니? -> 리스트에 저장되어 있음
-
-        /// -------------------------- 버려두 댐
-
+        /// 출석체크 며칠째니?
         PlayerPrefsManager.DailyCount_Cheak = ObscuredPrefs.GetInt("DailyCount_Cheak", 0);
+        /// 210115 - 데이터 추가
         PlayerPrefsManager.isDailyCheak = ObscuredPrefs.GetInt("isDailyCheak", 0) != 0 ? true : false;
         PlayerPrefsManager.ZogarkMissionCnt = ObscuredPrefs.GetInt("ZogarkMissionCnt", 0);
         PlayerPrefsManager.AmaAdsTimer = ObscuredPrefs.GetInt("AmaAdsTimer", 0);

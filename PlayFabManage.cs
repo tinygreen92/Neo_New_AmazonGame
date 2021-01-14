@@ -381,7 +381,40 @@ public class PlayFabManage : MonoBehaviour
         ListModel.Instance.nonSaveJsonMoney[0].isTutoAllClear = PlayerPrefsManager. isTutoAllClear ? 525 : 0;
 
         ///... [1] [2] 쭉쭉 저장 가능하게
-        
+        ///[1].RecentDistance = DailyCount_Cheak (출석체크 일자 저장)
+        ListModel.Instance.nonSaveJsonMoney[1].RecentDistance = PlayerPrefsManager.DailyCount_Cheak.ToString();
+        ///[1].Money_Gold 
+        ListModel.Instance.nonSaveJsonMoney[1].Money_Gold = PlayerPrefsManager.isDailyCheak == true ? "TRUE" : "FALSE";
+        ///[1].Money_Elixir
+        ListModel.Instance.nonSaveJsonMoney[1].Money_Elixir = PlayerPrefsManager.ZogarkMissionCnt.ToString();
+        ///[1].Money_AmazonCoin
+        ListModel.Instance.nonSaveJsonMoney[1].Money_AmazonCoin = PlayerPrefsManager.AmaAdsTimer.ToString();
+        ///[1].AmazonStoneCount
+        ListModel.Instance.nonSaveJsonMoney[1].AmazonStoneCount = PlayerPrefsManager.FreeDiaCnt.ToString();
+        ///[1].FreeWeaponCnt
+        ListModel.Instance.nonSaveJsonMoney[1].CurrentAmaLV = PlayerPrefsManager.FreeWeaponCnt.ToString();
+        ///[1].
+        //ListModel.Instance.nonSaveJsonMoney[1].box_Coupon = PlayerInventory.box_Coupon.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].box_E = PlayerInventory.box_E.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].box_D = PlayerInventory.box_D.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].box_C = PlayerInventory.box_C.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].box_B = PlayerInventory.box_B.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].box_A = PlayerInventory.box_A.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].box_S = PlayerInventory.box_S.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].box_L = PlayerInventory.box_L.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].ticket_reinforce_box = PlayerInventory.ticket_reinforce_box.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].ticket_leaf_box = PlayerInventory.ticket_leaf_box.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].ticket_pvp_enter = PlayerInventory.ticket_pvp_enter.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].ticket_cave_enter = PlayerInventory.ticket_cave_enter.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].ticket_cave_clear = PlayerInventory.ticket_cave_clear.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].S_reinforce_box = PlayerInventory.S_reinforce_box.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].S_leaf_box = PlayerInventory.S_leaf_box.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].mining = PlayerInventory.mining.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].amber = PlayerInventory.amber.ToString();
+        /////  인트 저장
+        //ListModel.Instance.nonSaveJsonMoney[1].isTutoAllClear = PlayerPrefsManager.isTutoAllClear ? 525 : 0;
+
+
 
         /// 여기는 인터넷 연결 해서 처리하는 구간
         var request = new UpdateUserDataRequest()
@@ -469,7 +502,8 @@ public class PlayFabManage : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("SECTOR_0 (버전정보): " + result.Data["SECTOR_0"].Value);
+                    /// 버전 코드 별로 적용 데이터 다르게 ??
+                    //Debug.LogError("SECTOR_0 (버전정보): " + result.Data["SECTOR_0"].Value);
 
                     /// TODO : 불러오기 했는데 tunamayo 가 없으면 예외처리
                     if (result.Data.ContainsKey("SECTOR_5"))
@@ -477,6 +511,9 @@ public class PlayFabManage : MonoBehaviour
                         Debug.LogError("SECTOR_5 (JsonData): " + result.Data["SECTOR_5"].Value); // 제이와피
                         File.WriteAllText(Application.persistentDataPath + "/_data_", result.Data["SECTOR_5"].Value); // 생성된 string을  _data_ 파일에 쓴다 
                     }
+
+                    ///---------------------------------------------------------------------------------------
+
                     Debug.LogError("SECTOR_1 (Money_Dia): " + result.Data["SECTOR_1"].Value);
                     if (long.TryParse(result.Data["SECTOR_1"].Value, out tryResult)) PlayerInventory.Money_Dia = tryResult;
                     else PlayerInventory.Money_Dia = 0;
@@ -489,6 +526,9 @@ public class PlayFabManage : MonoBehaviour
                     if(long.TryParse(result.Data["SECTOR_3"].Value, out tryResult)) PlayerInventory.Money_EnchantStone = tryResult;
                     else PlayerInventory.Money_Leaf = 0;
                     tryResult = 0;
+
+                    ///---------------------------------------------------------------------------------------
+
 
                     Debug.LogError("SECTOR_6 (isSuperUser): " + result.Data["SECTOR_6"].Value);
                     if(int.TryParse(result.Data["SECTOR_6"].Value, out tryResultt)) PlayerInventory.isSuperUser = tryResultt;
@@ -510,7 +550,7 @@ public class PlayFabManage : MonoBehaviour
                     ObscuredPrefs.Save();
 
                     /// 파일에서 데이터 불러와서 리스트에 대입
-                    PlayerPrefsManager.instance.JObjectLoad(false);
+                    PlayerPrefsManager.instance.SeverLoadMaser(result.Data["SECTOR_0"].Value);
                     SystemPopUp.instance.StopLoopLoading();
 
                     // 팝업 뜰거

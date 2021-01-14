@@ -1246,6 +1246,7 @@ public class ListModel : MonoBehaviour
     ///     /// 덮어쓰기용 재화 저장용 
     ///     nonSaveJsonMoney[0]은 21-01-13 에 사용
     ///     nonSaveJsonMoney[1]은 -- -- -- 에 사용 하는 식으로?
+    ///     nonSaveJsonMoney[1]은 -- -- -- 에 사용 하는 식으로?
     /// </summary>
     public List<NonJson> nonSaveJsonMoney = new List<NonJson>();
 
@@ -1278,6 +1279,13 @@ public class ListModel : MonoBehaviour
             amber = "",
             isTutoAllClear = 0,
         });
+    }
+
+
+
+    public void SecondNonJson()
+    {
+
     }
 
 

@@ -537,6 +537,8 @@ public class PopInventory : MonoBehaviour
                 itemDesc.text = LeanLocalization.GetTranslationText("Inven_Money_Desc_08");
                 itemAmount.text = PlayerInventory.S_leaf_box.ToString("N0");
                 itemIcon.sprite = gatChaIcons[3];
+
+
                 /// 포션을 사용하여 경험치가 증가되었습니다
                 popInvenDesc.GetComponent<LeanLocalizedText>().enabled = false;
                 popInvenDesc.text = LeanLocalization.GetTranslationText("Use_Amazon_Potion_Desc");
@@ -666,6 +668,9 @@ public class PopInventory : MonoBehaviour
             case 3: break; // ticket_cave_enter
             case 4: break; // ticket_cave_clear
             // S_reinforce_box
+
+
+                /// 아마존 포션 
             case 5:
                 if (PlayerInventory.S_reinforce_box < 1) return;
                 /// 10회?
