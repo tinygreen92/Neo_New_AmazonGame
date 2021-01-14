@@ -183,6 +183,10 @@ public class PlayerPrefsManager : MonoBehaviour
     /// </summary>
     public static ObscuredInt currentTutoIndex;
 
+    /// <summary>
+    /// 섹터 5 없는 경우
+    /// </summary>
+    public static bool isMissingFive;
 
     /// <summary>
     /// 무기 장착하면 애니메이션 바꿔줌
@@ -247,7 +251,8 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// JSon 화 시켜서 로컬 초벌 저장
+    /// JSon 화 시켜서 [로컬]에 저장
+    /// tunamato[21] 에 데이터 저장
     /// </summary>
     public void TEST_SaveJson()
     {
@@ -277,7 +282,7 @@ public class PlayerPrefsManager : MonoBehaviour
         //
         JObjectSave(ListModel.Instance.swampCaveData, 20);
         //      
-        /// 스트링 배열 몽땅 저장
+        /// 스트링 배열 로컬 저장
         JObjectSave(false);
 
         /// 임시 골드 등등 저장
@@ -311,8 +316,6 @@ public class PlayerPrefsManager : MonoBehaviour
         ObscuredPrefs.SetString("amber", PlayerInventory.amber.ToString());
 
         ObscuredPrefs.SetInt("isTutoAllClear", isTutoAllClear ? 525 : 0);
-
-        /// ------------------------------ 이 아래는 버려도 된다. isTutoAllClear 는 한번 더 체크
 
         ObscuredPrefs.SetInt("ZogarkMissionCnt", ZogarkMissionCnt);
         ObscuredPrefs.SetInt("AmaAdsTimer", AmaAdsTimer);
@@ -577,6 +580,9 @@ public class PlayerPrefsManager : MonoBehaviour
 
     public void NonJsonDataLoad(string Mormo)
     {
+        /// TODO : 1.0.0 데이터를 가지고 있는 경우 예외처리
+        if (Mormo == "8") return;
+
         /// 배열 복구
         ListModel.Instance.nonSaveJsonMoney = JsonConvert.DeserializeObject<List<NonJson>>(AESDecrypt128(Mormo));
         ///
@@ -618,6 +624,8 @@ public class PlayerPrefsManager : MonoBehaviour
         // 파일로 저장 
         string savestring = JsonConvert.SerializeObject(tunamayo); // JObject를 Serialize하여 json string 생성 
         savestring = AESEncrypt128(savestring);
+
+
         /// 서버에 저장할래? 시름 말래?
         if (_isSeverSave)
         {
@@ -632,6 +640,15 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 1kb 짜리 깨진 파일 읽음
+    /// </summary>
+    /// <returns></returns>
+    public string MoahanInit()
+    {
+        return File.ReadAllText(Application.persistentDataPath + "/_data_"); // string을 읽음 
+    }
+
+    /// <summary>
     /// 파일명으로 접근해서 해당 리스트 로드
     /// </summary>
     /// <param name="dir">나중에 스위치로 전환해야할 때 입력 받으</param>
@@ -642,11 +659,15 @@ public class PlayerPrefsManager : MonoBehaviour
         if (_isInit)
         {
             loadstring = mayo.text;
+            Debug.LogError("초기화 ");
+
         }
         /// 이후 파일은 여기서 불러와
         else
         {
             loadstring = File.ReadAllText(Application.persistentDataPath + "/_data_"); // string을 읽음 
+            Debug.LogError(" ReadAllText 로컬 데이터 충돌 체크 2단계");
+
         }
 
 
@@ -660,6 +681,11 @@ public class PlayerPrefsManager : MonoBehaviour
         ListModel.Instance.invisibleruneList = JsonConvert.DeserializeObject<List<RuneContent>>(AESDecrypt128(tunamayo[5]));
         ListModel.Instance.heartList = JsonConvert.DeserializeObject<List<HeartContent>>(AESDecrypt128(tunamayo[6]));
         ListModel.Instance.invisibleheartList = JsonConvert.DeserializeObject<List<HeartContent>>(AESDecrypt128(tunamayo[7]));
+
+
+        /// --------------------------------------------------------
+
+
         ListModel.Instance.supList = JsonConvert.DeserializeObject<List<SupContent>>(AESDecrypt128(tunamayo[8]));
         ListModel.Instance.shopList = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[9]));
         ListModel.Instance.shopListSPEC = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[10]));
@@ -723,6 +749,11 @@ public class PlayerPrefsManager : MonoBehaviour
             ObscuredPrefs.SetInt("tunamayo", 525);
             /// 초창기 초기화 후 호출할때만 데이터 세이브
             TEST_SaveJson();
+        }
+        /// 서버에서 덮어 씌우기 한 다음 다시 게임에 적용시켜
+        else
+        {
+
         }
     }
 
@@ -797,117 +828,128 @@ public class PlayerPrefsManager : MonoBehaviour
         return plainString;
     }
 
-
-
-
-    //#region Json.Net 예제
-
-    ///// <summary>
-    ///// Json 저장 메소드 예제
-    ///// </summary>
-    //void EX_JObjectSave()
-    //{
-    //    // key-value 사용 
-    //    //  JObject 인스턴스 생성
-    //    JObject savedata = new JObject
-    //    {
-    //        ["key-name"] = "INPUT.text", // key-value 삽입 
-    //        ["anyname"] = 1d, // int, float, string 
-    //        ["is-save"] = true // bool 등 다양한 자료형 사용 가능 
-    //    };
-
-    //    // json에서 배열 사용하기 
-    //    JArray arraydata = new JArray(); // JArray 인스턴스 생성 
-    //    for (int i = 0; i < 5; i++)
-    //    {
-    //        // 랜덤한 값을 추가한다. 
-    //        // C++에서 사용하는 vector의 push_back과 같다고 보면 된다. 
-    //        arraydata.Add(UnityEngine.Random.Range(0.0f, 10.0f));
-    //    }
-
-    //    savedata["arraydata"] = arraydata; // 위에서 만든 JArray를 대입. 
-
-    //    // 다른 방법으로 JArray 사용하기 
-    //    savedata["newarr"] = new JArray(); // 새로운 key에 value로 JArray 할당. 
-
-    //    for (int i = 0; i < 5; i++)
-    //    {
-    //        ((JArray)savedata["newarr"]).Add(UnityEngine.Random.Range(0, 50)); // JArray 변수를 만들어서 축약 가능 
-    //    }
-
-    //    // json 형식을 value로 사용하기 
-    //    savedata["parent"] = new JObject(); // key를 지정하고 value에 new JObject()를 대입. 
-    //    savedata["parent"]["child1"] = 123;
-    //    savedata["parent"]["child2"] = 456;
-
-    //    //출처: https://blog.komastar.kr/232 [World of Komastar]
-
-    //    // 구조체 class를 json으로 변환하기 
-    //    SaveData s = new SaveData(); // 인스턴스화 시키고 적당히 데이터를 입력. 
-    //    s.id = 0;
-    //    s.namelist1 = "komastar";
-    //    s.namelist2 = "santaman";
-    //    savedata["class-savedata"] = JToken.FromObject(s); // 파싱.
-
-
-    //    // 파일로 저장 
-    //    string savestring = JsonConvert.SerializeObject(savedata, Formatting.Indented); // JObject를 Serialize하여 json string 생성 
-    //    File.WriteAllText(Application.persistentDataPath + "/pinkiepieisbestpony.json", AESEncrypt128(savestring)); // 생성된 string을 파일에 쓴다 
-    //}
-
-
-    ///// <summary>
-    ///// 암호화된 json 불러오기
-    ///// </summary>
-    //void EX_JObjectLoad()
-    //{
-    //    // 불러오기는 저장의 역순 
-    //    string loadstring = File.ReadAllText(Application.persistentDataPath + "/pinkiepieisbestpony.json"); // string을 읽음 
-    //    JObject loaddata = JObject.Parse(AESDecrypt128(loadstring)); // JObject 파싱 
-
-    //    Debug.Log(loaddata["key-name"]);
-
-    //    // key 값으로 데이터 접근하여 적절히 사용 
-    //    Debug.Log("key-value 개수 : " + loaddata.Count);
-    //    Debug.Log("----------------------------");
-    //    Debug.Log(loaddata["class-savedata"]);
-    //    Debug.Log("----------------------------");
-    //    JArray loadarray = (JArray)loaddata["arraydata"];
-
-    //    for (int i = 0; i < loadarray.Count; i++)
-    //    {
-    //        Debug.Log(loadarray[i]);
-    //    }
-
-    //    Debug.Log("----------------------------");
-
-    //    foreach (JToken item in loaddata["newarr"])
-    //    {
-    //        Debug.Log(item);
-    //    }
-
-    //    Debug.Log("----------------------------");
-    //    Debug.Log(loaddata["newarr"]);
-    //}
-
-    //public struct SaveData
-    //{
-    //    // 변수 이름이 key값으로 사용된다. 
-    //    public int id;
-    //    public string namelist1;
-    //    public string namelist2;
-    //}
-
-    //#endregion
-
-
     /// <summary>
-    ///  랜덤 시드를 통해서 가중치 랜덤 뽑아낸다
+    /// 데이터 리셋을 위해 게임을 종료합니다.
     /// </summary>
-    /// <param name="inputDatas"></param>
-    /// <param name="seed"></param>
-    /// <returns></returns>
-    public float GetRandom(float[] inputDatas, int seed)
+    public void DataReset()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit(); // 어플리케이션 종료
+#endif
+    }
+
+
+
+        //#region Json.Net 예제
+
+        ///// <summary>
+        ///// Json 저장 메소드 예제
+        ///// </summary>
+        //void EX_JObjectSave()
+        //{
+        //    // key-value 사용 
+        //    //  JObject 인스턴스 생성
+        //    JObject savedata = new JObject
+        //    {
+        //        ["key-name"] = "INPUT.text", // key-value 삽입 
+        //        ["anyname"] = 1d, // int, float, string 
+        //        ["is-save"] = true // bool 등 다양한 자료형 사용 가능 
+        //    };
+
+        //    // json에서 배열 사용하기 
+        //    JArray arraydata = new JArray(); // JArray 인스턴스 생성 
+        //    for (int i = 0; i < 5; i++)
+        //    {
+        //        // 랜덤한 값을 추가한다. 
+        //        // C++에서 사용하는 vector의 push_back과 같다고 보면 된다. 
+        //        arraydata.Add(UnityEngine.Random.Range(0.0f, 10.0f));
+        //    }
+
+        //    savedata["arraydata"] = arraydata; // 위에서 만든 JArray를 대입. 
+
+        //    // 다른 방법으로 JArray 사용하기 
+        //    savedata["newarr"] = new JArray(); // 새로운 key에 value로 JArray 할당. 
+
+        //    for (int i = 0; i < 5; i++)
+        //    {
+        //        ((JArray)savedata["newarr"]).Add(UnityEngine.Random.Range(0, 50)); // JArray 변수를 만들어서 축약 가능 
+        //    }
+
+        //    // json 형식을 value로 사용하기 
+        //    savedata["parent"] = new JObject(); // key를 지정하고 value에 new JObject()를 대입. 
+        //    savedata["parent"]["child1"] = 123;
+        //    savedata["parent"]["child2"] = 456;
+
+        //    //출처: https://blog.komastar.kr/232 [World of Komastar]
+
+        //    // 구조체 class를 json으로 변환하기 
+        //    SaveData s = new SaveData(); // 인스턴스화 시키고 적당히 데이터를 입력. 
+        //    s.id = 0;
+        //    s.namelist1 = "komastar";
+        //    s.namelist2 = "santaman";
+        //    savedata["class-savedata"] = JToken.FromObject(s); // 파싱.
+
+
+        //    // 파일로 저장 
+        //    string savestring = JsonConvert.SerializeObject(savedata, Formatting.Indented); // JObject를 Serialize하여 json string 생성 
+        //    File.WriteAllText(Application.persistentDataPath + "/pinkiepieisbestpony.json", AESEncrypt128(savestring)); // 생성된 string을 파일에 쓴다 
+        //}
+
+
+        ///// <summary>
+        ///// 암호화된 json 불러오기
+        ///// </summary>
+        //void EX_JObjectLoad()
+        //{
+        //    // 불러오기는 저장의 역순 
+        //    string loadstring = File.ReadAllText(Application.persistentDataPath + "/pinkiepieisbestpony.json"); // string을 읽음 
+        //    JObject loaddata = JObject.Parse(AESDecrypt128(loadstring)); // JObject 파싱 
+
+        //    Debug.Log(loaddata["key-name"]);
+
+        //    // key 값으로 데이터 접근하여 적절히 사용 
+        //    Debug.Log("key-value 개수 : " + loaddata.Count);
+        //    Debug.Log("----------------------------");
+        //    Debug.Log(loaddata["class-savedata"]);
+        //    Debug.Log("----------------------------");
+        //    JArray loadarray = (JArray)loaddata["arraydata"];
+
+        //    for (int i = 0; i < loadarray.Count; i++)
+        //    {
+        //        Debug.Log(loadarray[i]);
+        //    }
+
+        //    Debug.Log("----------------------------");
+
+        //    foreach (JToken item in loaddata["newarr"])
+        //    {
+        //        Debug.Log(item);
+        //    }
+
+        //    Debug.Log("----------------------------");
+        //    Debug.Log(loaddata["newarr"]);
+        //}
+
+        //public struct SaveData
+        //{
+        //    // 변수 이름이 key값으로 사용된다. 
+        //    public int id;
+        //    public string namelist1;
+        //    public string namelist2;
+        //}
+
+        //#endregion
+
+
+        /// <summary>
+        ///  랜덤 시드를 통해서 가중치 랜덤 뽑아낸다
+        /// </summary>
+        /// <param name="inputDatas"></param>
+        /// <param name="seed"></param>
+        /// <returns></returns>
+        public float GetRandom(float[] inputDatas, int seed)
     {
         System.Random random = new System.Random(seed);
 
@@ -982,16 +1024,42 @@ public class PlayerPrefsManager : MonoBehaviour
     /// </summary>
     public void SaveMyDataReal()
     {
-        SystemPopUp.instance.LoopLoadingImg();
-        JObjectSave(true);
-        Invoke(nameof(InvoMyDate), 1.0f);
+        SystemPopUp.instance.LoopSavingImg();
+        TEST_SaveJson();
+        Invoke(nameof(InvoMyDate), 0.5f);
     }
 
     void InvoMyDate()
     {
-        SystemPopUp.instance.StopLoopLoading();
-        SaveMyData.SetActive(false);
+        /// 서버에서 JSON 몽땅 저장.
+        JObjectSave(true);
+
+        Invoke(nameof(InvoMyDate2), 0.5f);
     }
+    void InvoMyDate2()
+    {
+        /// 로컬 데이터 리셋 후 종료
+        ListModel.Instance.supList.Clear();
+        ListModel.Instance.charatorList.Clear();
+        ListModel.Instance.invisibleheartList.Clear();
+        ListModel.Instance.invisibleruneList.Clear();
+        ListModel.Instance.weaponList.Clear();
+        ListModel.Instance.petList.Clear();
+        ListModel.Instance.shopList.Clear();
+        ListModel.Instance.shopListSPEC.Clear();
+        ListModel.Instance.shopListNOR.Clear();
+        ListModel.Instance.mineCraft.Clear();
+        //
+        ObscuredPrefs.DeleteAll();
+        PlayerPrefs.DeleteAll();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit(); // 어플리케이션 종료
+#endif
+    }
+
 
 
     /// <summary>

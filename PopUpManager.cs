@@ -18,7 +18,7 @@ public class PopUpManager : MonoBehaviour
     public GameObject FreeDiaRewordPop;
     [Space]
     public GameObject[] GuardImgs;
-
+    public Text[] guardText;
     [Header("- 팝업 게임 오브젝트 배열")]
     [SerializeField]
     private GameObject[] Pops;
@@ -255,14 +255,28 @@ public class PopUpManager : MonoBehaviour
         GuardImgs[0].SetActive(true);
         GuardImgs[1].SetActive(true);
         //
-        Invoke(nameof(InvoHold), 20f);
+        StartCoroutine(hold20());
     }
 
-    void InvoHold()
+    IEnumerator hold20()
     {
+        yield return null;
+        int currntTime = 15;
+        WaitForSeconds delay = new WaitForSeconds(1f);
+        guardText[0].text = currntTime.ToString() ;
+        guardText[1].text = currntTime.ToString();
+        while (currntTime > 0)
+        {
+            yield return delay;
+            currntTime -= 1;
+            guardText[0].text = currntTime.ToString();
+            guardText[1].text = currntTime.ToString();
+        }
+
         GuardImgs[0].SetActive(false);
         GuardImgs[1].SetActive(false);
     }
+
 
 
 

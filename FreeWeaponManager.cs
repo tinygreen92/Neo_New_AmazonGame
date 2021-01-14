@@ -13,6 +13,7 @@ public class FreeWeaponManager : MonoBehaviour
     public GameObject FreeDiaRewordPop;
     [Space]
     public GameObject[] GuardImgs;
+    public Text[] guardText;
     // 조작 불가 타이머 스탬프
     private DateTime dailyEndTimestamp;
     private TimeSpan dailydRemaining;
@@ -185,14 +186,28 @@ public class FreeWeaponManager : MonoBehaviour
         GuardImgs[0].SetActive(true);
         GuardImgs[1].SetActive(true);
         //
-        Invoke(nameof(InvoHold), 20f);
+        StartCoroutine(hold20());
     }
 
-    void InvoHold()
+    IEnumerator hold20()
     {
+        yield return null;
+        int currntTime = 15;
+        WaitForSeconds delay = new WaitForSeconds(1f);
+        guardText[0].text = currntTime.ToString();
+        guardText[1].text = currntTime.ToString();
+        while (currntTime > 1)
+        {
+            yield return delay;
+            currntTime -= 1;
+            guardText[0].text = currntTime.ToString();
+            guardText[1].text = currntTime.ToString();
+        }
+
         GuardImgs[0].SetActive(false);
         GuardImgs[1].SetActive(false);
     }
+
 
     #endregion
 

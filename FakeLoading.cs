@@ -20,10 +20,6 @@ public class FakeLoading : MonoBehaviour
     float alpha;
     // Start is called before the first frame update
 
-
-
-
-
     void Start()
     {
         /// 타이틀 이미지, 로딩바 뒷쪽 활성화
@@ -82,10 +78,20 @@ public class FakeLoading : MonoBehaviour
         {
             yield return new WaitForFixedUpdate();
         }
+
+
+        /// 버전 체크
+        while (!PlayerPrefsManager.isMissingFive)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+
         /// 첫 실행시 메인 브금 재생
         AudioManager.instance.PlayAudio("Main", "BGM");
         StartManager.instance.headChatTxt.text = "";
         StartManager.instance.headChatTxt.DOText(StartManager.instance.NOTICE2, 1f);
+
         currentTime = 0;
         while (currentTime < 1f)
         {
@@ -93,8 +99,8 @@ public class FakeLoading : MonoBehaviour
             loadingBar.fillAmount = Mathf.SmoothStep(0.6f, 1f, currentTime);
             yield return null;
         }
-  
-        
+
+
         /// ------------------------------------------------
         /// -----화면 까기 전에 완료되어야 할 것 들--------
         /// ------------------------------------------------
@@ -105,7 +111,6 @@ public class FakeLoading : MonoBehaviour
         /// 아마존 결정 게이지 표기
         PlayerInventory.Money_AmazonCoin += 0;
         PlayerInventory.AmazonStoneCount += 0;
-
 
 
 
@@ -172,7 +177,6 @@ public class FakeLoading : MonoBehaviour
 
 
 
-
         /// 튜토리얼 새로고침
         tm.InitTutorial();
 
@@ -201,6 +205,7 @@ public class FakeLoading : MonoBehaviour
         {
             GameObject.Find("NanooManager").GetComponent<NanooManager>().PostboxDelete();
             GameObject.Find("NanooManager").GetComponent<NanooManager>().PostboxRedDot();
+            Debug.LogError("우편함 날리기");
         }
 
         /// 페이크 로딩창 끄기.

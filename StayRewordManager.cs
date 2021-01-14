@@ -85,6 +85,8 @@ public class StayRewordManager : MonoBehaviour
         /// 빨간 점 띄우기
         RedDotManager.instance.RedDot[0].SetActive(true);
         textStaytext.text = LeanLocalization.GetTranslationText("Side_Left_StayReword");
+        /// 플레이팹에 상태 저장
+        PlayerPrefsManager.instance.JObjectSave(true);
     }
 
     /// <summary>

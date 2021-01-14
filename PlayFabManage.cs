@@ -20,7 +20,7 @@ public class PlayFabManage : MonoBehaviour
     [Header("- 닉네임 설정 자식 원투")]
     public InputField nickInputText;
 
-
+    private string URL = "com.lab525.new_amazon";
 
     /// <summary>
     ///  플레이 팹에서 사용하는 숫자+영문
@@ -58,13 +58,14 @@ public class PlayFabManage : MonoBehaviour
     {
         /// result.PlayFabId 플레이팹 아이디 = 구글 랭킹용
         myPlayFabId = _result.PlayFabId;
-
+        /// 섹터 5 없는 사람 예외처리
+        //GetUserSector5();
         // ------------- 테스트 --------------------
         /// 아마존 게임내 공통 데이터 호출  - 버전 코드 불러오기용 테스트
         ClientGetTitleData();
 
         /// 서버 인벤토리 열어서 유료화폐 보여 주기
-        GetVirtualCurrency("");
+        //GetVirtualCurrency("");
         // ------------- 테스트 --------------------
         PlayFabClientAPI.GetAccountInfo(new GetAccountInfoRequest { PlayFabId = myPlayFabId },
                                         GetAccountSuccess,
@@ -185,13 +186,24 @@ public class PlayFabManage : MonoBehaviour
         PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(),
             result => {
                 /// 클라이언트 버전 체크용으로 사용
-                if (result.Data == null || !result.Data.ContainsKey("MonsterName"))
+                if (result.Data == null || !result.Data.ContainsKey("CurrentVersion"))
                 {
-                    Debug.LogWarning("No MonsterName");
+                    Debug.LogWarning("No CurrentVersion");
                 }
+                /// 데이터 호출 성공시.
                 else
                 {
-                    Debug.LogWarning("MonsterName: " + result.Data["MonsterName"]);
+                    //Debug.LogWarning("CurrentVersion: " + result.Data["CurrentVersion"]);
+                    /// 최신 버전이 아니면 팝업 띄워준다.
+                    if (Application.version != result.Data["CurrentVersion"])
+                    {
+                        PopUpManager.instance.ShowPopUP(31);
+                    }
+                    else
+                    {
+                        PlayerPrefsManager.isMissingFive = true;
+                    }
+
                 }
             },
             error => {
@@ -338,8 +350,9 @@ public class PlayFabManage : MonoBehaviour
 
     /// <summary>
     /// 데이터 밀어넣기 -> 서버에 저장 생각날때마다 해줄 것
+    /// JObjectSave (true) 로 호출
     /// </summary>
-    public void SetUserData()
+    void SetUserData()
     {
         ListModel.Instance.nonSaveJsonMoney[0].RecentDistance = PlayerInventory.RecentDistance.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].Money_Gold = PlayerInventory.Money_Gold.ToString();
@@ -368,8 +381,6 @@ public class PlayFabManage : MonoBehaviour
         ListModel.Instance.nonSaveJsonMoney[0].isTutoAllClear = PlayerPrefsManager. isTutoAllClear ? 525 : 0;
 
         ///... [1] [2] 쭉쭉 저장 가능하게
-
-
         
 
         /// 여기는 인터넷 연결 해서 처리하는 구간
@@ -397,11 +408,34 @@ public class PlayFabManage : MonoBehaviour
             (result) =>
             {
                 Debug.LogError("SECTOR_데이터 저장 성공!! " + myPlayFabId);
-                CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
+                ObscuredPrefs.Save();
             },
             (error) => Debug.LogError("SECTOR_데이터 저장 실패")
             );
     }
+
+
+
+    void GetUserSector5()
+    {
+        var request = new GetUserDataRequest() { PlayFabId = myPlayFabId };
+        PlayFabClientAPI.GetUserData(request, (result) =>
+        {
+            /// 섹터 5 만 없을 경우 처리
+            if (result.Data != null || !result.Data.ContainsKey("SECTOR_5"))        /// 예외처리
+            {
+                PlayerPrefsManager.isMissingFive = true;
+                Debug.LogError("섹터 5 불러오기 성공");
+            }
+        },
+        (error) =>
+        {
+            SystemPopUp.instance.StopLoopLoading();
+            Debug.LogError("섹터 5 불러오기 실패");
+        }
+         );
+    }
+
 
 
     /// <summary>
@@ -437,20 +471,23 @@ public class PlayFabManage : MonoBehaviour
                 {
                     Debug.LogError("SECTOR_0 (버전정보): " + result.Data["SECTOR_0"].Value);
 
-                    Debug.LogError("SECTOR_5 (JsonData): " + result.Data["SECTOR_5"].Value); // 제이와피
-                    File.WriteAllText(Application.persistentDataPath + "/_data_", result.Data["SECTOR_5"].Value); // 생성된 string을  _data_ 파일에 쓴다 
-
+                    /// TODO : 불러오기 했는데 tunamayo 가 없으면 예외처리
+                    if (result.Data.ContainsKey("SECTOR_5"))
+                    {
+                        Debug.LogError("SECTOR_5 (JsonData): " + result.Data["SECTOR_5"].Value); // 제이와피
+                        File.WriteAllText(Application.persistentDataPath + "/_data_", result.Data["SECTOR_5"].Value); // 생성된 string을  _data_ 파일에 쓴다 
+                    }
                     Debug.LogError("SECTOR_1 (Money_Dia): " + result.Data["SECTOR_1"].Value);
-                    if (long.TryParse(result.Data["SECTOR_1"].Value, out tryResult)) ObscuredPrefs.SetString("Money_Dia", tryResult.ToString());
-                    else ObscuredPrefs.SetString("Money_Dia", "0");
+                    if (long.TryParse(result.Data["SECTOR_1"].Value, out tryResult)) PlayerInventory.Money_Dia = tryResult;
+                    else PlayerInventory.Money_Dia = 0;
                     tryResult = 0;
                     Debug.LogError("SECTOR_2 (Money_Leaf): " + result.Data["SECTOR_2"].Value);
-                    if(long.TryParse(result.Data["SECTOR_2"].Value, out tryResult)) ObscuredPrefs.SetString("Money_Leaf", tryResult.ToString());
-                    else ObscuredPrefs.SetString("Money_Leaf", "0");
+                    if(long.TryParse(result.Data["SECTOR_2"].Value, out tryResult)) PlayerInventory.Money_Leaf = tryResult;
+                    else PlayerInventory.Money_Leaf = 0;
                     tryResult = 0;
                     Debug.LogError("SECTOR_3 (Money_EnchantStone): " + result.Data["SECTOR_3"].Value);
-                    if(long.TryParse(result.Data["SECTOR_3"].Value, out tryResult)) ObscuredPrefs.SetString("Money_EnchantStone", tryResult.ToString());
-                    else ObscuredPrefs.SetString("Money_EnchantStone", "0");
+                    if(long.TryParse(result.Data["SECTOR_3"].Value, out tryResult)) PlayerInventory.Money_EnchantStone = tryResult;
+                    else PlayerInventory.Money_Leaf = 0;
                     tryResult = 0;
 
                     Debug.LogError("SECTOR_6 (isSuperUser): " + result.Data["SECTOR_6"].Value);
@@ -472,8 +509,11 @@ public class PlayFabManage : MonoBehaviour
                     ObscuredPrefs.SetInt("isSeverDataLoad", 609);
                     ObscuredPrefs.Save();
 
+                    /// 파일에서 데이터 불러와서 리스트에 대입
+                    PlayerPrefsManager.instance.JObjectLoad(false);
                     SystemPopUp.instance.StopLoopLoading();
-                    SceneManager.LoadScene(0);
+
+                    // 팝업 뜰거
                 }
             }
 
@@ -481,13 +521,23 @@ public class PlayFabManage : MonoBehaviour
         (error) =>
         {
             SystemPopUp.instance.StopLoopLoading();
-            Debug.LogWarning("데이터 불러오기 실패");
-            SceneManager.LoadScene(0);
+            Debug.LogError ("데이터 불러오기 실패");
+            //SceneManager.LoadScene(0);
         }
          );
-
     }
 
+
+    public void GameUpdatePlz()
+    {
+        Application.OpenURL("market://details?id=" + URL);
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit(); // 어플리케이션 종료
+#endif
+    }
 
 
 

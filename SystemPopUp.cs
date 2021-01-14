@@ -7,6 +7,8 @@ public class SystemPopUp : MonoBehaviour
 {
     public static SystemPopUp instance;
 
+
+    public GameObject warningText;
     [Header("- 팝업 게임 오브젝트 배열")]
     [SerializeField]
     private GameObject[] Pops;
@@ -57,6 +59,15 @@ public class SystemPopUp : MonoBehaviour
     {
         loading.DOKill();
         Pops[0].SetActive(false);
+    }
+
+    public void LoopSavingImg()
+    {
+        warningText.SetActive(true);
+        Pops[0].SetActive(true);
+        loading.DORotate(new Vector3(0, 0, -360), 3, RotateMode.FastBeyond360)
+            .SetLoops(-1, LoopType.Incremental)
+            .SetEase(Ease.Linear);
     }
 
 

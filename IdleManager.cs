@@ -64,10 +64,14 @@ public class IdleManager : MonoBehaviour
             progress += rate * Time.deltaTime;
         }
 
-        /// 배너 레이아웃이 올라온 상태가 아니거나, 슈퍼유저가 아니면 광고 표시
-        if (!BannerAdPanelController.isOn || PlayerInventory.isSuperUser == 0)
+        /// 배너 레이아웃이 올라온 상태가 아니면 광고 표시
+        if (!BannerAdPanelController.isOn)
         {
-            em.ShowBanner();
+            /// 슈퍼유저가 아니면 광고 표시
+            if (PlayerInventory.isSuperUser == 0)
+            { 
+                em.ShowBanner();
+            }
         }
 
         for (int i = 0; i < IdleForCanvas.Length; i++)

@@ -49,6 +49,8 @@ public class HeartManager : MonoBehaviour
         NSM.RefreshInfiList();
         /// 오브젝트 재생성
         NSM.GnerForHeart();
+
+
     }
 
     /// <summary>
@@ -60,5 +62,14 @@ public class HeartManager : MonoBehaviour
         /// 유물 뽑기 1회 진행
         if (PlayerPrefsManager.currentTutoIndex == 20) ListModel.Instance.TUTO_Update(20);
         if (PlayerPrefsManager.currentTutoIndex == 45) ListModel.Instance.TUTO_Update(45);
+        /// 
+        Invoke(nameof(InvoHeartSave), 0.5f);
+    }
+
+    void InvoHeartSave()
+    {
+        /// 플레이팹에 상태 저장
+        /// 플레이팹에 상태 저장
+        PlayerPrefsManager.instance.JObjectSave(true);
     }
 }

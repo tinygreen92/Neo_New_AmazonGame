@@ -933,7 +933,7 @@ public class RuneManager : MonoBehaviour
         tmpRuneList.Add(ListModel.Instance.runeList.Last());
 
         /// 플레이팹에 상태 저장
-        GameObject.FindWithTag("PFM").GetComponent<PlayFabManage>().SetUserData();
+        PlayerPrefsManager.instance.JObjectSave(true);
     }
 
     ///// <summary>

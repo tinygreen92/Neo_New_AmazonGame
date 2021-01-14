@@ -4,6 +4,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using CodeStage.AntiCheat.Storage;
+using System.IO;
 
 public class ModelHandler : MonoBehaviour
 {
@@ -25,104 +26,44 @@ public class ModelHandler : MonoBehaviour
         /// 210113 _ 추가 데이터 파일 초기화 - >nonSaveJsonMoney [0]
         ListModel.Instance.InitNonJsonData();
 
-
-
-
-
-
-
+        /// 나중에 추가 데이터 생기면 nonSaveJsonMoney [1] 생성해서 여기에 저장하면 됨
+       // ListModel.Instance.InitNonJsonData(); 
 
         /// 완전 초기화 후에 쌔삥 데이터로 갈아 끼워줌
         if (!ObscuredPrefs.HasKey("tunamayo"))
         {
             /// 파일에서 데이터 불러와서 리스트에 대입
             PlayerPrefsManager.instance.JObjectLoad(true);
-
-
         }
+        ///update210114
+        ///update210114
+        ///update210114
+        else if (!ObscuredPrefs.HasKey("update210114"))
+        {
+           string loadstring = File.ReadAllText(Application.persistentDataPath + "/_data_"); // string을 읽음 
+            /// 멀쩡한 파일이다.
+            if (loadstring !="0ploWsGdZyF6rPHLBv8vIhpAa2lAnZAKThEqtD0iKfPCIfm2YG2CyfQ8lvKbXZQZhQCwBIQC+rLh3uVkTj2m+kdPxcx83eK+vvpRII+r0oIPeYbY12vSkQiV96LtybtNptckySL/rMdSuWQQal3Z0w==")
+            {
+                /// 정상적으로 로드
+                InitMoHa(false);
+            }
+            /// TODO : 로컬 파일 꺠진 경우
+            else
+            {
+                /// true 라면 유료 재화만 복구하고
+                InitMoHa(true);
+            }
+            /// 초반 초기화 완료 됐을때 키 초기화
+            ObscuredPrefs.SetInt("update210114", 214);
+        }
+        /// 재접속
+        /// 재접속
+        /// 재접속
         else
         {
-            /// TODO :  임시 데이터 로드
-            if (double.TryParse(ObscuredPrefs.GetString("RecentDistance"), out dTryResult)) PlayerInventory.RecentDistance = dTryResult;
-            else PlayerInventory.RecentDistance = 0;
-            if (double.TryParse(ObscuredPrefs.GetString("Money_Gold"), out dTryResult)) PlayerInventory.Money_Gold = dTryResult;
-            else PlayerInventory.Money_Gold = 0;
-
-            /// --------------------------------------------------------------------------------------------------------------------
-
-            if (long.TryParse(ObscuredPrefs.GetString("Money_Elixir"), out lTryResult)) PlayerInventory.Money_Elixir = lTryResult;
-            else PlayerInventory.Money_Elixir = 0;
-            if (long.TryParse(ObscuredPrefs.GetString("Money_Dia"), out lTryResult))
-            {
-                Debug.LogError("lTryResult : " + lTryResult);
-                PlayerInventory.Money_Dia = lTryResult;
-            }
-            else PlayerInventory.Money_Dia = 0;
-            if (long.TryParse(ObscuredPrefs.GetString("Money_Leaf"), out lTryResult)) PlayerInventory.Money_Leaf = lTryResult;
-            else PlayerInventory.Money_Leaf = 0;
-            if (long.TryParse(ObscuredPrefs.GetString("Money_EnchantStone"), out lTryResult)) PlayerInventory.Money_EnchantStone = lTryResult;
-            else PlayerInventory.Money_EnchantStone = 0;
-            if (long.TryParse(ObscuredPrefs.GetString("Money_AmazonCoin"), out lTryResult)) PlayerInventory.Money_AmazonCoin = lTryResult;
-            else PlayerInventory.Money_AmazonCoin = 0;
-            if (long.TryParse(ObscuredPrefs.GetString("AmazonStoneCount"), out lTryResult)) PlayerInventory.AmazonStoneCount = lTryResult;
-            else PlayerInventory.AmazonStoneCount = 0;
-
-            /// --------------------------------------------------------------------------------------------------------------------
-
-            if (int.TryParse(ObscuredPrefs.GetString("CurrentAmaLV"), out iTryResult)) PlayerInventory.CurrentAmaLV = iTryResult;
-            else PlayerInventory.CurrentAmaLV = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("box_Coupon"), out iTryResult)) PlayerInventory.box_Coupon = iTryResult;
-            else PlayerInventory.box_Coupon = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("box_E"), out iTryResult)) PlayerInventory.box_E = iTryResult;
-            else PlayerInventory.box_E = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("box_D"), out iTryResult)) PlayerInventory.box_D = iTryResult;
-            else PlayerInventory.box_D = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("box_C"), out iTryResult)) PlayerInventory.box_C = iTryResult;
-            else PlayerInventory.box_C = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("box_B"), out iTryResult)) PlayerInventory.box_B = iTryResult;
-            else PlayerInventory.box_B = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("box_A"), out iTryResult)) PlayerInventory.box_A = iTryResult;
-            else PlayerInventory.box_A = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("box_S"), out iTryResult)) PlayerInventory.box_S = iTryResult;
-            else PlayerInventory.box_S = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("box_L"), out iTryResult)) PlayerInventory.box_L = iTryResult;
-            else PlayerInventory.box_L = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("ticket_reinforce_box"), out iTryResult)) PlayerInventory.ticket_reinforce_box = iTryResult;
-            else PlayerInventory.ticket_reinforce_box = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("ticket_leaf_box"), out iTryResult)) PlayerInventory.ticket_leaf_box = iTryResult;
-            else PlayerInventory.ticket_leaf_box = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("ticket_pvp_enter"), out iTryResult)) PlayerInventory.ticket_pvp_enter = iTryResult;
-            else PlayerInventory.ticket_pvp_enter = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("ticket_cave_enter"), out iTryResult)) PlayerInventory.ticket_cave_enter = iTryResult;
-            else PlayerInventory.ticket_cave_enter = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("ticket_cave_clear"), out iTryResult)) PlayerInventory.ticket_cave_clear = iTryResult;
-            else PlayerInventory.ticket_cave_clear = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("S_reinforce_box"), out iTryResult)) PlayerInventory.S_reinforce_box = iTryResult;
-            else PlayerInventory.S_reinforce_box = 0;
-
-            if (int.TryParse(ObscuredPrefs.GetString("S_leaf_box"), out iTryResult)) PlayerInventory.S_leaf_box = iTryResult;
-            else PlayerInventory.S_leaf_box = 0;
-
-            if (int.TryParse(ObscuredPrefs.GetString("mining"), out iTryResult)) PlayerInventory.mining = iTryResult;
-            else PlayerInventory.mining = 0;
-            if (int.TryParse(ObscuredPrefs.GetString("amber"), out iTryResult)) PlayerInventory.amber = iTryResult;
-            else PlayerInventory.amber = 0;
-
-            PlayerPrefsManager.isTutoAllClear = ObscuredPrefs.GetInt("isTutoAllClear", 0) != 0 ? true : false;
-
-            /// -------------------------- 버려두 댐
-
-            PlayerPrefsManager.DailyCount_Cheak = ObscuredPrefs.GetInt("DailyCount_Cheak", 0);
-            PlayerPrefsManager.isDailyCheak = ObscuredPrefs.GetInt("isDailyCheak", 0) != 0 ? true : false;
-            PlayerPrefsManager.ZogarkMissionCnt = ObscuredPrefs.GetInt("ZogarkMissionCnt", 0);
-            PlayerPrefsManager.AmaAdsTimer = ObscuredPrefs.GetInt("AmaAdsTimer", 0);
-            PlayerPrefsManager.FreeDiaCnt = ObscuredPrefs.GetInt("FreeDiaCnt", 0);
-            PlayerPrefsManager.FreeWeaponCnt = ObscuredPrefs.GetInt("FreeWeaponCnt", 0);
-
-            /// 파일에서 데이터 불러와서 리스트에 대입
-            PlayerPrefsManager.instance.JObjectLoad(false);
+            /// 로컬 데이터 로드
+            InitMoHa(false);
         }
-
 
     }
 
@@ -130,6 +71,94 @@ public class ModelHandler : MonoBehaviour
     int iTryResult;
     long lTryResult;
     double dTryResult;
+
+
+    /// <summary>
+    /// _isLocal = false 이면 로컬에서 불러오기
+    /// _isLocal = true 이면 초기화 해버리기
+    /// </summary>
+    /// <param name="_isLocal"></param>
+    void InitMoHa(bool _isLocal)
+    {
+        if (double.TryParse(ObscuredPrefs.GetString("RecentDistance"), out dTryResult)) PlayerInventory.RecentDistance = dTryResult;
+        else PlayerInventory.RecentDistance = 0;
+        if (double.TryParse(ObscuredPrefs.GetString("Money_Gold"), out dTryResult)) PlayerInventory.Money_Gold = dTryResult;
+        else PlayerInventory.Money_Gold = 0;
+
+        /// --------------------------------------------------------------------------------------------------------------------
+
+        if (long.TryParse(ObscuredPrefs.GetString("Money_Elixir"), out lTryResult)) PlayerInventory.Money_Elixir = lTryResult;
+        else PlayerInventory.Money_Elixir = 0;
+        if (long.TryParse(ObscuredPrefs.GetString("Money_Dia"), out lTryResult)) PlayerInventory.Money_Dia = lTryResult;
+        else PlayerInventory.Money_Dia = 0;
+        if (long.TryParse(ObscuredPrefs.GetString("Money_Leaf"), out lTryResult)) PlayerInventory.Money_Leaf = lTryResult;
+        else PlayerInventory.Money_Leaf = 0;
+        if (long.TryParse(ObscuredPrefs.GetString("Money_EnchantStone"), out lTryResult)) PlayerInventory.Money_EnchantStone = lTryResult;
+        else PlayerInventory.Money_EnchantStone = 0;
+        if (long.TryParse(ObscuredPrefs.GetString("Money_AmazonCoin"), out lTryResult)) PlayerInventory.Money_AmazonCoin = lTryResult;
+        else PlayerInventory.Money_AmazonCoin = 0;
+        if (long.TryParse(ObscuredPrefs.GetString("AmazonStoneCount"), out lTryResult)) PlayerInventory.AmazonStoneCount = lTryResult;
+        else PlayerInventory.AmazonStoneCount = 0;
+
+        /// --------------------------------------------------------------------------------------------------------------------
+
+        if (int.TryParse(ObscuredPrefs.GetString("CurrentAmaLV"), out iTryResult)) PlayerInventory.CurrentAmaLV = iTryResult;
+        else PlayerInventory.CurrentAmaLV = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("box_Coupon"), out iTryResult)) PlayerInventory.box_Coupon = iTryResult;
+        else PlayerInventory.box_Coupon = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("box_E"), out iTryResult)) PlayerInventory.box_E = iTryResult;
+        else PlayerInventory.box_E = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("box_D"), out iTryResult)) PlayerInventory.box_D = iTryResult;
+        else PlayerInventory.box_D = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("box_C"), out iTryResult)) PlayerInventory.box_C = iTryResult;
+        else PlayerInventory.box_C = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("box_B"), out iTryResult)) PlayerInventory.box_B = iTryResult;
+        else PlayerInventory.box_B = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("box_A"), out iTryResult)) PlayerInventory.box_A = iTryResult;
+        else PlayerInventory.box_A = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("box_S"), out iTryResult)) PlayerInventory.box_S = iTryResult;
+        else PlayerInventory.box_S = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("box_L"), out iTryResult)) PlayerInventory.box_L = iTryResult;
+        else PlayerInventory.box_L = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("ticket_reinforce_box"), out iTryResult)) PlayerInventory.ticket_reinforce_box = iTryResult;
+        else PlayerInventory.ticket_reinforce_box = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("ticket_leaf_box"), out iTryResult)) PlayerInventory.ticket_leaf_box = iTryResult;
+        else PlayerInventory.ticket_leaf_box = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("ticket_pvp_enter"), out iTryResult)) PlayerInventory.ticket_pvp_enter = iTryResult;
+        else PlayerInventory.ticket_pvp_enter = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("ticket_cave_enter"), out iTryResult)) PlayerInventory.ticket_cave_enter = iTryResult;
+        else PlayerInventory.ticket_cave_enter = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("ticket_cave_clear"), out iTryResult)) PlayerInventory.ticket_cave_clear = iTryResult;
+        else PlayerInventory.ticket_cave_clear = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("S_reinforce_box"), out iTryResult)) PlayerInventory.S_reinforce_box = iTryResult;
+        else PlayerInventory.S_reinforce_box = 0;
+
+        if (int.TryParse(ObscuredPrefs.GetString("S_leaf_box"), out iTryResult)) PlayerInventory.S_leaf_box = iTryResult;
+        else PlayerInventory.S_leaf_box = 0;
+
+        if (int.TryParse(ObscuredPrefs.GetString("mining"), out iTryResult)) PlayerInventory.mining = iTryResult;
+        else PlayerInventory.mining = 0;
+        if (int.TryParse(ObscuredPrefs.GetString("amber"), out iTryResult)) PlayerInventory.amber = iTryResult;
+        else PlayerInventory.amber = 0;
+
+        /// 튜토리얼 클리어 했니?
+        PlayerPrefsManager.isTutoAllClear = ObscuredPrefs.GetInt("isTutoAllClear", 0) != 0 ? true : false;
+        /// 튜토리얼 단계 어디니? -> 리스트에 저장되어 있음
+
+        /// -------------------------- 버려두 댐
+
+        PlayerPrefsManager.DailyCount_Cheak = ObscuredPrefs.GetInt("DailyCount_Cheak", 0);
+        PlayerPrefsManager.isDailyCheak = ObscuredPrefs.GetInt("isDailyCheak", 0) != 0 ? true : false;
+        PlayerPrefsManager.ZogarkMissionCnt = ObscuredPrefs.GetInt("ZogarkMissionCnt", 0);
+        PlayerPrefsManager.AmaAdsTimer = ObscuredPrefs.GetInt("AmaAdsTimer", 0);
+        PlayerPrefsManager.FreeDiaCnt = ObscuredPrefs.GetInt("FreeDiaCnt", 0);
+        PlayerPrefsManager.FreeWeaponCnt = ObscuredPrefs.GetInt("FreeWeaponCnt", 0);
+
+        Debug.LogError("로컬 데이터 충돌 체크 1단계");
+
+        /// 파일에서 데이터 불러와서 리스트에 대입
+        PlayerPrefsManager.instance.JObjectLoad(_isLocal);
+    }
 
     ///// <summary>
     ///// 인보크로 불러와줄것

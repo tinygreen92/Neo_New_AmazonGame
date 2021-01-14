@@ -909,8 +909,6 @@ public class IAPManager : MonoBehaviour
                 sim.popUpIconDesc.text = "x" + _amount.ToString("N0");
                 GiftGetText.text = LeanLocalization.GetTranslationText("YOUR_REWORD_IN_POCKET");
             }
-            /// 정상 구매 되었으면 몽땅 세이브
-            PlayerPrefsManager.instance.TEST_SaveJson();
         }
         /// TODO : 패키지 상점이에용
         else
@@ -922,6 +920,8 @@ public class IAPManager : MonoBehaviour
         tmpStone = _stoneAmong;
         /// 팝업 표시해줌
         sim.popUp.SetActive(true);
+        /// 정상 구매 되었으면 몽땅 세이브
+        PlayerPrefsManager.instance.TEST_SaveJson();
     }
     /// <summary>
     /// 최초 버튼 클릭시 -> 확인 버튼에 달아줌
@@ -973,7 +973,7 @@ public class IAPManager : MonoBehaviour
                 ListModel.Instance.mvpDataList[0].SuperUser = 525;
                 bac.Banner525Hide();
                 /// 플레이팹에 상태 저장
-                GameObject.FindWithTag("PFM").GetComponent<PlayFabManage>().SetUserData();
+                PlayerPrefsManager.instance.JObjectSave(true);
                 sim.ChangeSection();
                 break;
             case EM_IAPConstants.Product_buff_attack:
@@ -1057,7 +1057,7 @@ public class IAPManager : MonoBehaviour
                 PlayerInventory.SetBuffStack(4);
                 bm.MoneyLoveBuff(3);
                 /// 플레이팹에 상태 저장
-                GameObject.FindWithTag("PFM").GetComponent<PlayFabManage>().SetUserData();
+                PlayerPrefsManager.instance.JObjectSave(true);
                 ComplPopup.SetActive(true);
                 SwichPackageCatgory(1);
                 break;

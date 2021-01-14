@@ -60,6 +60,11 @@ public class BannerAdPanelController : MonoBehaviour
     /// </summary>
     public void Banner525Hide()
     {
+        Invoke(nameof(Invo), 0.5f);
+    }
+
+    void Invo()
+    {
         /// 광고제거 구매했니?
         if (PlayerInventory.isSuperUser != 0)
         {
@@ -69,7 +74,6 @@ public class BannerAdPanelController : MonoBehaviour
             Time.timeScale = 1.1f;
         }
     }
-
 
     ///// <summary>
     ///// http://cheongbok.blogspot.com/2018/07/dp-pixel.html
