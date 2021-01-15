@@ -192,12 +192,6 @@ public class FakeLoading : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
-        /// json 로딩 끝나면 착용한 룬 이미지 표기하기
-        rm.InitShowIconFive();
-        /// 아마존 결정 게이지 표기
-        PlayerInventory.Money_AmazonCoin += 0;
-        PlayerInventory.AmazonStoneCount += 0;
-
         /// 데이터 불러오기 재실행이면 우편함 날려줌
         if (ObscuredPrefs.GetInt("isSeverDataLoad") != 0)
         {

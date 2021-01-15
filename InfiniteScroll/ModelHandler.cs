@@ -58,9 +58,6 @@ public class ModelHandler : MonoBehaviour
             /// 초반 초기화 완료 됐을때 키 초기화
             ObscuredPrefs.SetInt("update210114", 214);
         }
-        /// 재접속
-        /// 재접속
-        /// 재접속
         else
         {
             /// 로컬 데이터 로드
@@ -99,13 +96,9 @@ public class ModelHandler : MonoBehaviour
         else PlayerInventory.Money_EnchantStone = 0;
         if (long.TryParse(ObscuredPrefs.GetString("Money_AmazonCoin"), out lTryResult)) PlayerInventory.Money_AmazonCoin = lTryResult;
         else PlayerInventory.Money_AmazonCoin = 0;
-        if (long.TryParse(ObscuredPrefs.GetString("AmazonStoneCount"), out lTryResult)) PlayerInventory.AmazonStoneCount = lTryResult;
-        else PlayerInventory.AmazonStoneCount = 0;
 
-        /// --------------------------------------------------------------------------------------------------------------------
 
-        if (int.TryParse(ObscuredPrefs.GetString("CurrentAmaLV"), out iTryResult)) PlayerInventory.CurrentAmaLV = iTryResult;
-        else PlayerInventory.CurrentAmaLV = 0;
+
         if (int.TryParse(ObscuredPrefs.GetString("box_Coupon"), out iTryResult)) PlayerInventory.box_Coupon = iTryResult;
         else PlayerInventory.box_Coupon = 0;
         if (int.TryParse(ObscuredPrefs.GetString("box_E"), out iTryResult)) PlayerInventory.box_E = iTryResult;
@@ -153,8 +146,6 @@ public class ModelHandler : MonoBehaviour
         PlayerPrefsManager.AmaAdsTimer = ObscuredPrefs.GetInt("AmaAdsTimer", 0);
         PlayerPrefsManager.FreeDiaCnt = ObscuredPrefs.GetInt("FreeDiaCnt", 0);
         PlayerPrefsManager.FreeWeaponCnt = ObscuredPrefs.GetInt("FreeWeaponCnt", 0);
-
-        Debug.LogError("로컬 데이터 충돌 체크 1단계");
 
         /// 파일에서 데이터 불러와서 리스트에 대입
         PlayerPrefsManager.instance.JObjectLoad(_isLocal);

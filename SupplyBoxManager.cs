@@ -376,7 +376,21 @@ public class SupplyBoxManager : MonoBehaviour
         Normal.gameObject.SetActive(false);
         Super.gameObject.SetActive(false);
         StartCoroutine(AutoSupply());
+        /// 30분 마다 서버 저장
+        StartCoroutine(AutoSave());
     }
+
+    IEnumerator AutoSave()
+    {
+        yield return null;
+        yield return new WaitForSeconds(supplyDelay * 3f);
+        /// 플레이팹에 상태 저장
+        /// 플레이팹에 상태 저장
+        PlayerPrefsManager.instance.JObjectSave(true);
+        StartCoroutine(AutoSave());
+    }
+
+
 
     IEnumerator AutoSupply()
     {

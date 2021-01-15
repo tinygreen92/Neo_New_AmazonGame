@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Purchasing;
 using CodeStage.AntiCheat.ObscuredTypes;
+using CodeStage.AntiCheat.Storage;
 
 ///
 ///     <캐릭터_스테이터스> <캐릭터_보유_재화> <캐릭터_기록용_변수(title_Statistics)>
@@ -1229,7 +1230,7 @@ public static class PlayerInventory
     /// 아마존 포션으로 얻은 경험치에 연결된 본체
     /// </summary>
     static ObscuredLong amazonStoneCount;
-    static ObscuredInt maxGage;
+    public static ObscuredInt MaxGage { get; set; }
     /// <summary>
     /// 아마존 포션으로 얻은 경험치
     /// </summary>
@@ -1241,26 +1242,50 @@ public static class PlayerInventory
         }
         set 
         {
+            Debug.LogError("호출 어디야");
             amazonStoneCount = value;
             /// 유물 경험치 요구 유물 적용
-            maxGage = Mathf.CeilToInt(((CurrentAmaLV + 1) * 100 * (float)AmazonPoint_Cost));
+            MaxGage = Mathf.CeilToInt(((CurrentAmaLV + 1) * 100 * (float)AmazonPoint_Cost));
             /// TODO : 증가 시켰는데 맥스 요구 보다 높으면 이월 시키고 결정지급 / 게이지 돌파하면 이월 시키고 게이지 증가
-            if (amazonStoneCount >= maxGage)
+            if (amazonStoneCount >= MaxGage && amazonStoneCount != 0)
             {
+                if (!ObscuredPrefs.HasKey("isFirstPotion"))
+                {
+                    Debug.LogError("첫번째 포션 변환 ");
+                    ObscuredPrefs.SetInt("isFirstPotion", 525);
+                    ObscuredPrefs.Save();
+                    /// 포션 인벤토리로 넣어
+                    SetTicketCount("S_leaf_box", (int)amazonStoneCount);
+                    amazonStoneCount -= amazonStoneCount;
+                    /// 게이지 올려
+                    ExpManager.instance.UpdateExpGage(MaxGage);
+                    return;
+                }
+
+                Debug.LogError("호출 어디야" + amazonStoneCount + " / " + MaxGage);
+
                 CurrentAmaLV++;
-                amazonStoneCount -= maxGage;
+                amazonStoneCount -= MaxGage;
                 Money_AmazonCoin += CurrentAmaLV;
                 PopUpManager.instance.ShowGetPop(5, CurrentAmaLV.ToString());
                 /// 다시 갱신
-                maxGage = Mathf.CeilToInt(((CurrentAmaLV + 1) * 100 * (float)AmazonPoint_Cost));
+                MaxGage = Mathf.CeilToInt(((CurrentAmaLV + 1) * 100 * (float)AmazonPoint_Cost));
+                if (!ObscuredPrefs.HasKey("isFirstPotion"))
+                {
+                    Debug.LogError("없어져라 ");
+                    ObscuredPrefs.SetInt("isFirstPotion", 525);
+                    ObscuredPrefs.Save();
+                }
+
             }
 
             /// 게이지 올려
-            ExpManager.instance.UpdateExpGage(maxGage);
+            ExpManager.instance.UpdateExpGage(MaxGage);
             //MoneyManager.instance.DisplayCostZogak();
         }
 
     }
+
 
 
 

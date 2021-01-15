@@ -1,4 +1,5 @@
-﻿using Lean.Localization;
+﻿using CodeStage.AntiCheat.Storage;
+using Lean.Localization;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -668,9 +669,6 @@ public class PopInventory : MonoBehaviour
             case 3: break; // ticket_cave_enter
             case 4: break; // ticket_cave_clear
             // S_reinforce_box
-
-
-                /// 아마존 포션 
             case 5:
                 if (PlayerInventory.S_reinforce_box < 1) return;
                 /// 10회?
@@ -711,17 +709,34 @@ public class PopInventory : MonoBehaviour
 
             case 6:
                 if (PlayerInventory.S_leaf_box < 1) return;
+                if (!ObscuredPrefs.HasKey("isFirstPotion"))
+                {
+                    ObscuredPrefs.SetInt("isFirstPotion", 525);
+                    ObscuredPrefs.Save();
+                }
                 /// 10회?
                 if (_is10Inverse)
                 {
-                    tmpAllamont = PlayerInventory.S_leaf_box;
-                    PlayerInventory.S_leaf_box = 0;
+                    /// 레벨업에 필요한 양
+                    int somo = (int)(PlayerInventory.MaxGage - PlayerInventory.AmazonStoneCount);
+                    /// 소모량이 충분하면?
+                    if (somo <= PlayerInventory.S_leaf_box)
+                    {
+                        PlayerInventory.S_leaf_box -= somo;
+                    }
+                    /// 소모량이 모자라면?
+                    else
+                    {
+                        somo = PlayerInventory.S_leaf_box;
+                        PlayerInventory.S_leaf_box =0;
+                    }
+
                     isLastPPOP = true;
                     /// 아마존 포션 모두 열기 대기
-                    AmazonPotionAmount =  tmpAllamont;
+                    AmazonPotionAmount = somo;
                     /// 미니팝업 세팅
                     miniIcon.sprite = miniSprs[4];
-                    miniAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(tmpAllamont);
+                    miniAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(somo);
                     miniPop.SetActive(true);
                 }
                 else

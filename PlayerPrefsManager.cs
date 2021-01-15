@@ -341,6 +341,8 @@ public class PlayerPrefsManager : MonoBehaviour
         //ObscuredPrefs.SetString("FreeWeapon", tmp);
         //ObscuredPrefs.SetString("FreeDia", tmp);
 
+        bool asdsa = FreeDiaCnt == 0;
+
         ObscuredPrefs.Save();
         Debug.LogWarning("세이브 데이터 타임 " + tmp);
     }
@@ -592,14 +594,41 @@ public class PlayerPrefsManager : MonoBehaviour
 
 
     /// <summary>
-    /// 리스트를 Json으로 저장
+    /// 리스트를 Json으로 저장 false 는 로컬 저장
     /// </summary>
     public void JObjectSave(bool _isSeverSave)
     {
+        if (_isSeverSave)
+        {
+            JObjectSave(ListModel.Instance.petList, 0);
+            JObjectSave(ListModel.Instance.charatorList, 1);
+            JObjectSave(ListModel.Instance.weaponList, 2);
+            JObjectSave(ListModel.Instance.equipRuneList, 3);
+            JObjectSave(ListModel.Instance.runeList, 4);
+            JObjectSave(ListModel.Instance.invisibleruneList, 5);
+            JObjectSave(ListModel.Instance.heartList, 6);
+            JObjectSave(ListModel.Instance.invisibleheartList, 7);
+            JObjectSave(ListModel.Instance.supList, 8);
+            JObjectSave(ListModel.Instance.shopList, 9);
+            JObjectSave(ListModel.Instance.shopListSPEC, 10);
+            JObjectSave(ListModel.Instance.shopListNOR, 11);
+            JObjectSave(ListModel.Instance.shopListPACK, 12);
+            JObjectSave(ListModel.Instance.shopListAMA, 13);
+            //
+            JObjectSave(ListModel.Instance.mvpDataList, 14);
+            //
+            JObjectSave(ListModel.Instance.missionDAYlist, 15);
+            JObjectSave(ListModel.Instance.missionALLlist, 16);
+            JObjectSave(ListModel.Instance.missionTUTOlist, 17);
+            //
+            JObjectSave(ListModel.Instance.mineCraft, 18);
+            JObjectSave(ListModel.Instance.axeDataList, 19);
+            //
+            JObjectSave(ListModel.Instance.swampCaveData, 20);
+        }
         // 파일로 저장 
         string savestring = JsonConvert.SerializeObject(tunamayo); // JObject를 Serialize하여 json string 생성 
         savestring = AESEncrypt128(savestring);
-
 
         /// 서버에 저장할래? 시름 말래?
         if (_isSeverSave)
@@ -613,6 +642,9 @@ public class PlayerPrefsManager : MonoBehaviour
 
         }
     }
+
+    int iTryResult;
+    long lTryResult;
 
     /// <summary>
     /// 1kb 짜리 깨진 파일 읽음
@@ -647,6 +679,7 @@ public class PlayerPrefsManager : MonoBehaviour
 
         /// 배열 복구
         tunamayo = JsonConvert.DeserializeObject<string[]>(AESDecrypt128(loadstring));
+
         ListModel.Instance.petList = JsonConvert.DeserializeObject<List<PetContent>>(AESDecrypt128(tunamayo[0]));
         ListModel.Instance.charatorList = JsonConvert.DeserializeObject<List<CharatorContent>>(AESDecrypt128(tunamayo[1]));
         ListModel.Instance.weaponList = JsonConvert.DeserializeObject<List<WeaponContent>>(AESDecrypt128(tunamayo[2]));
@@ -713,6 +746,11 @@ public class PlayerPrefsManager : MonoBehaviour
             }
         }
 
+
+
+
+
+
         /// 로딩바 올려주는 걸 허락한다.
         isJObjectLoad = true;
 
@@ -727,7 +765,14 @@ public class PlayerPrefsManager : MonoBehaviour
         /// 서버에서 덮어 씌우기 한 다음 다시 게임에 적용시켜
         else
         {
+            /// --------------------------------------------------------------------------------------------------------------------
 
+            if (int.TryParse(ObscuredPrefs.GetString("CurrentAmaLV"), out iTryResult)) PlayerInventory.CurrentAmaLV = iTryResult;
+            else PlayerInventory.CurrentAmaLV = 0;
+            if (long.TryParse(ObscuredPrefs.GetString("AmazonStoneCount"), out lTryResult)) PlayerInventory.AmazonStoneCount = lTryResult;
+            else PlayerInventory.AmazonStoneCount = 0;
+
+            /// --------------------------------------------------------------------------------------------------------------------
         }
     }
 
@@ -872,6 +917,7 @@ public class PlayerPrefsManager : MonoBehaviour
         ObscuredPrefs.Save();
         Debug.LogWarning("세이브 데이터 타임 " + tmp);
     }
+
 
 
     /// <summary>
