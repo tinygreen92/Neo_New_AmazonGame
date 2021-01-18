@@ -50,6 +50,11 @@ public class CaveManager : MonoBehaviour
     public Text sotangLeaf;
     public Text sotangEnchant;
     public Text sotangAdsText;
+    [Header(" - 늪지 제한")]
+    public Text sotangDesc;
+    public Image LimitBtn;
+    public Sprite[] LimitSprs;
+    [Space]
     public GameObject[] BtnLayoutSo;
     [Header(" - 토벌 팝업 내용물")]
     public Image AdsIcon2;
@@ -248,6 +253,7 @@ public class CaveManager : MonoBehaviour
         HBM.CheatGetOut();
         /// 입장권 소모
         PlayerInventory.SetTicketCount("cave_enter", -1);
+        PlayerPrefsManager.SwampyEnterCnt--;
         /// 입장권 새로고침
         RefreshMoney();
         /// 보급상자 꺼준다
@@ -334,6 +340,7 @@ public class CaveManager : MonoBehaviour
 
         /// 소탕권 소모
         PlayerInventory.SetTicketCount("cave_clear", -1);
+        PlayerPrefsManager.SwampySkipCnt--;
         /// 입장권 새로고침
         RefreshMoney();
         /// 확인 버튼으로 바꿔줌
@@ -483,6 +490,9 @@ public class CaveManager : MonoBehaviour
         DistanceManager.instance.CaveCancelPlayer();
     }
 
+    private static string HEAD_STR = " ( ";
+    private static string MID_STR = " / ";
+    private static string TAIL_STR = " )";
 
     bool _isEasySunDaLeft;
     /// <summary>
@@ -495,11 +505,26 @@ public class CaveManager : MonoBehaviour
         /// 이지 선다 입장
         if (_isLeft)
         {
+            sotangDesc.text = LeanLocalization.GetTranslationText("Sotang_Daily_Count") + HEAD_STR
+                                            + PlayerPrefsManager.SwampyEnterCnt.ToString("D2") + MID_STR
+                                            + "05" + TAIL_STR;
+            sotangDesc.gameObject.SetActive(true);
+            // 버튼 색
+            if (PlayerPrefsManager.SwampyEnterCnt < 1) LimitBtn.sprite = LimitSprs[0];
+            else LimitBtn.sprite = LimitSprs[1];
+            //
             easyRellyText.text = LeanLocalization.GetTranslationText("Enter_The_Swapm_Enter");
         }
         /// 이지 선다 소탕
         else
         {
+            sotangDesc.text = LeanLocalization.GetTranslationText("Sotang_Daily_Count") + HEAD_STR
+                                            + PlayerPrefsManager.SwampySkipCnt.ToString("D2") + MID_STR
+                                            + "05" + TAIL_STR;
+            sotangDesc.gameObject.SetActive(true);
+            // 버튼 색
+            if (PlayerPrefsManager.SwampySkipCnt < 1) LimitBtn.sprite = LimitSprs[0];
+            else LimitBtn.sprite = LimitSprs[1];
             /// 소탕 기록이 있으면 소탕권 사용하실? 메세지
             if (int.Parse(ListModel.Instance.swampCaveData[currentMyDan - 1].killCount) > 0)
             {
@@ -508,6 +533,7 @@ public class CaveManager : MonoBehaviour
             /// 소탕 기록 없다 = 킬카운터 0 이다 기록없음 팝업.
             else
             {
+                sotangDesc.gameObject.SetActive(false);
                 easyRellyText.text = LeanLocalization.GetTranslationText("Enter_The_Swapm_Norecord");
             }
         }
@@ -519,7 +545,10 @@ public class CaveManager : MonoBehaviour
         /// 입장할래 클릭
         if(_isEasySunDaLeft)
         {
-            if (PlayerInventory.ticket_cave_enter < 1)
+            /// 기회가 남았니?
+            if (PlayerPrefsManager.SwampyEnterCnt < 1) return;
+            /// 입장권 있니?
+             if (PlayerInventory.ticket_cave_enter < 1)
             {
                 PopUpManager.instance.ShowGrobalPopUP(2);
             }
@@ -535,6 +564,8 @@ public class CaveManager : MonoBehaviour
         /// 소탕할래 클릭
         else
         {
+            /// 기회가 남았니?
+            if (PlayerPrefsManager.SwampySkipCnt < 1) return;
             /// 소탕 기록이 있으면 소탕권 사용하실? 메세지
             if (int.Parse(ListModel.Instance.swampCaveData[currentMyDan - 1].killCount) < 1)
             {

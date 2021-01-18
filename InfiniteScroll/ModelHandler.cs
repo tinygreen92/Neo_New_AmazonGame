@@ -17,9 +17,27 @@ public class ModelHandler : MonoBehaviour
     //public TextAsset SHPSHPSHOP;            /// 상점 텍스트 파일
     //public TextAsset Misson;            /// 미션 텍스트 파일
     //public TextAsset _mine;            /// 광산 텍스트 파일
-    //public TextAsset _Swamp;            /// 숨겨진 늪지 텍스트 파일
+    public TextAsset _Swamp;            /// 숨겨진 늪지 텍스트 파일
 
+    public void zTA_Parser_Swamp()
+    {
+        ListModel.Instance.swampCaveData.Clear();
 
+        string[] line = _Swamp.text.Substring(0, _Swamp.text.Length).Split('\n');
+        for (int i = 0; i < line.Length; i++)
+        {
+            string[] row = line[i].Split('\t');
+
+            ListModel.Instance.swampCaveData.Add(new SwampCave
+            {
+                stageLevel = float.Parse(row[0]),
+                monsterHP = float.Parse(row[1]),
+                rewordLeaf = float.Parse(row[2]),
+                rewordEnchant = float.Parse(row[3]),
+                killCount = row[4],
+            });
+        }
+    }
 
     private void Start()
     {
@@ -36,33 +54,48 @@ public class ModelHandler : MonoBehaviour
         {
             /// 파일에서 데이터 불러와서 리스트에 대입
             PlayerPrefsManager.instance.JObjectLoad(true);
+            return;
         }
+
+
+
+
         ///update210114
+        ///----------------------------------------------update210114---------------------------------------
         ///update210114
-        ///update210114
-        else if (!ObscuredPrefs.HasKey("update210114"))
+        if (!ObscuredPrefs.HasKey("update210114"))
         {
-           string loadstring = File.ReadAllText(Application.persistentDataPath + "/_data_"); // string을 읽음 
-            /// 멀쩡한 파일이다.
-            if (loadstring !="0ploWsGdZyF6rPHLBv8vIhpAa2lAnZAKThEqtD0iKfPCIfm2YG2CyfQ8lvKbXZQZhQCwBIQC+rLh3uVkTj2m+kdPxcx83eK+vvpRII+r0oIPeYbY12vSkQiV96LtybtNptckySL/rMdSuWQQal3Z0w==")
-            {
-                /// 정상적으로 로드
-                InitMoHa(false);
-            }
-            /// TODO : 로컬 파일 꺠진 경우
-            else
+            /// 초반 초기화 완료 됐을때 키 초기화
+            ObscuredPrefs.SetInt("update210114", 214);
+
+            string loadstring = File.ReadAllText(Application.persistentDataPath + "/_data_"); // string을 읽음 
+            /// 깨진 파일이다.
+            if (loadstring =="0ploWsGdZyF6rPHLBv8vIhpAa2lAnZAKThEqtD0iKfPCIfm2YG2CyfQ8lvKbXZQZhQCwBIQC+rLh3uVkTj2m+kdPxcx83eK+vvpRII+r0oIPeYbY12vSkQiV96LtybtNptckySL/rMdSuWQQal3Z0w==")
             {
                 /// true 라면 유료 재화만 복구하고
                 InitMoHa(true);
+                return;
             }
-            /// 초반 초기화 완료 됐을때 키 초기화
-            ObscuredPrefs.SetInt("update210114", 214);
+
         }
-        else
-        {
-            /// 로컬 데이터 로드
-            InitMoHa(false);
-        }
+
+        ///update210117
+        ///--------------------------------------update210117 ----------------------------------------------
+        ///update210117
+        //if (!ObscuredPrefs.HasKey("update210117"))
+        //{
+        //    /// 로컬 데이터 로드
+        //    InitMoHa(false);
+        //    return;
+        //}
+
+
+
+        /// ----------------------------------------- 통상 호출
+
+
+        /// 로컬 데이터 로드
+        InitMoHa(false);
 
     }
 
@@ -140,12 +173,21 @@ public class ModelHandler : MonoBehaviour
         PlayerPrefsManager.isTutoAllClear = ObscuredPrefs.GetInt("isTutoAllClear", 0) != 0 ? true : false;
         /// 출석체크 며칠째니?
         PlayerPrefsManager.DailyCount_Cheak = ObscuredPrefs.GetInt("DailyCount_Cheak", 0);
-        /// 210115 - 데이터 추가
+
+        /// 210115 업데이트 추가
         PlayerPrefsManager.isDailyCheak = ObscuredPrefs.GetInt("isDailyCheak", 0) != 0 ? true : false;
         PlayerPrefsManager.ZogarkMissionCnt = ObscuredPrefs.GetInt("ZogarkMissionCnt", 0);
         PlayerPrefsManager.AmaAdsTimer = ObscuredPrefs.GetInt("AmaAdsTimer", 0);
         PlayerPrefsManager.FreeDiaCnt = ObscuredPrefs.GetInt("FreeDiaCnt", 0);
         PlayerPrefsManager.FreeWeaponCnt = ObscuredPrefs.GetInt("FreeWeaponCnt", 0);
+
+        /// 210117 업데이트 추가
+        PlayerPrefsManager.SwampyEnterCnt = ObscuredPrefs.GetInt("SwampyEnterCnt", 5);
+        PlayerPrefsManager.SwampySkipCnt = ObscuredPrefs.GetInt("SwampySkipCnt", 5);
+        //
+
+
+
 
         /// 파일에서 데이터 불러와서 리스트에 대입
         PlayerPrefsManager.instance.JObjectLoad(_isLocal);
@@ -170,16 +212,16 @@ public class ModelHandler : MonoBehaviour
     /// </summary>
     public void TEST_RESTE_JSON()
     {
-        ListModel.Instance.supList.Clear();
-        ListModel.Instance.charatorList.Clear();
-        ListModel.Instance.invisibleheartList.Clear();
-        ListModel.Instance.invisibleruneList.Clear();
-        ListModel.Instance.weaponList.Clear();
-        ListModel.Instance.petList.Clear();
-        ListModel.Instance.shopList.Clear();
-        ListModel.Instance.shopListSPEC.Clear();
-        ListModel.Instance.shopListNOR.Clear();
-        ListModel.Instance.mineCraft.Clear();
+        //ListModel.Instance.supList.Clear();
+        //ListModel.Instance.charatorList.Clear();
+        //ListModel.Instance.invisibleheartList.Clear();
+        //ListModel.Instance.invisibleruneList.Clear();
+        //ListModel.Instance.weaponList.Clear();
+        //ListModel.Instance.petList.Clear();
+        //ListModel.Instance.shopList.Clear();
+        //ListModel.Instance.shopListSPEC.Clear();
+        //ListModel.Instance.shopListNOR.Clear();
+        //ListModel.Instance.mineCraft.Clear();
         //
         ObscuredPrefs.DeleteAll();
         PlayerPrefs.DeleteAll();

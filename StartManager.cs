@@ -51,6 +51,7 @@ public class StartManager : MonoBehaviour
 #if UNITY_ANDROID
         if (Input.GetKeyUp(KeyCode.Escape))
         {
+            PlayerPrefsManager.instance.TEST_SaveJson();
             // Ask if user wants to exit
             NativeUI.AlertPopup alert = NativeUI.ShowTwoButtonAlert("게임 종료",
                                             "아마존 탈출하기 : 방치형 RPG를 종료하시겠습니까?",
@@ -61,7 +62,11 @@ public class StartManager : MonoBehaviour
                 alert.OnComplete += delegate (int button)
                 {
                     if (button == 0)
+                    {
+
                         Application.Quit();
+                    }
+                        
                 };
         }
 

@@ -10,6 +10,10 @@ using CodeStage.AntiCheat.Storage;
 
 public class NanooManager : MonoBehaviour
 {
+    private static string NanooRankTable = "amazon-RANK-92E2A6C2-7EE8CE7E";
+    private static string userID = "Unknown"; // 유저 ID 저장하라.
+    private static string userNickname = "Unranked"; // 닉네임 랭킹에 표기
+
     [Header("- 플레이어 닉네임 표기")]
     public Text outterNameText;
     public Text innerNameText;
@@ -27,8 +31,6 @@ public class NanooManager : MonoBehaviour
     Plugin plugin;
     public PlayFabManage playfabm;
     public RankManager rm;
-    private static string userID = "Unknown"; // 유저 ID 저장하라.
-    private static string userNickname = "Unranked"; // 닉네임 랭킹에 표기
 
 
     void Start()
@@ -604,7 +606,7 @@ public class NanooManager : MonoBehaviour
     /// <param name="_score"></param>
     public void RecordRankDistance(int _score)
     {
-        plugin.RankingRecord("amazon-RANK-665FA4CF-24686EF5", _score, _score.ToString(), (state, message, rawData, dictionary) => {
+        plugin.RankingRecord(NanooRankTable, _score, _score.ToString(), (state, message, rawData, dictionary) => {
             if (state.Equals(Configure.PN_API_STATE_SUCCESS))
             {
                 Debug.Log("Success");
@@ -622,7 +624,7 @@ public class NanooManager : MonoBehaviour
         /// 개인 기록 보여줌
         ShowRankingPersonal();
         
-        plugin.Ranking("amazon-RANK-665FA4CF-24686EF5", 50, (state, message, rawData, dictionary) => {
+        plugin.Ranking(NanooRankTable, 50, (state, message, rawData, dictionary) => {
             if (state.Equals(Configure.PN_API_STATE_SUCCESS))
             {
                 ArrayList list = (ArrayList)dictionary["list"];
@@ -656,7 +658,7 @@ public class NanooManager : MonoBehaviour
     public void ShowRankingPersonal()
     {
         rm.personalText[1].text = userNickname;
-        plugin.RankingPersonal("amazon-RANK-665FA4CF-24686EF5", (state, message, rawData, dictionary) => {
+        plugin.RankingPersonal(NanooRankTable, (state, message, rawData, dictionary) => {
             if (state.Equals(Configure.PN_API_STATE_SUCCESS))
             {
                 Debug.Log(dictionary["nickname"]);

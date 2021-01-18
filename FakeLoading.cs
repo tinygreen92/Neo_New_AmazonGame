@@ -66,6 +66,8 @@ public class FakeLoading : MonoBehaviour
         /// Dotween 테스트
         StartManager.instance.headChatTxt.text = "";
         StartManager.instance.headChatTxt.DOText(StartManager.instance.NOTICE, 1f);
+
+        Debug.LogError("인트 파서 됨? " + int.Parse("0"));
         //
         while (currentTime < 1f)
         {
@@ -79,6 +81,7 @@ public class FakeLoading : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
+        SystemPopUp.instance.StopLoopLoading();
 
         /// 버전 체크
         while (!PlayerPrefsManager.isMissingFive)
@@ -99,9 +102,6 @@ public class FakeLoading : MonoBehaviour
             loadingBar.fillAmount = Mathf.SmoothStep(0.6f, 1f, currentTime);
             yield return null;
         }
-
-
-
 
 
         while (!PlayerPrefsManager.isJObjectLoad)

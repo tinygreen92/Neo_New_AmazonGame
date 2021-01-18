@@ -357,9 +357,11 @@ public class PlayFabManage : MonoBehaviour
         ListModel.Instance.nonSaveJsonMoney[0].RecentDistance = PlayerInventory.RecentDistance.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].Money_Gold = PlayerInventory.Money_Gold.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].Money_Elixir = PlayerInventory.Money_Elixir.ToString();
+
         ListModel.Instance.nonSaveJsonMoney[0].Money_AmazonCoin = PlayerInventory.Money_AmazonCoin.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].AmazonStoneCount = PlayerInventory.AmazonStoneCount.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].CurrentAmaLV = PlayerInventory.CurrentAmaLV.ToString();
+
         ListModel.Instance.nonSaveJsonMoney[0].box_Coupon = PlayerInventory.box_Coupon.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].box_E = PlayerInventory.box_E.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].box_D = PlayerInventory.box_D.ToString();
@@ -368,13 +370,16 @@ public class PlayFabManage : MonoBehaviour
         ListModel.Instance.nonSaveJsonMoney[0].box_A = PlayerInventory.box_A.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].box_S = PlayerInventory.box_S.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].box_L = PlayerInventory.box_L.ToString();
+
         ListModel.Instance.nonSaveJsonMoney[0].ticket_reinforce_box = PlayerInventory.ticket_reinforce_box.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].ticket_leaf_box = PlayerInventory.ticket_leaf_box.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].ticket_pvp_enter = PlayerInventory.ticket_pvp_enter.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].ticket_cave_enter = PlayerInventory.ticket_cave_enter.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].ticket_cave_clear = PlayerInventory.ticket_cave_clear.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].S_reinforce_box = PlayerInventory.S_reinforce_box.ToString();
+
         ListModel.Instance.nonSaveJsonMoney[0].S_leaf_box = PlayerInventory.S_leaf_box.ToString();
+
         ListModel.Instance.nonSaveJsonMoney[0].mining = PlayerInventory.mining.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].amber = PlayerInventory.amber.ToString();
         ///  인트 저장
@@ -393,10 +398,15 @@ public class PlayFabManage : MonoBehaviour
         ListModel.Instance.nonSaveJsonMoney[1].AmazonStoneCount = PlayerPrefsManager.FreeDiaCnt.ToString();
         ///[1].FreeWeaponCnt
         ListModel.Instance.nonSaveJsonMoney[1].CurrentAmaLV = PlayerPrefsManager.FreeWeaponCnt.ToString();
-        ///[1].
-        //ListModel.Instance.nonSaveJsonMoney[1].box_Coupon = PlayerInventory.box_Coupon.ToString();
-        //ListModel.Instance.nonSaveJsonMoney[1].box_E = PlayerInventory.box_E.ToString();
-        //ListModel.Instance.nonSaveJsonMoney[1].box_D = PlayerInventory.box_D.ToString();
+
+        /// 0117 추가 데이터
+
+        ///[1].SwampyEnterCnt
+        ListModel.Instance.nonSaveJsonMoney[1].box_Coupon = PlayerPrefsManager.SwampyEnterCnt.ToString();
+        ///[1].SwampySkipCnt
+        ListModel.Instance.nonSaveJsonMoney[1].box_E = PlayerPrefsManager.SwampySkipCnt.ToString();
+        ///[1].Update210117
+        ListModel.Instance.nonSaveJsonMoney[1].box_D = ObscuredPrefs.GetInt("update210117").ToString();
         //ListModel.Instance.nonSaveJsonMoney[1].box_C = PlayerInventory.box_C.ToString();
         //ListModel.Instance.nonSaveJsonMoney[1].box_B = PlayerInventory.box_B.ToString();
         //ListModel.Instance.nonSaveJsonMoney[1].box_A = PlayerInventory.box_A.ToString();
@@ -441,7 +451,18 @@ public class PlayFabManage : MonoBehaviour
             (result) =>
             {
                 Debug.LogError("SECTOR_데이터 저장 성공!! " + myPlayFabId);
-                ObscuredPrefs.Save();
+                /// 서버에 올리고 로컬 초기화
+                if (PlayerPrefsManager.instance.isResetAferSave)
+                {
+                    Time.timeScale = 0;
+                    PlayerPrefsManager.instance.InvoMyDate2();
+                }
+                /// 그냥 서버 저장
+                else
+                {
+                    SystemPopUp.instance.StopLoopLoading();
+
+                }
             },
             (error) => Debug.LogError("SECTOR_데이터 저장 실패")
             );
@@ -478,6 +499,7 @@ public class PlayFabManage : MonoBehaviour
     /// <param name="_isZZOgomi"></param>
     public void GetUserData(bool _isZZOgomi)
     {
+        /// 새로운 영혼 씌우기
         long tryResult = 0;
         int tryResultt = 0;
         SystemPopUp.instance.LoopLoadingImg();
@@ -487,7 +509,7 @@ public class PlayFabManage : MonoBehaviour
             //if (result.Data == null || !result.Data.ContainsKey("SECTOR_0"))        /// 예외처리
             if (result.Data == null || !result.Data.ContainsKey("SECTOR_4"))        /// 예외처리
             {
-                Debug.LogError("No SECTOR_0 텅텅 비어있음");
+                Debug.LogError("쪼꼬미 데이터 없음");
                 PlayerPrefsManager.instance.ZZoGGoMiDataLoad(null);
                 PlayerPrefsManager.isLoadingComp = true;
                 SystemPopUp.instance.StopLoopLoading();
@@ -496,12 +518,18 @@ public class PlayFabManage : MonoBehaviour
             {
                 if (_isZZOgomi)
                 {
+                    Debug.LogError("쪼꼬미 데이터 로드");
                     //Debug.LogError("SECTOR_4 (isSuperUser): " + result.Data["SECTOR_4"].Value);
                     PlayerPrefsManager.instance.ZZoGGoMiDataLoad(result.Data["SECTOR_4"].Value);
                     SystemPopUp.instance.StopLoopLoading();
                 }
                 else
                 {
+                    /// 남아있는 찌꺼기 제거
+                    ObscuredPrefs.DeleteAll();
+                    PlayerPrefs.DeleteAll();
+                    //File.WriteAllText(Application.persistentDataPath + "/_data_", null);
+
                     /// 버전 코드 별로 적용 데이터 다르게 ??
                     //Debug.LogError("SECTOR_0 (버전정보): " + result.Data["SECTOR_0"].Value);
 
@@ -535,7 +563,7 @@ public class PlayFabManage : MonoBehaviour
                     else PlayerInventory.isSuperUser = 0;
 
                     Debug.LogError("SECTOR_7 (RecentDistance): " + result.Data["SECTOR_7"].Value);
-                    if(long.TryParse(result.Data["SECTOR_7"].Value, out tryResult)) PlayerInventory.RecentDistance = tryResult;
+                    if(long.TryParse(result.Data["SECTOR_7"].Value, out tryResult)) PlayerInventory.RecentDistance = tryResult-1;
                     else PlayerInventory.RecentDistance = 0;
 
                     Debug.LogError("SECTOR_8 (nonSaveJsonMoney): " + result.Data["SECTOR_8"].Value);
@@ -545,8 +573,9 @@ public class PlayFabManage : MonoBehaviour
 
                     /// 파일에서 데이터 불러와서 리스트에 대입
                     PlayerPrefsManager.isLoadingComp = true;
-                    /// 얘는 로컬에서만 존재
+                    /// 초반 초기화 완료 됐을때 키 초기화 [로컬에만 존재]
                     ObscuredPrefs.SetInt("isSeverDataLoad", 609);
+                    ObscuredPrefs.SetInt("tunamayo", 22);
                     ObscuredPrefs.Save();
 
                     /// 파일에서 데이터 불러와서 리스트에 대입

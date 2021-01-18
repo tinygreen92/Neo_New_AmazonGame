@@ -228,7 +228,10 @@ public class RuneManager : MonoBehaviour
         }
 
         /// 특수 조합 공식 발동
-        if (result != "") isRareFussion = true;
+        if (result != "")
+        {
+             isRareFussion = true;
+        }
         return result;
     }
 

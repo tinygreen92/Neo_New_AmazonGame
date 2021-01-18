@@ -41,9 +41,11 @@ public class RankManager : MonoBehaviour
         if(PlayerInventory.RecentDistance > 1.0d)
         {
             nanoo.RecordRankDistance(Mathf.RoundToInt((float)PlayerInventory.RecentDistance)-1);
+            /// 랭킹 기록 시 플레이팹에 상태 저장
+            PlayerPrefsManager.instance.JObjectSave(true);
         }
-        /// 로딩 뺑글이
-        SystemPopUp.instance.LoopLoadingImg();
+        ///// 로딩 뺑글이
+        //SystemPopUp.instance.LoopLoadingImg();
         /// 지연 호출
         Invoke(nameof(InvoRank), 1.0f);
 

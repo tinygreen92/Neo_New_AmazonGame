@@ -112,7 +112,7 @@ public class DailyManager : MonoBehaviour
         if (!isFristRun) return;
 
         dailydRemaining = dailyEndTimestamp - UnbiasedTime.Instance.Now();
-        /// 3600초마다 저장 = 정각 마다 저장
+        /// 3600초마다 저장 = 정각 마다 로컬 저장
         if (!isSave && dailydRemaining.Minutes == 59)
         {
             PlayerPrefsManager.instance.TEST_SaveJson();
@@ -304,9 +304,9 @@ public class DailyManager : MonoBehaviour
         /// 늪지 / 채굴권 2장 충전
         PlayerInventory.SetTicketCount("cave_enter", 2);
         PlayerInventory.SetTicketCount("mining", 2);
-
+        int MaxDayQuest = ListModel.Instance.missionDAYlist.Count;
         ///  TODO : 일일 퀘스트 초기화. 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < MaxDayQuest; i++)
         {
             ListModel.Instance.DAYlist_Update(i, 0);
         }
@@ -359,6 +359,9 @@ public class DailyManager : MonoBehaviour
         RedDotManager.instance.RedDot[4].SetActive(true);
         /////-> 다시 24시간 카운터 재시작
         //Invoke(nameof(CheckDailyInit), 0.5f);
+
+        PlayerPrefsManager.SwampyEnterCnt = 5;
+        PlayerPrefsManager.SwampySkipCnt = 5;
 
         PlayerPrefsManager.instance.TEST_SaveJson();
     }

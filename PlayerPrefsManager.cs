@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CodeStage.AntiCheat.ObscuredTypes;
 using CodeStage.AntiCheat.Storage;
+using System.Collections;
 
 enum EnumNumber
 {
@@ -121,7 +122,23 @@ enum EnumNumber
 
 public class PlayerPrefsManager : MonoBehaviour
 {
+
+
+    public void zJObjectSaveNew()
+    {
+        // JObject를 Serialize하여 json string 생성 
+        string savestring = JsonConvert.SerializeObject(ListModel.Instance.swampCaveData);
+        File.WriteAllText(Application.persistentDataPath + "/_Tuna_", AESEncrypt128(savestring)); // 생성된 string을  _data_ 파일에 쓴다 
+    }
+
+
+
+
     public TextAsset mayo;
+    /// <summary>
+    /// 210117Update
+    /// </summary>
+    public TextAsset tuna;
     [Header("- 무기 애니메이션 뭉태기")]
     public GameObject[] WeaponAnims;
     [Header("- 매니저들")]
@@ -166,6 +183,10 @@ public class PlayerPrefsManager : MonoBehaviour
     public static ObscuredInt AmaAdsTimer;                           // 아마존 결정 상점 10회 제한
     public static ObscuredInt FreeDiaCnt;                           // 무료 다이아 10회 제한
     public static ObscuredInt FreeWeaponCnt;                           // 무료 무기 뽑기 10회 제한
+
+    /// 입장 / 소탕 제한
+    public static ObscuredInt SwampyEnterCnt;                           // 늪지 입장 5회 제한
+    public static ObscuredInt SwampySkipCnt;                           // 늪지 소탕 5회 제한
 
 
     ///  ---------------------------안 암호화.
@@ -216,7 +237,13 @@ public class PlayerPrefsManager : MonoBehaviour
     void OnApplicationQuit()
     {
         /* 앱이 종료 될 때 처리 */
-        TEST_SaveJson();
+        /// 서버에 저장하고 리셋하면 저장 하지 마
+        if (!isResetAferSave) 
+        {
+            TEST_SaveJson();
+        }
+
+        
     }
 
     private void OnApplicationPause(bool pause)
@@ -247,44 +274,17 @@ public class PlayerPrefsManager : MonoBehaviour
             FreeDiaCnt.RandomizeCryptoKey();
             FreeWeaponCnt.RandomizeCryptoKey();
             currentTutoIndex.RandomizeCryptoKey();
+            SwampyEnterCnt.RandomizeCryptoKey();
+            SwampySkipCnt.RandomizeCryptoKey();
         }
     }
 
     /// <summary>
-    /// JSon 화 시켜서 [로컬]에 저장
-    /// tunamato[21] 에 데이터 저장
+    /// Prefs  [로컬]에 저장
+    /// JObjectSave -> tunamato[21] 에 데이터 저장
     /// </summary>
     public void TEST_SaveJson()
     {
-        JObjectSave(ListModel.Instance.petList, 0);
-        JObjectSave(ListModel.Instance.charatorList, 1);
-        JObjectSave(ListModel.Instance.weaponList, 2);
-        JObjectSave(ListModel.Instance.equipRuneList, 3);
-        JObjectSave(ListModel.Instance.runeList, 4);
-        JObjectSave(ListModel.Instance.invisibleruneList, 5);
-        JObjectSave(ListModel.Instance.heartList, 6);
-        JObjectSave(ListModel.Instance.invisibleheartList, 7);
-        JObjectSave(ListModel.Instance.supList, 8);
-        JObjectSave(ListModel.Instance.shopList, 9);
-        JObjectSave(ListModel.Instance.shopListSPEC, 10);
-        JObjectSave(ListModel.Instance.shopListNOR, 11);
-        JObjectSave(ListModel.Instance.shopListPACK, 12);
-        JObjectSave(ListModel.Instance.shopListAMA, 13);
-        //
-        JObjectSave(ListModel.Instance.mvpDataList, 14);
-        //
-        JObjectSave(ListModel.Instance.missionDAYlist, 15);
-        JObjectSave(ListModel.Instance.missionALLlist, 16);
-        JObjectSave(ListModel.Instance.missionTUTOlist, 17);
-        //
-        JObjectSave(ListModel.Instance.mineCraft, 18);
-        JObjectSave(ListModel.Instance.axeDataList, 19);
-        //
-        JObjectSave(ListModel.Instance.swampCaveData, 20);
-        //      
-        /// 스트링 배열 로컬 저장
-        JObjectSave(false);
-
         /// 임시 골드 등등 저장
         ObscuredPrefs.SetString("RecentDistance", PlayerInventory.RecentDistance.ToString());
         ObscuredPrefs.SetString("Money_Gold", PlayerInventory.Money_Gold.ToString());
@@ -305,6 +305,7 @@ public class PlayerPrefsManager : MonoBehaviour
         ObscuredPrefs.SetString("box_A", PlayerInventory.box_A.ToString());
         ObscuredPrefs.SetString("box_S", PlayerInventory.box_S.ToString());
         ObscuredPrefs.SetString("box_L", PlayerInventory.box_L.ToString());
+
         ObscuredPrefs.SetString("ticket_reinforce_box", PlayerInventory.ticket_reinforce_box.ToString());
         ObscuredPrefs.SetString("ticket_leaf_box", PlayerInventory.ticket_leaf_box.ToString());
         ObscuredPrefs.SetString("ticket_pvp_enter", PlayerInventory.ticket_pvp_enter.ToString());
@@ -319,13 +320,23 @@ public class PlayerPrefsManager : MonoBehaviour
 
         ObscuredPrefs.SetInt("isTutoAllClear", isTutoAllClear ? 525 : 0);
 
+        ObscuredPrefs.SetInt("isDailyCheak", isDailyCheak ? 525 : 0);
         ObscuredPrefs.SetInt("ZogarkMissionCnt", ZogarkMissionCnt);
         ObscuredPrefs.SetInt("AmaAdsTimer", AmaAdsTimer);
         ObscuredPrefs.SetInt("FreeDiaCnt", FreeDiaCnt);
         ObscuredPrefs.SetInt("FreeWeaponCnt", FreeWeaponCnt);
-        ObscuredPrefs.SetInt("isDailyCheak", isDailyCheak ? 525 : 0);
+
+        ///  210117 업데이트 추가
+        ObscuredPrefs.SetInt("SwampyEnterCnt", SwampyEnterCnt);
+        ObscuredPrefs.SetInt("SwampySkipCnt", SwampySkipCnt);
+
+        ObscuredPrefs.SetInt("update210117", 963);
+
+
         ObscuredPrefs.Save();
 
+        /// 리스트를 JSON 으로 로컬 저장
+        JObjectSave(false);
 
         /// 아직 오프라인 체크 안함
         if (!isCheckOffline)
@@ -340,8 +351,6 @@ public class PlayerPrefsManager : MonoBehaviour
         //ObscuredPrefs.SetString("Check_Daily", tmp);
         //ObscuredPrefs.SetString("FreeWeapon", tmp);
         //ObscuredPrefs.SetString("FreeDia", tmp);
-
-        bool asdsa = FreeDiaCnt == 0;
 
         ObscuredPrefs.Save();
         Debug.LogWarning("세이브 데이터 타임 " + tmp);
@@ -598,37 +607,36 @@ public class PlayerPrefsManager : MonoBehaviour
     /// </summary>
     public void JObjectSave(bool _isSeverSave)
     {
-        if (_isSeverSave)
-        {
-            JObjectSave(ListModel.Instance.petList, 0);
-            JObjectSave(ListModel.Instance.charatorList, 1);
-            JObjectSave(ListModel.Instance.weaponList, 2);
-            JObjectSave(ListModel.Instance.equipRuneList, 3);
-            JObjectSave(ListModel.Instance.runeList, 4);
-            JObjectSave(ListModel.Instance.invisibleruneList, 5);
-            JObjectSave(ListModel.Instance.heartList, 6);
-            JObjectSave(ListModel.Instance.invisibleheartList, 7);
-            JObjectSave(ListModel.Instance.supList, 8);
-            JObjectSave(ListModel.Instance.shopList, 9);
-            JObjectSave(ListModel.Instance.shopListSPEC, 10);
-            JObjectSave(ListModel.Instance.shopListNOR, 11);
-            JObjectSave(ListModel.Instance.shopListPACK, 12);
-            JObjectSave(ListModel.Instance.shopListAMA, 13);
-            //
-            JObjectSave(ListModel.Instance.mvpDataList, 14);
-            //
-            JObjectSave(ListModel.Instance.missionDAYlist, 15);
-            JObjectSave(ListModel.Instance.missionALLlist, 16);
-            JObjectSave(ListModel.Instance.missionTUTOlist, 17);
-            //
-            JObjectSave(ListModel.Instance.mineCraft, 18);
-            JObjectSave(ListModel.Instance.axeDataList, 19);
-            //
-            JObjectSave(ListModel.Instance.swampCaveData, 20);
-        }
-        // 파일로 저장 
-        string savestring = JsonConvert.SerializeObject(tunamayo); // JObject를 Serialize하여 json string 생성 
-        savestring = AESEncrypt128(savestring);
+        Debug.LogError("아니 어디서 호출 되는겨");
+        SystemPopUp.instance.LoopLoadingImg();
+        JObjectSave(ListModel.Instance.petList, 0);
+        JObjectSave(ListModel.Instance.charatorList, 1);
+        JObjectSave(ListModel.Instance.weaponList, 2);
+        JObjectSave(ListModel.Instance.equipRuneList, 3);
+        JObjectSave(ListModel.Instance.runeList, 4);
+        JObjectSave(ListModel.Instance.invisibleruneList, 5);
+        JObjectSave(ListModel.Instance.heartList, 6);
+        JObjectSave(ListModel.Instance.invisibleheartList, 7);
+        JObjectSave(ListModel.Instance.supList, 8);
+        JObjectSave(ListModel.Instance.shopList, 9);
+        JObjectSave(ListModel.Instance.shopListSPEC, 10);
+        JObjectSave(ListModel.Instance.shopListNOR, 11);
+        JObjectSave(ListModel.Instance.shopListPACK, 12);
+        JObjectSave(ListModel.Instance.shopListAMA, 13);
+        //
+        JObjectSave(ListModel.Instance.mvpDataList, 14);
+        //
+        JObjectSave(ListModel.Instance.missionDAYlist, 15);
+        JObjectSave(ListModel.Instance.missionALLlist, 16);
+        JObjectSave(ListModel.Instance.missionTUTOlist, 17);
+        //
+        JObjectSave(ListModel.Instance.mineCraft, 18);
+        JObjectSave(ListModel.Instance.axeDataList, 19);
+        //
+        JObjectSave(ListModel.Instance.swampCaveData, 20);
+
+        // JObject를 Serialize하여 json string 생성 
+        string savestring = AESEncrypt128(JsonConvert.SerializeObject(tunamayo));
 
         /// 서버에 저장할래? 시름 말래?
         if (_isSeverSave)
@@ -640,8 +648,10 @@ public class PlayerPrefsManager : MonoBehaviour
         {
             File.WriteAllText(Application.persistentDataPath + "/_data_", savestring); // 생성된 string을  _data_ 파일에 쓴다 
 
+            SystemPopUp.instance.StopLoopLoading();
         }
     }
+
 
     int iTryResult;
     long lTryResult;
@@ -661,13 +671,14 @@ public class PlayerPrefsManager : MonoBehaviour
     /// <param name="dir">나중에 스위치로 전환해야할 때 입력 받으</param>
     public void JObjectLoad(bool _isInit)
     {
-        string loadstring;
+        string loadstring = "";
+        /// 늪지 밸패 210117
+        string loadstringSwapy = tuna.text;
         /// 첫시작 파일은 리소시즈
         if (_isInit)
         {
             loadstring = mayo.text;
-            Debug.LogError("초기화 ");
-
+            Debug.LogError("게임 처음 실행하는 깨끗한 데이터 ");
         }
         /// 이후 파일은 여기서 불러와
         else
@@ -688,17 +699,17 @@ public class PlayerPrefsManager : MonoBehaviour
         ListModel.Instance.invisibleruneList = JsonConvert.DeserializeObject<List<RuneContent>>(AESDecrypt128(tunamayo[5]));
         ListModel.Instance.heartList = JsonConvert.DeserializeObject<List<HeartContent>>(AESDecrypt128(tunamayo[6]));
         ListModel.Instance.invisibleheartList = JsonConvert.DeserializeObject<List<HeartContent>>(AESDecrypt128(tunamayo[7]));
+        ListModel.Instance.supList = JsonConvert.DeserializeObject<List<SupContent>>(AESDecrypt128(tunamayo[8]));
 
 
         /// --------------------------------------------------------
 
-
-        ListModel.Instance.supList = JsonConvert.DeserializeObject<List<SupContent>>(AESDecrypt128(tunamayo[8]));
         ListModel.Instance.shopList = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[9]));
         ListModel.Instance.shopListSPEC = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[10]));
         ListModel.Instance.shopListNOR = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[11]));
         ListModel.Instance.shopListPACK = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[12]));
         ListModel.Instance.shopListAMA = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[13]));
+
         // 유료 구매 부분
         ListModel.Instance.mvpDataList = JsonConvert.DeserializeObject<List<MVP>>(AESDecrypt128(tunamayo[14]));
         //일퀘 / 업적 / 튜토리얼
@@ -708,9 +719,15 @@ public class PlayerPrefsManager : MonoBehaviour
         // 채굴 관련
         ListModel.Instance.mineCraft = JsonConvert.DeserializeObject<List<MineCraft>>(AESDecrypt128(tunamayo[18]));
         ListModel.Instance.axeDataList = JsonConvert.DeserializeObject<List<AxeStat>>(AESDecrypt128(tunamayo[19]));
-        // 늪지 관련
-        ListModel.Instance.swampCaveData = JsonConvert.DeserializeObject<List<SwampCave>>(AESDecrypt128(tunamayo[20]));
-
+        /// 늪지 관련
+        if (_isInit)
+        {
+            ListModel.Instance.swampCaveData = JsonConvert.DeserializeObject<List<SwampCave>>(AESDecrypt128(loadstringSwapy));
+        }
+        else
+        {
+            ListModel.Instance.swampCaveData = JsonConvert.DeserializeObject<List<SwampCave>>(AESDecrypt128(tunamayo[20]));
+        }
 
 
         /// 유물 뽑은거 트리거 로드
@@ -746,11 +763,6 @@ public class PlayerPrefsManager : MonoBehaviour
             }
         }
 
-
-
-
-
-
         /// 로딩바 올려주는 걸 허락한다.
         isJObjectLoad = true;
 
@@ -758,7 +770,14 @@ public class PlayerPrefsManager : MonoBehaviour
         if (_isInit)
         {
             /// 초반 초기화 완료 됐을때 키 초기화
-            ObscuredPrefs.SetInt("tunamayo", 525);
+            ObscuredPrefs.SetInt("tunamayo", 75);
+            ObscuredPrefs.Save();
+            /// 210117 업데이트 추가
+            SwampyEnterCnt = ObscuredPrefs.GetInt("SwampyEnterCnt", 5);
+            SwampySkipCnt = ObscuredPrefs.GetInt("SwampySkipCnt", 5);
+
+            Debug.LogError("_isInit /  SwampyEnterCnt : " + SwampyEnterCnt);
+
             /// 초창기 초기화 후 호출할때만 데이터 세이브
             TEST_SaveJson();
         }
@@ -772,7 +791,22 @@ public class PlayerPrefsManager : MonoBehaviour
             if (long.TryParse(ObscuredPrefs.GetString("AmazonStoneCount"), out lTryResult)) PlayerInventory.AmazonStoneCount = lTryResult;
             else PlayerInventory.AmazonStoneCount = 0;
 
+            isResetAferSave = false;
             /// --------------------------------------------------------------------------------------------------------------------
+            /// 
+            ///update210117
+            ///--------------------------------------update210117 ----------------------------------------------
+            ///update210117
+            if (!ObscuredPrefs.HasKey("update210117"))
+            {
+                /// 늪지 기록 초기화.
+                ListModel.Instance.swampCaveData = JsonConvert.DeserializeObject<List<SwampCave>>(AESDecrypt128(loadstringSwapy));
+               
+                /// 초반 초기화 완료 됐을때 키 초기화
+                ObscuredPrefs.SetInt("update210117", 956);
+                ObscuredPrefs.Save();
+            }
+
         }
     }
 
@@ -815,8 +849,16 @@ public class PlayerPrefsManager : MonoBehaviour
         // 채굴 관련
         ListModel.Instance.mineCraft = JsonConvert.DeserializeObject<List<MineCraft>>(AESDecrypt128(tunamayo[18]));
         ListModel.Instance.axeDataList = JsonConvert.DeserializeObject<List<AxeStat>>(AESDecrypt128(tunamayo[19]));
-        // 늪지 관련
-        ListModel.Instance.swampCaveData = JsonConvert.DeserializeObject<List<SwampCave>>(AESDecrypt128(tunamayo[20]));
+        ///늪지 관련
+        if (_BulidNum != "1.0.4")
+        {
+            ListModel.Instance.swampCaveData = JsonConvert.DeserializeObject<List<SwampCave>>(AESDecrypt128(tuna.text));
+        }
+        else
+        {
+            ListModel.Instance.swampCaveData = JsonConvert.DeserializeObject<List<SwampCave>>(AESDecrypt128(tunamayo[20]));
+        }
+        
 
 
         /// 유물 뽑은거 트리거 로드
@@ -883,8 +925,6 @@ public class PlayerPrefsManager : MonoBehaviour
         PlayerInventory.mining = int.Parse(ListModel.Instance.nonSaveJsonMoney[0].mining);
         PlayerInventory.amber = int.Parse(ListModel.Instance.nonSaveJsonMoney[0].amber);
 
-        Debug.LogError("인타퍼성~~~~" + int.Parse(ListModel.Instance.nonSaveJsonMoney[0].amber));
-
         isTutoAllClear = ListModel.Instance.nonSaveJsonMoney[0].isTutoAllClear != 0 ? true : false;
 
         /// 210115 업데이트 추가
@@ -898,24 +938,24 @@ public class PlayerPrefsManager : MonoBehaviour
             ObscuredPrefs.SetInt("AmaAdsTimer", int.Parse(ListModel.Instance.nonSaveJsonMoney[1].Money_AmazonCoin));
             ObscuredPrefs.SetInt("FreeDiaCnt", int.Parse(ListModel.Instance.nonSaveJsonMoney[1].AmazonStoneCount));
             ObscuredPrefs.SetInt("FreeWeaponCnt", int.Parse(ListModel.Instance.nonSaveJsonMoney[1].CurrentAmaLV));
+
+            /// 210117 업데이트 추가
+            if (ListModel.Instance.nonSaveJsonMoney[1].box_Coupon == null) ListModel.Instance.nonSaveJsonMoney[1].box_Coupon = "0";
+            SwampyEnterCnt =  int.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_Coupon);
+            if (ListModel.Instance.nonSaveJsonMoney[1].box_E == null) ListModel.Instance.nonSaveJsonMoney[1].box_E = "0";
+            SwampySkipCnt =  int.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_E);
+
+            if (ListModel.Instance.nonSaveJsonMoney[1].box_D == null) ListModel.Instance.nonSaveJsonMoney[1].box_D = "0";
+            ObscuredPrefs.SetInt("update210117", int.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_D));
+            ObscuredPrefs.Save();
+
+
+            Debug.LogError("특별 서버 불러오기 " + SwampyEnterCnt + " 장");
         }
 
-        /// 아직 오프라인 체크 안함
-        if (!isCheckOffline)
-        {
-            return;
-        }
 
-        /// 오프라인 보상 체크 끝났다면 타이머 일괄적으로 저장
-        string tmp = UnbiasedTime.Instance.Now().ToString("yyyyMMddHHmmss");
-        ObscuredPrefs.SetString("DateTime", tmp);
-        //ObscuredPrefs.SetString("AmazonShop", tmp);
-        //ObscuredPrefs.SetString("Check_Daily", tmp);
-        //ObscuredPrefs.SetString("FreeWeapon", tmp);
-        //ObscuredPrefs.SetString("FreeDia", tmp);  
-
-        ObscuredPrefs.Save();
-        Debug.LogWarning("세이브 데이터 타임 " + tmp);
+        /// 리스트를 Prefs 로 저장
+        TEST_SaveJson();
     }
 
 
@@ -996,6 +1036,7 @@ public class PlayerPrefsManager : MonoBehaviour
     /// </summary>
     public void DataReset()
     {
+
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
@@ -1182,39 +1223,43 @@ public class PlayerPrefsManager : MonoBehaviour
     public GameObject LoadMyData;
 
     /// <summary>
+    /// 세이브 후에 로컬 리셋
+    /// </summary>
+    public bool isResetAferSave;
+
+    /// <summary>
     /// 이거 이전에 TEST_Save 해주고
     /// 진짜냐? 에 서버에 저장할래에 붙여줌.
     /// </summary>
     public void SaveMyDataReal()
     {
         SystemPopUp.instance.LoopSavingImg();
-        TEST_SaveJson();
-        Invoke(nameof(InvoMyDate), 0.5f);
-    }
-
-    void InvoMyDate()
-    {
         /// 서버에서 JSON 몽땅 저장.
         JObjectSave(true);
-
-        Invoke(nameof(InvoMyDate2), 0.5f);
+        isResetAferSave = true;
     }
-    void InvoMyDate2()
+
+    /// <summary>
+    /// 플레이팹 서버 저장 끝나면 호출 해줌.
+    /// </summary>
+    public void InvoMyDate2()
     {
         /// 로컬 데이터 리셋 후 종료
-        ListModel.Instance.supList.Clear();
-        ListModel.Instance.charatorList.Clear();
-        ListModel.Instance.invisibleheartList.Clear();
-        ListModel.Instance.invisibleruneList.Clear();
-        ListModel.Instance.weaponList.Clear();
-        ListModel.Instance.petList.Clear();
-        ListModel.Instance.shopList.Clear();
-        ListModel.Instance.shopListSPEC.Clear();
-        ListModel.Instance.shopListNOR.Clear();
-        ListModel.Instance.mineCraft.Clear();
+        //ListModel.Instance.supList.Clear();
+        //ListModel.Instance.charatorList.Clear();
+        //ListModel.Instance.invisibleheartList.Clear();
+        //ListModel.Instance.invisibleruneList.Clear();
+        //ListModel.Instance.weaponList.Clear();
+        //ListModel.Instance.petList.Clear();
+        //ListModel.Instance.shopList.Clear();
+        //ListModel.Instance.shopListSPEC.Clear();
+        //ListModel.Instance.shopListNOR.Clear();
+        //ListModel.Instance.mineCraft.Clear();
         //
         ObscuredPrefs.DeleteAll();
         PlayerPrefs.DeleteAll();
+        // data 완전 초기화.
+        File.WriteAllText(Application.persistentDataPath + "/_data_", null); 
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
