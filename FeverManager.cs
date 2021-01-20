@@ -29,8 +29,9 @@ public class FeverManager : MonoBehaviour
 
     [Header("- 디버그 모드 활성화.")]
     public GameObject[] TEST_Btn;
-    [Header("- 피버 이제 안쓰는거")]
-    public Transform FeverParent;
+
+    [Header("- 피버 새로 사용하는 거")]
+    public Image infill;
     public GameObject testFeverSpr;
     public static int state_Monster_KillCount;                          // 죽인 몬스터 수
     public static bool isFeverTime;
@@ -39,7 +40,7 @@ public class FeverManager : MonoBehaviour
     private void Awake()
     {
         state_Monster_KillCount = ObscuredPrefs.GetInt("state_Monster_KillCount");
-        //FeverParent.GetChild(0).GetComponent<Image>().fillAmount = (state_Monster_KillCount / PlayerInventory.Kill_Cost);
+        infill.fillAmount = (state_Monster_KillCount / PlayerInventory.Kill_Cost);
     }
 
 
@@ -301,7 +302,7 @@ public class FeverManager : MonoBehaviour
             else
             {
                 Debug.LogWarning("누적 state_Monster_KillCount" + state_Monster_KillCount);
-                //FeverParent.GetChild(0).GetComponent<Image>().fillAmount = (state_Monster_KillCount / PlayerInventory.Kill_Cost);
+                infill.fillAmount = (state_Monster_KillCount / PlayerInventory.Kill_Cost);
                 ObscuredPrefs.SetInt("state_Monster_KillCount", state_Monster_KillCount);
                 ///  킬 카운터 1 올리기
                 ListModel.Instance.DAYlist_Update(5);
@@ -318,24 +319,24 @@ public class FeverManager : MonoBehaviour
         testFeverSpr.SetActive(true);
         /// 킬카운터 초기화 하고 피버 타임 활성화.
         state_Monster_KillCount = 0;
-        //FeverParent.GetChild(0).GetComponent<Image>().fillAmount = 1;
+        infill.fillAmount = 1;
         ObscuredPrefs.SetInt("state_Monster_KillCount", state_Monster_KillCount);
 
         isFeverTime = true;
         //
-        float currntTime = 0;
+        float currntTime = (float)PlayerInventory.Fever_Time;
+        float MaxTime = currntTime;
 
         while (true)
         {
             yield return new WaitForFixedUpdate();
-            currntTime += Time.deltaTime;
-            //FeverParent.GetChild(0).GetComponent<Image>().fillAmount = (currntTime / maxTime);
+            currntTime -= Time.deltaTime;
+            infill.fillAmount = (currntTime / MaxTime);
 
-            if (currntTime >= PlayerInventory.Fever_Time)
+            if (currntTime <= 0)
             {
                 testFeverSpr.SetActive(false);
-
-                //FeverParent.GetChild(0).GetComponent<Image>().fillAmount = 0;
+                infill.fillAmount = 0;
                 /// 피버 끝
                 isFeverTime = false;
                 break;

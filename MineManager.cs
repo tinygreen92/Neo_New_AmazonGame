@@ -298,7 +298,6 @@ public class MineManager : MonoBehaviour
 
     public void InvoMineEnter()
     {
-        PlayerPrefsManager.instance.TEST_SaveJson();
         /// 멈춰!!
         anim.StopPlayback();
         anim.Play("Player_Mine_Idle", -1, 0f);
@@ -349,7 +348,6 @@ public class MineManager : MonoBehaviour
     /// </summary>
     public void InvoExitMine()
     {
-        PlayerPrefsManager.instance.TEST_SaveJson();
         /// 빨간 점 꺼주기
         RedDotManager.instance.RedDot[6].SetActive(false);
         /// 멈춰!!

@@ -68,10 +68,16 @@ public class IdleManager : MonoBehaviour
         if (!BannerAdPanelController.isOn)
         {
             /// 슈퍼유저가 아니면 광고 표시
-            if (PlayerInventory.isSuperUser == 0)
-            { 
+            if (PlayerInventory.isSuperUser != 0)
+            {
+                /// 슈퍼 유저다 
+            }
+            else
+            {
                 em.ShowBanner();
             }
+
+
         }
 
         for (int i = 0; i < IdleForCanvas.Length; i++)

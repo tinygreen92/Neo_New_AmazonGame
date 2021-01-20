@@ -65,11 +65,14 @@ public class PopUpManager : MonoBehaviour
         }
         else // 카운트 0미만 이면 하루 지났다 / 아님 출석 안했다.
         {
+            GuardImgs[0].gameObject.SetActive(false);
+
             FreeDiaRemainBox.text = "FREE";
             /// 업데이트 문 탈출
             isTimerOn = false;
         }
     }
+
 
     /// <summary>
     /// 무료 타이머 돌려라 돌려
@@ -87,6 +90,7 @@ public class PopUpManager : MonoBehaviour
         }
         else /// 타이머 끝남.
         {
+            GuardImgs[0].gameObject.SetActive(false);
             // 타이머 숫자 숨겨준다.
             FreeDiaRemainBox.text = "FREE";
         }
@@ -233,7 +237,8 @@ public class PopUpManager : MonoBehaviour
         SaveDateTime( dailyEndTimestamp);
         isTimerOn = true;
         /// 보상 지급
-        nm.PostboxDailySend("diamond", 100);
+        //nm.PostboxDailySend("diamond", 100);
+        nm.CouponCheak("diamond", "100");
         ///  광고 1회 시청 완료 카운트
         ListModel.Instance.ALLlist_Update(0, 1);
         /// 광고 시청 일일 업적
@@ -247,36 +252,6 @@ public class PopUpManager : MonoBehaviour
     #endregion
 
     
-    /// <summary>
-    /// 무료 다이아 / 무료 뽑기 / 무료 포션 받기 하면 20초 대기.
-    /// </summary>
-    public void AdsHolding20s()
-    {
-        GuardImgs[0].SetActive(true);
-        GuardImgs[1].SetActive(true);
-        //
-        StartCoroutine(hold20());
-    }
-
-    IEnumerator hold20()
-    {
-        yield return null;
-        int currntTime = 15;
-        WaitForSeconds delay = new WaitForSeconds(1f);
-        guardText[0].text = currntTime.ToString() ;
-        guardText[1].text = currntTime.ToString();
-        while (currntTime > 0)
-        {
-            yield return delay;
-            currntTime -= 1;
-            guardText[0].text = currntTime.ToString();
-            guardText[1].text = currntTime.ToString();
-        }
-
-        GuardImgs[0].SetActive(false);
-        GuardImgs[1].SetActive(false);
-    }
-
 
 
 

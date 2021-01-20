@@ -633,6 +633,7 @@ public class CaveManager : MonoBehaviour
             ListModel.Instance.ALLlist_Update(4, tmpLeaf * 2);
             ///  강화석 업적 카운트 올리기
             ListModel.Instance.ALLlist_Update(5, tmpES * 2);
+
         }
         else
         {
@@ -649,7 +650,7 @@ public class CaveManager : MonoBehaviour
         {
             ListModel.Instance.TUTO_Update(26);
         }
-
+        /// 로컬 저장
         PlayerPrefsManager.instance.TEST_SaveJson();
     }
 

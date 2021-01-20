@@ -26,8 +26,10 @@ public class StartManager : MonoBehaviour
     {
         instance = this;
         Application.targetFrameRate = 59;
+        Application.runInBackground = true;
 
         /// ------------------------------------------------------------------ ///
+        
         if (isDebugMode) return;
         // 로그 비활성화
         Debug.unityLogger.logEnabled = false;

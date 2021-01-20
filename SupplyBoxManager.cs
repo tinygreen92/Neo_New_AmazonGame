@@ -398,8 +398,10 @@ public class SupplyBoxManager : MonoBehaviour
         yield return new WaitForSeconds(supplyDelay);
         /// 보급상자 쿨 마다 로컬 데이터 저장 - > 후에 서버 저장까지?
         PlayerPrefsManager.instance.TEST_SaveJson();
+        /// 플레이팹에서 공지사항 읽어옴
+        GameObject.FindWithTag("PFM").GetComponent<PlayFabManage>().ClientGetTitleData("Notice");
         /// 광산/늪지 입장 아닐때만 정상 카운트 되고 보급품 떨어짐.
-        if(!PlayerPrefsManager.isEnterTheMine)
+        if (!PlayerPrefsManager.isEnterTheMine)
         {
             if (superCont >= 10)
             {

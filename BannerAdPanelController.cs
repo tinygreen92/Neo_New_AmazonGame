@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class BannerAdPanelController : MonoBehaviour
 {
+    public GameObject SuperPannel;
     public Animator playerAnim;
     public EasyMoblieManager em;
     [Header("- 위로 들어올릴 패널 Bottom")]
@@ -32,7 +33,7 @@ public class BannerAdPanelController : MonoBehaviour
     public static bool isOn;
 
     /// <summary>
-    /// SendMessage 로 호출 중
+    /// congif - 3번째 - 배너 SendMessage 로 호출 중
     /// </summary>
     private void BannerOnoff()
     {
@@ -68,6 +69,8 @@ public class BannerAdPanelController : MonoBehaviour
         /// 광고제거 구매했니?
         if (PlayerInventory.isSuperUser != 0)
         {
+            SuperPannel.SetActive(true);
+
             isBannerDown = true;
             isOn = !isOn;
             em.DestroyBanner();

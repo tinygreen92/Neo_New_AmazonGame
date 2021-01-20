@@ -99,6 +99,9 @@ public class PresentManager : MonoBehaviour
 
         /// 모두 받기 회색
         AllBtn.sprite = AllBtnSprs[0];
+
+        /// 로컬 저장
+        PlayerPrefsManager.instance.TEST_SaveJson();
     }
 
     public void RedotAssemble()

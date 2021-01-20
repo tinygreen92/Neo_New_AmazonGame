@@ -128,17 +128,21 @@ public class PlayerPrefsManager : MonoBehaviour
     {
         // JObject를 Serialize하여 json string 생성 
         string savestring = JsonConvert.SerializeObject(ListModel.Instance.swampCaveData);
-        File.WriteAllText(Application.persistentDataPath + "/_Tuna_", AESEncrypt128(savestring)); // 생성된 string을  _data_ 파일에 쓴다 
+        File.WriteAllText(Application.persistentDataPath + "/_Pie_.txt", AESEncrypt128(savestring)); // 생성된 string을  _data_ 파일에 쓴다 
     }
 
 
 
-
-    public TextAsset mayo;
+    /// <summary>
+    /// 210119Update
+    /// </summary>
+    public TextAsset pie;
     /// <summary>
     /// 210117Update
     /// </summary>
     public TextAsset tuna;
+    [Space]
+    public TextAsset mayo;
     [Header("- 무기 애니메이션 뭉태기")]
     public GameObject[] WeaponAnims;
     [Header("- 매니저들")]
@@ -200,6 +204,11 @@ public class PlayerPrefsManager : MonoBehaviour
     public static ObscuredBool isCheckOffline;                   // 오프라인 팝업 띄웠니?
 
     /// <summary>
+    /// 공지사항 스트링 저장용
+    /// </summary>
+    public String CH_NOTICE;
+
+    /// <summary>
     /// 튜토리얼에서 사용하는 어디까지 클리어했니 인덱스
     /// </summary>
     public static ObscuredInt currentTutoIndex;
@@ -223,9 +232,6 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
 
-
-
-
     public static PlayerPrefsManager instance;
     private void Awake()
     {
@@ -242,16 +248,16 @@ public class PlayerPrefsManager : MonoBehaviour
         {
             TEST_SaveJson();
         }
-
-        
     }
 
+    bool isPaused;
     private void OnApplicationPause(bool pause)
     {
         if (!isLoadingComp) return;
         /// 일시 정지 상태 진입
         if (pause)
         {
+            isPaused = true;
             /// 후욱후욱
             isGetOfflineReword.RandomizeCryptoKey();
             isTutorialClear.RandomizeCryptoKey();
@@ -276,7 +282,20 @@ public class PlayerPrefsManager : MonoBehaviour
             currentTutoIndex.RandomizeCryptoKey();
             SwampyEnterCnt.RandomizeCryptoKey();
             SwampySkipCnt.RandomizeCryptoKey();
+            /// 로컬 저장
+            TEST_SaveJson();
         }
+        else
+        {
+            if (isPaused)
+            {
+                isPaused = false;
+            }
+        }
+
+
+
+
     }
 
     /// <summary>
@@ -618,6 +637,7 @@ public class PlayerPrefsManager : MonoBehaviour
         JObjectSave(ListModel.Instance.heartList, 6);
         JObjectSave(ListModel.Instance.invisibleheartList, 7);
         JObjectSave(ListModel.Instance.supList, 8);
+
         JObjectSave(ListModel.Instance.shopList, 9);
         JObjectSave(ListModel.Instance.shopListSPEC, 10);
         JObjectSave(ListModel.Instance.shopListNOR, 11);
@@ -850,7 +870,7 @@ public class PlayerPrefsManager : MonoBehaviour
         ListModel.Instance.mineCraft = JsonConvert.DeserializeObject<List<MineCraft>>(AESDecrypt128(tunamayo[18]));
         ListModel.Instance.axeDataList = JsonConvert.DeserializeObject<List<AxeStat>>(AESDecrypt128(tunamayo[19]));
         ///늪지 관련
-        if (_BulidNum != "1.0.4")
+        if (_BulidNum == "1.0.3" || _BulidNum == "1.0.2" || _BulidNum == "1.0.1")
         {
             ListModel.Instance.swampCaveData = JsonConvert.DeserializeObject<List<SwampCave>>(AESDecrypt128(tuna.text));
         }

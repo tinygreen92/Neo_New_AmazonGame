@@ -16,6 +16,7 @@ public class PackageData
 
 public class IAPManager : MonoBehaviour
 {
+    public GameObject TextPaakge;
     [Header("- 패키지 내용물 숫자 ")]
     public int[] front5Amount;
     public int[] back7Amount;
@@ -210,6 +211,11 @@ public class IAPManager : MonoBehaviour
         purcBtns[0].gameObject.SetActive(true);
         PopUpManager.instance.ShowPopUP(13);
     }
+
+    /// <summary>
+    /// 특별 상점 (현금 버프 있는곳) 클릭하면 패키지 상점 소개 메시지 나오게
+    /// </summary>
+    /// <param name="_indx"></param>
     public void Purchase_Spec(int _indx)
     {
         ShutUpMalpoi();
@@ -232,6 +238,8 @@ public class IAPManager : MonoBehaviour
         purchaseIndex[1] = _indx;
         purcBtns[1].gameObject.SetActive(true);
         PopUpManager.instance.ShowPopUP(13);
+        /// TODO : 아이콘과 메세지 출력
+        TextPaakge.SetActive(true);
     }
     public void Purchase_Nor(int _indx)
     {
@@ -658,6 +666,8 @@ public class IAPManager : MonoBehaviour
         {
             purcBtns[i].gameObject.SetActive(false);
         }
+        /// TODO : 패키지 홍보 메세지 꺼줌
+        TextPaakge.SetActive(false);
     }
 
     double dtimeBae;

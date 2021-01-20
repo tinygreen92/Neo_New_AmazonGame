@@ -76,8 +76,14 @@ public class SupportItem : MonoBehaviour
         else if (muti == 100 && _MultiLv > 900) _MultiLv = 1000;
 
         // 레벨 1 이상이면
-        if (_MultiLv > 1) _MultiResult *= (_MultiLv + 1d);
-        else _MultiResult *= 2d;
+        if (_MultiLv > 1)
+        {
+            _MultiResult *= _MultiLv;
+        }
+        else
+        {
+            _MultiResult *= 2d;
+        }
 
         return Math.Truncate( _MultiResult);
     }

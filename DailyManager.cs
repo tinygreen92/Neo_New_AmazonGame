@@ -191,40 +191,46 @@ public class DailyManager : MonoBehaviour
     private void GetRealPresent(int _value)
     {
         ///아마존 결정 지급
-        if (_value < 20) nm.PostboxDailySend("stone", 1);
-        else nm.PostboxDailySend("stone", 5);
+        if (_value < 20)
+        {
+            nm.CouponCheak("stone", "1");
+        }
+        else
+        {
+            nm.CouponCheak("stone", "5");
+        }
         /// 나머지 지급
         switch (_value)
         {
-            case 0: nm.PostboxDailySend("weapon_coupon", 2); break;
-            case 1: nm.PostboxDailySend("cave", 2); break;
-            case 2: nm.PostboxDailySend("reinforce_box", 3); break;
-            case 3: nm.PostboxDailySend("cave_clear", 2); break;
-            case 4: nm.PostboxDailySend("diamond", 100); break;
+            case 0: nm.CouponCheak("weapon_coupon", "2"); break;
+            case 1: nm.CouponCheak("cave", "2"); break;
+            case 2: nm.CouponCheak("reinforce_box", "3"); break;
+            case 3: nm.CouponCheak("cave_clear", "2"); break;
+            case 4: nm.CouponCheak("diamond", "100"); break;
 
-            case 5: nm.PostboxDailySend("weapon_coupon", 2); break;
-            case 6: nm.PostboxDailySend("cave", 2); break;
-            case 7: nm.PostboxDailySend("leaf_box", 5); break;
-            case 8: nm.PostboxDailySend("cave_clear", 2); break;
-            case 9: nm.PostboxDailySend("diamond", 100); break;
+            case 5: nm.CouponCheak("weapon_coupon", "2"); break;
+            case 6: nm.CouponCheak("cave", "2"); break;
+            case 7: nm.CouponCheak("leaf_box", "5"); break;
+            case 8: nm.CouponCheak("cave_clear", "2"); break;
+            case 9: nm.CouponCheak("diamond", "100"); break;
 
-            case 10: nm.PostboxDailySend("weapon_coupon", 2); break;
-            case 11: nm.PostboxDailySend("cave", 2); break;
-            case 12: nm.PostboxDailySend("reinforce_box", 3); break;
-            case 13: nm.PostboxDailySend("cave_clear", 2); break;
-            case 14: nm.PostboxDailySend("diamond", 100); break;
+            case 10: nm.CouponCheak("weapon_coupon", "2"); break;
+            case 11: nm.CouponCheak("cave", "2"); break;
+            case 12: nm.CouponCheak("reinforce_box","3"); break;
+            case 13: nm.CouponCheak("cave_clear", "2"); break;
+            case 14: nm.CouponCheak("diamond", "100"); break;
 
-            case 15: nm.PostboxDailySend("weapon_coupon", 2); break;
-            case 16: nm.PostboxDailySend("cave", 2); break;
-            case 17: nm.PostboxDailySend("leaf_box", 5); break;
-            case 18: nm.PostboxDailySend("cave_clear", 2); break;
-            case 19: nm.PostboxDailySend("diamond", 100); break;
+            case 15: nm.CouponCheak("weapon_coupon", "2"); break;
+            case 16: nm.CouponCheak("cave", "2"); break;
+            case 17: nm.CouponCheak("leaf_box", "5"); break;
+            case 18: nm.CouponCheak("cave_clear", "2"); break;
+            case 19: nm.CouponCheak("diamond", "100"); break;
 
-            case 20: nm.PostboxDailySend("weapon_coupon", 5); break;
-            case 21: nm.PostboxDailySend("cave", 4); break;
-            case 22: nm.PostboxDailySend("elixr", 10); break;
-            case 23: nm.PostboxDailySend("cave_clear", 4); break;
-            case 24: nm.PostboxDailySend("diamond", 200); break;
+            case 20: nm.CouponCheak("weapon_coupon", "5"); break;
+            case 21: nm.CouponCheak("cave", "4"); break;
+            case 22: nm.CouponCheak("elixr", "10"); break;
+            case 23: nm.CouponCheak("cave_clear", "4"); break;
+            case 24: nm.CouponCheak("diamond", "200"); break;
 
             default: break;
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -102,17 +103,19 @@ public class SupportManager : MonoBehaviour
     /// </summary>
     public void GetSoozipGold(int _id)
     {
-        /// 1. 골드 창 <하단> 에 + 수집 골드 그래픽 표기
+        /// 1. 골드 창 [하단] 에 + 수집 골드 그래픽 표기
 
 
         /// 2. 표기 사라지면 실제 플레이어 골드에 더해줌 
         earnGold = ListModel.Instance.supList[_id].currentEarnGold * 0.5d;
-        earnGold *= (int.Parse(ListModel.Instance.supList[_id].supporterLevel) + 1);
-        Debug.Log(name + _id + "번 인덱스 골드 "+ earnGold + " 수집!");
+        earnGold *= (double.Parse(ListModel.Instance.supList[_id].supporterLevel) + 1d);
+        Debug.Log(name + _id + "번 인덱스 유물 전  골드 "+ earnGold);
+        Debug.Log(name + _id + "번 인덱스 평균치   골드 "+ Math.Truncate(earnGold));
+        Debug.Log(name + _id + "번 인덱스 적용 골드 "+ earnGold * PlayerInventory.Soozip_Gold_Earned + " 수집!");
 
-        PlayerInventory.Money_Gold += earnGold * PlayerInventory.Soozip_Gold_Earned;
+        PlayerInventory.Money_Gold += Math.Truncate(earnGold) * PlayerInventory.Soozip_Gold_Earned;
         ///  골드 업적 카운트 올리기
-        ListModel.Instance.ALLlist_Update(3, earnGold * PlayerInventory.Soozip_Gold_Earned);
+        ListModel.Instance.ALLlist_Update(3, Math.Truncate(earnGold) * PlayerInventory.Soozip_Gold_Earned);
         /// 3. 그래픽 표기 끝나면 골드 창 Refresh
         MoneyManager.instance.DisplayGold();
 

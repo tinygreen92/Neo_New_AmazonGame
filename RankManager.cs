@@ -41,8 +41,8 @@ public class RankManager : MonoBehaviour
         if(PlayerInventory.RecentDistance > 1.0d)
         {
             nanoo.RecordRankDistance(Mathf.RoundToInt((float)PlayerInventory.RecentDistance)-1);
-            /// 랭킹 기록 시 플레이팹에 상태 저장
-            PlayerPrefsManager.instance.JObjectSave(true);
+            /// 랭킹 기록 시 로컬에 저장 한번 해주고
+            PlayerPrefsManager.instance.TEST_SaveJson();
         }
         ///// 로딩 뺑글이
         //SystemPopUp.instance.LoopLoadingImg();
@@ -53,6 +53,9 @@ public class RankManager : MonoBehaviour
 
     void InvoRank()
     {
+        /// 로컬 저장되면 플레이팹에도 저장 해줘
+        PlayerPrefsManager.instance.JObjectSave(true);
+        /// 랭킹 호출 ㄱ
         for (int i = 0; i < userRankBox.Length; i++)
         {
             userRankBox[i].GetChild(0).gameObject.SetActive(false);

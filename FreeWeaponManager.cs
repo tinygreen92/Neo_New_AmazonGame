@@ -14,6 +14,7 @@ public class FreeWeaponManager : MonoBehaviour
     [Space]
     public GameObject[] GuardImgs;
     public Text[] guardText;
+    public Text freeDiaText;
     // 조작 불가 타이머 스탬프
     private DateTime dailyEndTimestamp;
     private TimeSpan dailydRemaining;
@@ -49,6 +50,7 @@ public class FreeWeaponManager : MonoBehaviour
         }
         else // 카운트 0미만 이면 하루 지났다 / 아님 출석 안했다.
         {
+            GuardImgs[1].gameObject.SetActive(false);
             TimerText.text = "FREE";
             /// 업데이트 문 탈출
             isTimerOn = false;
@@ -81,6 +83,7 @@ public class FreeWeaponManager : MonoBehaviour
         }
         else /// 타이머 끝남.
         {
+            GuardImgs[1].gameObject.SetActive(false);
             // 타이머 숫자 숨겨준다.
             TimerText.text = "FREE";
         }
@@ -93,20 +96,12 @@ public class FreeWeaponManager : MonoBehaviour
     }
 
 
-
-
-
-
-
-
-
-
     #region <Rewarded Ads> 무료 무기 뽑기 광고
 
     /// <summary>
     /// 실제 광고를 봤다면 true
     /// </summary>
-    bool _AdsComp;
+    //bool _AdsComp;
     /// <summary>
     /// 클릭해서 웨폰 뽑기 들어가는 버튼
     /// </summary>
@@ -126,7 +121,6 @@ public class FreeWeaponManager : MonoBehaviour
         }
         else
         {
-            _AdsComp = false;
             /// 광고 없어도 ㅇㅋ
             //AdsDesc.text = LeanLocalization.GetTranslationText("Config_Ads_Nope");
             Invoke(nameof(AdsInvo), 0.5f);
@@ -142,7 +136,6 @@ public class FreeWeaponManager : MonoBehaviour
     // Event handler called when a rewarded ad has completed
     void AdsCompleated(RewardedAdNetwork network, AdPlacement location)
     {
-        _AdsComp = true;
         Invoke(nameof(AdsInvo), 0.5f);
         Advertising.RewardedAdCompleted -= AdsCompleated;
         Advertising.RewardedAdSkipped -= AdsSkipped;
@@ -166,17 +159,20 @@ public class FreeWeaponManager : MonoBehaviour
         SaveDateTime(dailyEndTimestamp);
         // 트리거 초히과
         isTimerOn = true;
-        _AdsComp = false;
         ///  광고 1회 시청 완료 카운트
         ListModel.Instance.ALLlist_Update(0, 1);
         /// 광고 시청 일일 업적
         ListModel.Instance.DAYlist_Update(7);
         /// 우편에 무기 뽑기권 지급
         PlayerPrefsManager.FreeWeaponCnt++;
-        nm.PostboxDailySend("weapon_coupon", 3);
+        //nm.PostboxDailySend("weapon_coupon", 3);
+        nm.CouponCheak("weapon_coupon", "3");
         /// 보상 팝업
         FreeDiaRewordPop.SetActive(true);
     }
+
+
+
 
     /// <summary>
     /// 무료 다이아 / 무료 뽑기 / 무료 포션 받기 하면 20초 대기.
@@ -203,9 +199,29 @@ public class FreeWeaponManager : MonoBehaviour
             guardText[0].text = currntTime.ToString();
             guardText[1].text = currntTime.ToString();
         }
+        guardText[0].text = "";
+        guardText[1].text = "";
 
-        GuardImgs[0].SetActive(false);
-        GuardImgs[1].SetActive(false);
+        /// 다이아 새로 고침
+        if (freeDiaText.text == "FREE")
+        {
+            GuardImgs[0].SetActive(false);
+        }
+        else
+        {
+            GuardImgs[0].SetActive(true);
+        }
+
+        /// 무기 뽑 새로 고침
+        if (TimerText.text == "FREE")
+        {
+            GuardImgs[1].SetActive(false);
+        }
+        else
+        {
+            GuardImgs[1].SetActive(true);
+        }
+
     }
 
 

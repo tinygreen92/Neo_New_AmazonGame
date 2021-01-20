@@ -19,25 +19,25 @@ public class ModelHandler : MonoBehaviour
     //public TextAsset _mine;            /// 광산 텍스트 파일
     public TextAsset _Swamp;            /// 숨겨진 늪지 텍스트 파일
 
-    public void zTA_Parser_Swamp()
-    {
-        ListModel.Instance.swampCaveData.Clear();
+    //public void zTA_Parser_Swamp()
+    //{
+    //    ListModel.Instance.swampCaveData.Clear();
 
-        string[] line = _Swamp.text.Substring(0, _Swamp.text.Length).Split('\n');
-        for (int i = 0; i < line.Length; i++)
-        {
-            string[] row = line[i].Split('\t');
+    //    string[] line = _Swamp.text.Substring(0, _Swamp.text.Length).Split('\n');
+    //    for (int i = 0; i < line.Length; i++)
+    //    {
+    //        string[] row = line[i].Split('\t');
 
-            ListModel.Instance.swampCaveData.Add(new SwampCave
-            {
-                stageLevel = float.Parse(row[0]),
-                monsterHP = float.Parse(row[1]),
-                rewordLeaf = float.Parse(row[2]),
-                rewordEnchant = float.Parse(row[3]),
-                killCount = row[4],
-            });
-        }
-    }
+    //        ListModel.Instance.swampCaveData.Add(new SwampCave
+    //        {
+    //            stageLevel = float.Parse(row[0]),
+    //            monsterHP = float.Parse(row[1]),
+    //            rewordLeaf = float.Parse(row[2]),
+    //            rewordEnchant = float.Parse(row[3]),
+    //            killCount = row[4],
+    //        });
+    //    }
+    //}
 
     private void Start()
     {

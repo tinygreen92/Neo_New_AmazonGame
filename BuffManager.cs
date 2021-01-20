@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using EasyMobile;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class BuffManager : MonoBehaviour
 {
+    public GameObject FreeBuffRewordPop;
+    [Header("- 버프 이펙트")]
     public GameObject[] BuffEffect;
     public PetManager pm;
     /// <summary>
@@ -11,11 +14,11 @@ public class BuffManager : MonoBehaviour
     /// </summary>
     [Header("- 회색 이미지 위에 씌울 칼라 이미지들")]
     public Image[] filedImgs;
+    public Text[] buffTimeText;
     /// <summary>
-    /// 상점에서 사는 버프 시간은 30분 고정이다.
+    /// 상점에서 사는 버프 시간은 30분 고정이다. -> 1시간으로 상향
     /// </summary>
-    private const float SHOP_BUFF_TIME = 1800.0f;
-    //private const float SHOP_BUFF_TIME = 30.0f;
+    private float SHOP_BUFF_TIME = 3600f;
     /// <summary>
     /// 버프 타이머 코루틴 8가지
     /// </summary>
@@ -31,7 +34,8 @@ public class BuffManager : MonoBehaviour
     {
         /// 버프
         if (buffTimer[_id] != null && _id > 3) return;
-
+        /// 상점 버프
+        SHOP_BUFF_TIME = 3600f;
         buffTimer[_id] = StartCoroutine(BuffTimerStart(_id));
     }
 
@@ -85,12 +89,15 @@ public class BuffManager : MonoBehaviour
             }
             /// 이미지 fill
             filedImgs[_id].fillAmount = (maxTime - time) / maxTime;
+            /// 타이머 텍스트 표기
+            buffTimeText[_id].text = (maxTime - time).ToString("F0");
 
             /// 종료 조건
             if (time >= maxTime)
             {
                 /// 버프 꺼줌
                 BuffOnOff(_id, false);
+                buffTimeText[_id].text = "";
                 break;
             }
         }
@@ -192,5 +199,95 @@ public class BuffManager : MonoBehaviour
 
         BuffEffect[indx].SetActive(false);
     }
+
+
+
+
+
+
+    #region <Rewarded Ads> 무료 버프 보기 광고
+
+
+    public void Ads_FreeBuffClicked()
+    {
+        PlayerPrefsManager.instance.TEST_SaveJson();
+        SystemPopUp.instance.LoopLoadingImg();
+        Invoke(nameof(InvoStopLoop), 5.0f);
+
+        if (Advertising.IsRewardedAdReady(RewardedAdNetwork.MoPub, AdPlacement.Default))
+        {
+            Advertising.RewardedAdCompleted += AdsCompleated;
+            Advertising.RewardedAdSkipped += AdsSkipped;
+            Advertising.ShowRewardedAd(RewardedAdNetwork.MoPub, AdPlacement.Default);
+        }
+        else
+        {
+            Invoke(nameof(AdsInvo), 0.5f);
+        }
+
+    }
+
+    void InvoStopLoop()
+    {
+        SystemPopUp.instance.StopLoopLoading();
+    }
+
+    // Event handler called when a rewarded ad has completed
+    void AdsCompleated(RewardedAdNetwork network, AdPlacement location)
+    {
+        Invoke(nameof(AdsInvo), 0.5f);
+        Advertising.RewardedAdCompleted -= AdsCompleated;
+        Advertising.RewardedAdSkipped -= AdsSkipped;
+    }
+
+    // Event handler called when a rewarded ad has been skipped
+    void AdsSkipped(RewardedAdNetwork network, AdPlacement location)
+    {
+        Advertising.RewardedAdCompleted -= AdsCompleated;
+        Advertising.RewardedAdSkipped -= AdsSkipped;
+        SystemPopUp.instance.StopLoopLoading();
+    }
+    /// <summary>
+    /// 보상 지급 메소드
+    /// </summary>
+    void AdsInvo()
+    {
+        SystemPopUp.instance.StopLoopLoading();
+        ///  광고 1회 시청 완료 카운트
+        ListModel.Instance.ALLlist_Update(0, 1);
+        /// 광고 시청 일일 업적
+        ListModel.Instance.DAYlist_Update(7);
+        /// 광고제거 구매 안했으면  버프 4종 돌아가
+        if (PlayerInventory.isSuperUser == 0)
+        {
+            SHOP_BUFF_TIME = 1200f;
+            /// 영구 버프일 경우는 빼주고
+            if (!PlayerInventory.isbuff_power_up) buffTimer[0] = StartCoroutine(BuffTimerStart(0));
+            if (!PlayerInventory.isbuff_attack_speed_up) buffTimer[1] = StartCoroutine(BuffTimerStart(1));
+            if (!PlayerInventory.isbuff_move_speed_up) buffTimer[2] = StartCoroutine(BuffTimerStart(2));
+            if (!PlayerInventory.isbuff_gold_earned_up) buffTimer[3] = StartCoroutine(BuffTimerStart(3));
+        }
+
+
+
+        /// 보상 팝업
+        FreeBuffRewordPop.SetActive(true);
+    }
+
+
+    #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

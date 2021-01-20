@@ -235,12 +235,17 @@ public class AmazonShopManager : MonoBehaviour
         ///
         switch (_index)
         {
-            case 0: nm.PostboxDailySend("L_box", 1); break;
-            case 1: nm.PostboxDailySend("S_box", 1); break;
+            //case 0: nm.PostboxDailySend("L_box", 1); break;
+            //case 1: nm.PostboxDailySend("S_box", 1); break;.
+
+            case 0: nm.CouponCheak("L_box", "1"); break;
+            case 1: nm.CouponCheak("S_box", "1"); break;
+
             //case 2: nm.PostboxDailySend("Crazy_dia", 1); break;
             //case 3: nm.PostboxDailySend("S_reinforce_box", 1); break;
             //case 4: nm.PostboxDailySend("Crazy_elixr", 1); break;
             //case 5: nm.PostboxDailySend("S_leaf_box", 1); break;
+
             /// 룬 뽑기 실행하면 리턴
             case 6: rm.GatchaRune(); gameObject.SetActive(false); return;
             default: return;
@@ -352,7 +357,7 @@ public class AmazonShopManager : MonoBehaviour
         /// 광고 시청 일일 업적
         ListModel.Instance.DAYlist_Update(7);
         /// 아마존 포션 추가
-        PlayerInventory.SetTicketCount("S_leaf_box", tmpReword);
+        nm.CouponCheak("S_leaf_box", "tmpReword");
         _AdsComp = false;
         /// 결정 조각 팝업 
         PopUpManager.instance.ShowGetPop(10, tmpReword.ToString());

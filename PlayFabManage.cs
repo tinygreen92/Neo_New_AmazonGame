@@ -63,7 +63,6 @@ public class PlayFabManage : MonoBehaviour
         // ------------- 테스트 --------------------
         /// 아마존 게임내 공통 데이터 호출  - 버전 코드 불러오기용 테스트
         ClientGetTitleData();
-
         /// 서버 인벤토리 열어서 유료화폐 보여 주기
         //GetVirtualCurrency("");
         // ------------- 테스트 --------------------
@@ -87,8 +86,6 @@ public class PlayFabManage : MonoBehaviour
         }
         else
         {
-            /// 플레이어 개인 데이터 호출
-            //GetUserData();
             /// 플레이팹 로딩 완료
             PlayerPrefsManager.isLoadingComp = true;
             /// 닉네임 설정되어 있네? 바로 접속
@@ -193,15 +190,16 @@ public class PlayFabManage : MonoBehaviour
                 /// 데이터 호출 성공시.
                 else
                 {
-                    //Debug.LogWarning("CurrentVersion: " + result.Data["CurrentVersion"]);
-                    /// 최신 버전이 아니면 팝업 띄워준다.
-                    if (Application.version != result.Data["CurrentVersion"])
+                    /// 최신 버전이면 패스.
+                    if (Application.version == result.Data["CurrentVersion"] || Application.version == result.Data["TEST_Mode"])
                     {
-                        PopUpManager.instance.ShowPopUP(31);
+                        PlayerPrefsManager.isMissingFive = true;
+                        /// 공지사항 넣어주고
+                        PlayerPrefsManager.instance.CH_NOTICE = result.Data["ChatNotice"];
                     }
                     else
                     {
-                        PlayerPrefsManager.isMissingFive = true;
+                        PopUpManager.instance.ShowPopUP(31);
                     }
 
                 }
@@ -213,6 +211,33 @@ public class PlayFabManage : MonoBehaviour
         );
     }
 
+
+    /// <summary>
+    /// 로그인 할때 버전 체크 말고 채팅창 공지사항 불러올때
+    /// 포톤에서 사용해야 하나?
+    /// </summary>
+    /// <param name="_Func"></param>
+    public void ClientGetTitleData(string _Func)
+    {
+        PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(),
+            result => {
+                /// 예외처리
+                if (result.Data == null || !result.Data.ContainsKey("ChatNotice"))
+                {
+                    Debug.LogWarning("No ChatNotice");
+                }
+                /// 데이터 호출 성공시.
+                else
+                {
+                    PlayerPrefsManager.instance.CH_NOTICE = result.Data["ChatNotice"];
+                }
+            },
+            error => {
+                Debug.Log("Got error getting titleData:");
+                Debug.Log(error.GenerateErrorReport());
+            }
+        );
+    }
 
 
 

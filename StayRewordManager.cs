@@ -159,12 +159,19 @@ public class StayRewordManager : MonoBehaviour
         int reInt = ObscuredPrefs.GetInt("rewordCharge", 0);
         switch (reInt)
         {
-            case 0: nm.PostboxItemSend("E_box", 1, ""); break;
-            case 1: nm.PostboxItemSend("D_box", 1, ""); break;
-            case 2: nm.PostboxItemSend("C_box", 1, ""); break;
-            case 3: nm.PostboxItemSend("B_box", 1, ""); break;
-            case 4: nm.PostboxItemSend("A_box", 1, ""); break;
-            //case 5: nm.PostboxItemSend("S_box", 1, ""); break;
+            //case 0: nm.PostboxItemSend("E_box", 1, ""); break;
+            //case 1: nm.PostboxItemSend("D_box", 1, ""); break;
+            //case 2: nm.PostboxItemSend("C_box", 1, ""); break;
+            //case 3: nm.PostboxItemSend("B_box", 1, ""); break;
+            //case 4: nm.PostboxItemSend("A_box", 1, ""); break;
+
+            case 0: nm.CouponCheak("E_box", "1"); break;
+            case 1: nm.CouponCheak("D_box", "1"); break;
+            case 2: nm.CouponCheak("C_box", "1"); break;
+            case 3: nm.CouponCheak("B_box", "1"); break;
+            case 4: nm.CouponCheak("A_box", "1"); break;
+
+
             default: return;
         }
         /// 보상 받았으면 접속 보상 +1스택
@@ -193,13 +200,15 @@ public class StayRewordManager : MonoBehaviour
             if (!_AdsComp)
             {
                 getItemAmount.text = "x10";
-                nm.PostboxItemSend("crystal", 10, "");
+                //nm.PostboxItemSend("crystal", 10, "");
+                nm.CouponCheak("crystal", "10");
             }
             /// 광고 보았나?
             else
             {
                 getItemAmount.text = "x20";
-                nm.PostboxItemSend("crystal", 20, "");
+                //nm.PostboxItemSend("crystal", 20, "");
+                nm.CouponCheak("crystal", "20");
             }
 
             /// 보상 더 남았나?
@@ -309,12 +318,18 @@ public class StayRewordManager : MonoBehaviour
         /// 해당 스택 보상 지급
         switch (reInt)
         {
-            case 0: nm.PostboxItemSend("E_box", 2, ""); break;
-            case 1: nm.PostboxItemSend("D_box", 2, ""); break;
-            case 2: nm.PostboxItemSend("C_box", 2, ""); break;
-            case 3: nm.PostboxItemSend("B_box", 2, ""); break;
-            case 4: nm.PostboxItemSend("A_box", 2, ""); break;
-            //case 5: nm.PostboxItemSend("S_box", 2, ""); break;
+            //case 0: nm.PostboxItemSend("E_box", 2, ""); break;
+            //case 1: nm.PostboxItemSend("D_box", 2, ""); break;
+            //case 2: nm.PostboxItemSend("C_box", 2, ""); break;
+            //case 3: nm.PostboxItemSend("B_box", 2, ""); break;
+            //case 4: nm.PostboxItemSend("A_box", 2, ""); break;
+
+            case 0: nm.CouponCheak("E_box", "2"); break;
+            case 1: nm.CouponCheak("D_box", "2"); break;
+            case 2: nm.CouponCheak("C_box", "2"); break;
+            case 3: nm.CouponCheak("B_box", "2"); break;
+            case 4: nm.CouponCheak("A_box", "2"); break;
+
             default: return;
         }
         /// 보상 받았으면 접속 보상 +1스택

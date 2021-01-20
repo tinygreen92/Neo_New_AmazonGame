@@ -386,6 +386,11 @@ public class NanooManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 팝업 없이 바로 우편함 들어가는 코드
+    /// </summary>
+    /// <param name="_code"></param>
+    /// <param name="_amount"></param>
     public void PostboxDailySend(string _code, int _amount)
     {
         plugin.PostboxItemSend(_code, _amount, 365, "", (state, message, rawData, dictionary) => {
@@ -433,11 +438,11 @@ public class NanooManager : MonoBehaviour
     }
 
     /// <summary>
-    /// PostboxItemUse에 서 호출해서 습득
+    /// PostboxItemUse에 서 호출해서 인벤토리로 습득
     /// </summary>
     /// <param name="_code"></param>
     /// <param name="_count"></param>
-    void CouponCheak(string _code, string _count)
+    public void CouponCheak(string _code, string _count)
     {
         switch (_code)
         {
@@ -547,7 +552,8 @@ public class NanooManager : MonoBehaviour
 
             default: break;
         }
-        ObscuredPrefs.Save();
+        /// 로컬 저장
+        PlayerPrefsManager.instance.TEST_SaveJson();
     }
 
     /// <summary>
@@ -715,7 +721,7 @@ public class NanooManager : MonoBehaviour
         else
         {
             System.DateTime origin = new System.DateTime(1970, 1, 1, 9, 0, 0, 0);
-            Debug.LogWarning("ConvertFromUnixTimestamp : " + origin.AddSeconds(double.Parse(timestamp)));
+            Debug.LogError("나누 서버 타임 : " + origin.AddSeconds(double.Parse(timestamp)));
         }
     }
 

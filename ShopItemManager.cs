@@ -141,13 +141,26 @@ public class ShopItemManager : MonoBehaviour
         if (LeanLocalization.CurrentLanguage == "Korean")
         {
             NameBox.text = targetList[_count].korDesc;
-            BotDescBox.text = targetList[_count].korTailDesc;
+
+            switch (_count)
+            {
+                case 0: BotDescBox.text = LeanLocalization.GetTranslationText("ShopInfo_Spec_Desc01"); break;
+                case 1: BotDescBox.text = LeanLocalization.GetTranslationText("ShopInfo_Spec_Desc02"); break;
+                case 2: BotDescBox.text = LeanLocalization.GetTranslationText("ShopInfo_Spec_Desc03"); break;
+                case 3: BotDescBox.text = LeanLocalization.GetTranslationText("ShopInfo_Spec_Desc04"); break;
+
+                default: BotDescBox.text = targetList[_count].korTailDesc; break;
+            }
+
             if (PlayerPrefsManager.storeIndex == 10)
             {
                 System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("ko-KR", false).NumberFormat;
                 KRWBox.text = System.Convert.ToInt64(targetList[_count].korPrice).ToString("C", numberFormat);
             }
-            else PriceBox.text = targetList[_count].korPrice;
+            else
+            {
+                PriceBox.text = targetList[_count].korPrice;
+            }
         }
         else
         {
@@ -158,7 +171,10 @@ public class ShopItemManager : MonoBehaviour
                 System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
                 KRWBox.text = System.Convert.ToInt64(targetList[_count].engPrice).ToString("C", numberFormat);
             }
-            else PriceBox.text = targetList[_count].engPrice;
+            else
+            {
+                PriceBox.text = targetList[_count].engPrice;
+            }
         }
 
     }

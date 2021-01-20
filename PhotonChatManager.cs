@@ -1,10 +1,16 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Chat;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PhotonChatManager : MonoBehaviour, IChatClientListener
 {
+    [Header("-채팅창 업글 1.0.5")]
+    public Text noticeText;
+    public GameObject special_L;
+    public GameObject special_R;
+
     [Header("-확장된 채팅 패널")]
     public GameObject chatInnerPanel;
     [Header("-바깥 채팅 박스 텍스트")]
@@ -17,7 +23,9 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
     [Header("-한계치 설정")]
     public int HistoryLengthToFetch; // set in inspector. Up to a certain degree, previously sent messages can be fetched for context
     public int MaxLengthLog;
-
+    /// <summary>
+    /// 채팅 말 풍선이 붙을 오브젝트
+    /// </summary>
     public Transform ChatContent;
 
     public GameObject inChatBox_L;
@@ -51,7 +59,6 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
             ArrowIcon.sprite = ArroIcons[1];
             chatInnerPanel.SetActive(true);
             Invoke(nameof(ScrollReset), 0.02f);
-
         }
     }
 
@@ -125,8 +132,25 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
         }
     }
 
+
+    private TouchScreenKeyboard keyboard;
+    string inputGoldText = "";
+
     void Update()
     {
+        if (TouchScreenKeyboard.visible == false && keyboard != null)
+        {
+            /// 가상 키보드에서 확인 버튼을 눌렀을때
+            if (keyboard.status == TouchScreenKeyboard.Status.Done)
+            {
+                SendChatMessage(InputMesseageBox.text);
+                InputMesseageBox.Select();
+                InputMesseageBox.text = "";
+                keyboard = null;
+            }
+        }
+
+
         if (chatClient != null)
         {
             chatClient.Service(); // make sure to call this regularly! it limits effort internally, so calling often is ok!
@@ -141,6 +165,12 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
     {
         this.chatClient.Disconnect();
         chatClient = null;
+        /// 채팅 지워!
+        int mc = ChatContent.childCount;
+        for (int i = 0; i < mc; i++)
+        {
+            Lean.Pool.LeanPool.Despawn(innerContent.GetChild(0));
+        }
     }
     public void ExReconnect()
     {
@@ -152,12 +182,14 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
     /// </summary>
     public void OnEnterSend()
     {
-        if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
-        {
-            this.SendChatMessage(InputMesseageBox.text);
-            InputMesseageBox.Select();
-            InputMesseageBox.text = "";
-        }
+        keyboard = TouchScreenKeyboard.Open(inputGoldText, TouchScreenKeyboardType.Default);
+
+        //if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
+        //{
+        //    SendChatMessage(InputMesseageBox.text);
+        //    InputMesseageBox.Select();
+        //    InputMesseageBox.text = "";
+        //}
     }
 
     /// <summary>
@@ -209,14 +241,35 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
             // 내가 보낸 메세지면 오른쪽에 표시
             if (UserName == senders[i])
             {
-                GameObject inCB = Lean.Pool.LeanPool.Spawn(inChatBox_R, ChatContent);
-                inCB.GetComponent<CallChatBox>().SpawnThisObject(senders[i], messages[i].ToString());
+                /// 특별 메시지
+                if (senders[i].Contains("★"))
+                {
+                    GameObject inCB = Lean.Pool.LeanPool.Spawn(special_R, ChatContent);
+                    inCB.GetComponent<CallChatBox>().SpawnThisObject(senders[i], messages[i].ToString());
+                }
+                else
+                {
+                    GameObject inCB = Lean.Pool.LeanPool.Spawn(inChatBox_R, ChatContent);
+                    inCB.GetComponent<CallChatBox>().SpawnThisObject(senders[i], messages[i].ToString());
+                }
+
             }
             else
             {
-                // 다른 사람 메세지는 왼쪽에 표시
-                GameObject inCB = Lean.Pool.LeanPool.Spawn(inChatBox_L, ChatContent);
-                inCB.GetComponent<CallChatBox>().SpawnThisObject(senders[i], messages[i].ToString());
+                /// 특별 메시지
+                if (senders[i].Contains("★"))
+                {
+                    GameObject inCB = Lean.Pool.LeanPool.Spawn(special_L, ChatContent);
+                    inCB.GetComponent<CallChatBox>().SpawnThisObject(senders[i], messages[i].ToString());
+                }
+                else
+                {
+                    // 다른 사람 메세지는 왼쪽에 표시
+                    GameObject inCB = Lean.Pool.LeanPool.Spawn(inChatBox_L, ChatContent);
+                    inCB.GetComponent<CallChatBox>().SpawnThisObject(senders[i], messages[i].ToString());
+                }
+
+
             }
         }
 
