@@ -346,6 +346,9 @@ public class PlayerPrefsManager : MonoBehaviour
         ObscuredPrefs.SetInt("FreeWeaponCnt", FreeWeaponCnt);
 
         ///  210117 업데이트 추가
+        ///  210117 업데이트 추가
+        ///  210117 업데이트 추가
+        ///  
         ObscuredPrefs.SetInt("SwampyEnterCnt", SwampyEnterCnt);
         ObscuredPrefs.SetInt("SwampySkipCnt", SwampySkipCnt);
         ObscuredPrefs.SetInt("update210117", 963);
@@ -353,6 +356,9 @@ public class PlayerPrefsManager : MonoBehaviour
 
         /// 리스트를 JSON 으로 로컬 저장
         JObjectSave(false);
+
+        /// 로딩바 올려주는 걸 허락한다.
+        isJObjectLoad = true;
 
         /// 아직 오프라인 체크 안함
         if (!isCheckOffline)
@@ -370,6 +376,8 @@ public class PlayerPrefsManager : MonoBehaviour
 
         ObscuredPrefs.Save();
         Debug.LogWarning("세이브 데이터 타임 " + tmp);
+
+
     }
 
 
@@ -681,11 +689,11 @@ public class PlayerPrefsManager : MonoBehaviour
     /// <summary>
     /// 파일명으로 접근해서 해당 리스트 로드 true = 는 첫실행 초기화
     /// </summary>
-    /// <param name="dir">나중에 스위치로 전환해야할 때 입력 받으</param>
+    /// <param name="_isInit">나중에 스위치로 전환해야할 때 입력 받으</param>
     public void JObjectLoad(bool _isInit)
     {
         string loadstring = "";
-        /// 늪지 밸패 210117
+        /// 늪지 밸패 210117 ture/false 양쪽다 쓴다. (수정X)
         string loadstringSwapy = tuna.text;
         /// 첫시작 파일은 리소시즈
         if (_isInit)
@@ -810,18 +818,19 @@ public class PlayerPrefsManager : MonoBehaviour
             if (!ObscuredPrefs.HasKey("update210117"))
             {
                 /// 늪지 기록 초기화.
+                ListModel.Instance.swampCaveData.Clear();
                 ListModel.Instance.swampCaveData = JsonConvert.DeserializeObject<List<SwampCave>>(AESDecrypt128(loadstringSwapy));
                
                 /// 초반 초기화 완료 됐을때 키 초기화
                 ObscuredPrefs.SetInt("update210117", 956);
                 ObscuredPrefs.Save();
             }
-
+            /// 로딩바 올려주는 걸 허락한다.
+            isJObjectLoad = true;
         }
 
 
-        /// 로딩바 올려주는 걸 허락한다.
-        isJObjectLoad = true;
+
     }
 
 
@@ -941,9 +950,10 @@ public class PlayerPrefsManager : MonoBehaviour
         isTutoAllClear = ListModel.Instance.nonSaveJsonMoney[0].isTutoAllClear != 0 ? true : false;
 
         /// 210115 업데이트 추가
+        /// 210115 업데이트 추가
+        /// 210115 업데이트 추가
         if (ListModel.Instance.nonSaveJsonMoney.Count > 1)
         {
-            Debug.LogError("210115 업데이트 추가");
             ObscuredPrefs.SetInt("DailyCount_Cheak", int.Parse(ListModel.Instance.nonSaveJsonMoney[1].RecentDistance));
 
             ObscuredPrefs.SetInt("isDailyCheak", ListModel.Instance.nonSaveJsonMoney[1].Money_Gold == "TRUE" ? 505 : 0);
@@ -952,23 +962,24 @@ public class PlayerPrefsManager : MonoBehaviour
             ObscuredPrefs.SetInt("FreeDiaCnt", int.Parse(ListModel.Instance.nonSaveJsonMoney[1].AmazonStoneCount));
             ObscuredPrefs.SetInt("FreeWeaponCnt", int.Parse(ListModel.Instance.nonSaveJsonMoney[1].CurrentAmaLV));
 
-            /// 210117 업데이트 추가
-            if (ListModel.Instance.nonSaveJsonMoney[1].box_Coupon == null) ListModel.Instance.nonSaveJsonMoney[1].box_Coupon = "5";
-            SwampyEnterCnt =  int.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_Coupon);
-            if (ListModel.Instance.nonSaveJsonMoney[1].box_E == null) ListModel.Instance.nonSaveJsonMoney[1].box_E = "5";
-            SwampySkipCnt =  int.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_E);
 
-            if (ListModel.Instance.nonSaveJsonMoney[1].box_D == null) ListModel.Instance.nonSaveJsonMoney[1].box_D = "0";
-            ObscuredPrefs.SetInt("update210117", int.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_D));
+            /// 210117 업데이트 추가 예외 처리
+            /// 210117 업데이트 추가 예외 처리
+            /// 210117 업데이트 추가 예외 처리
+            /// 
+            if (ListModel.Instance.nonSaveJsonMoney[1].box_Coupon == null) SwampyEnterCnt = 5;
+            if (ListModel.Instance.nonSaveJsonMoney[1].box_E == null) SwampySkipCnt = 5;
+            /// update210117 스킵 위해 초기화
+            if (ListModel.Instance.nonSaveJsonMoney[1].box_D == null) ObscuredPrefs.SetInt("update210117", 117);
             ObscuredPrefs.Save();
-
-
-            Debug.LogError("특별 서버 불러오기 " + SwampyEnterCnt + " 장");
         }
+
+
+        /// 플래이팹 허락
+        isLoadingComp = true;
 
         /// 로딩바 올려주는 걸 허락한다.
         isJObjectLoad = true;
-
         /// 리스트를 Prefs 로 저장
         TEST_SaveJson();
     }

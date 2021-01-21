@@ -103,6 +103,12 @@ public class FakeLoading : MonoBehaviour
         }
 
 
+        while (!PlayerPrefsManager.isNickNameComp)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+
         while (!PlayerPrefsManager.isJObjectLoad)
         {
             yield return new WaitForFixedUpdate();
@@ -157,11 +163,6 @@ public class FakeLoading : MonoBehaviour
         }
 
 
-
-
-
-
-
         /// 튜토리얼 새로고침
         tm.InitTutorial();
 
@@ -186,18 +187,14 @@ public class FakeLoading : MonoBehaviour
             yield return null;
         }
 
-        while (!PlayerPrefsManager.isNickNameComp)
-        {
-            yield return new WaitForFixedUpdate();
-        }
 
-        /// 데이터 불러오기 재실행이면 우편함 날려줌
-        if (ObscuredPrefs.GetInt("isSeverDataLoad") != 0)
-        {
-            GameObject.Find("NanooManager").GetComponent<NanooManager>().PostboxDelete();
-            GameObject.Find("NanooManager").GetComponent<NanooManager>().PostboxRedDot();
-            Debug.LogError("우편함 날리기");
-        }
+        ///// 데이터 불러오기 재실행이면 우편함 날려줌
+        //if (ObscuredPrefs.GetInt("isSeverDataLoad") != 0)
+        //{
+        //    GameObject.Find("NanooManager").GetComponent<NanooManager>().PostboxDelete();
+        //    GameObject.Find("NanooManager").GetComponent<NanooManager>().PostboxRedDot();
+        //    Debug.LogError("우편함 날리기");
+        //}
 
         /// 페이크 로딩창 끄기.
         gameObject.SetActive(false);

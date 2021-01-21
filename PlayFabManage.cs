@@ -451,8 +451,8 @@ public class PlayFabManage : MonoBehaviour
         ListModel.Instance.nonSaveJsonMoney[1].box_Coupon = PlayerPrefsManager.SwampyEnterCnt.ToString();
         ///[1].SwampySkipCnt
         ListModel.Instance.nonSaveJsonMoney[1].box_E = PlayerPrefsManager.SwampySkipCnt.ToString();
-        ///[1].Update210117
-        ListModel.Instance.nonSaveJsonMoney[1].box_D = ObscuredPrefs.GetInt("update210117").ToString();
+        ///[1].update210117 (안쓰는거 같은데)
+        ListModel.Instance.nonSaveJsonMoney[1].box_D = "0";
         //ListModel.Instance.nonSaveJsonMoney[1].box_C = PlayerInventory.box_C.ToString();
         //ListModel.Instance.nonSaveJsonMoney[1].box_B = PlayerInventory.box_B.ToString();
         //ListModel.Instance.nonSaveJsonMoney[1].box_A = PlayerInventory.box_A.ToString();
@@ -617,8 +617,8 @@ public class PlayFabManage : MonoBehaviour
 
                     //Debug.LogError("SECTOR_9 (_______): " + result.Data["SECTOR_9"].Value);
 
-                    /// 파일에서 데이터 불러와서 리스트에 대입
-                    PlayerPrefsManager.isLoadingComp = true;
+                    ///// 파일에서 데이터 불러와서 리스트에 대입
+                    //PlayerPrefsManager.isLoadingComp = true;
                     /// 초반 초기화 완료 됐을때 키 초기화 [로컬에만 존재]
                     ObscuredPrefs.SetInt("isSeverDataLoad", 609);
                     ObscuredPrefs.SetInt("tunamayo", 22);

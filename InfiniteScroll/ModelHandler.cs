@@ -52,6 +52,9 @@ public class ModelHandler : MonoBehaviour
         /// 완전 초기화 후에 쌔삥 데이터로 갈아 끼워줌
         if (!ObscuredPrefs.HasKey("tunamayo"))
         {
+            /// update210114 적용
+            ObscuredPrefs.SetInt("update210114", 214);
+            ObscuredPrefs.Save();
             /// 파일에서 데이터 불러와서 리스트에 대입
             PlayerPrefsManager.instance.JObjectLoad(true);
             return;
