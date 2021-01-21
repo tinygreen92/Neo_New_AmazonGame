@@ -58,8 +58,6 @@ public class ModelHandler : MonoBehaviour
         }
 
 
-
-
         ///update210114
         ///----------------------------------------------update210114---------------------------------------
         ///update210114
@@ -67,7 +65,7 @@ public class ModelHandler : MonoBehaviour
         {
             /// 초반 초기화 완료 됐을때 키 초기화
             ObscuredPrefs.SetInt("update210114", 214);
-
+            ObscuredPrefs.Save();
             string loadstring = File.ReadAllText(Application.persistentDataPath + "/_data_"); // string을 읽음 
             /// 깨진 파일이다.
             if (loadstring =="0ploWsGdZyF6rPHLBv8vIhpAa2lAnZAKThEqtD0iKfPCIfm2YG2CyfQ8lvKbXZQZhQCwBIQC+rLh3uVkTj2m+kdPxcx83eK+vvpRII+r0oIPeYbY12vSkQiV96LtybtNptckySL/rMdSuWQQal3Z0w==")

@@ -67,7 +67,6 @@ public class FakeLoading : MonoBehaviour
         StartManager.instance.headChatTxt.text = "";
         StartManager.instance.headChatTxt.DOText(StartManager.instance.NOTICE, 1f);
 
-        Debug.LogError("인트 파서 됨? " + int.Parse("0"));
         //
         while (currentTime < 1f)
         {

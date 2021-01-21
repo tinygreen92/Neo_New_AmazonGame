@@ -348,10 +348,7 @@ public class PlayerPrefsManager : MonoBehaviour
         ///  210117 업데이트 추가
         ObscuredPrefs.SetInt("SwampyEnterCnt", SwampyEnterCnt);
         ObscuredPrefs.SetInt("SwampySkipCnt", SwampySkipCnt);
-
         ObscuredPrefs.SetInt("update210117", 963);
-
-
         ObscuredPrefs.Save();
 
         /// 리스트를 JSON 으로 로컬 저장
@@ -380,10 +377,6 @@ public class PlayerPrefsManager : MonoBehaviour
 
 
 
-
-
-
-
     /// <summary>
     /// TEST 용 황금상자 확률 올리기
     /// </summary>
@@ -398,7 +391,7 @@ public class PlayerPrefsManager : MonoBehaviour
 
     public void TEST_Distance()
     {
-        PlayerInventory.RecentDistance += 1000.0d;
+        PlayerInventory.RecentDistance += 100.0d;
     }
 
 
@@ -686,7 +679,7 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 파일명으로 접근해서 해당 리스트 로드
+    /// 파일명으로 접근해서 해당 리스트 로드 true = 는 첫실행 초기화
     /// </summary>
     /// <param name="dir">나중에 스위치로 전환해야할 때 입력 받으</param>
     public void JObjectLoad(bool _isInit)
@@ -783,9 +776,6 @@ public class PlayerPrefsManager : MonoBehaviour
             }
         }
 
-        /// 로딩바 올려주는 걸 허락한다.
-        isJObjectLoad = true;
-
         /// 초창기 초기화 후 호출할때만 데이터 세이브
         if (_isInit)
         {
@@ -828,6 +818,10 @@ public class PlayerPrefsManager : MonoBehaviour
             }
 
         }
+
+
+        /// 로딩바 올려주는 걸 허락한다.
+        isJObjectLoad = true;
     }
 
 
@@ -914,12 +908,11 @@ public class PlayerPrefsManager : MonoBehaviour
             }
         }
 
-        /// 로딩바 올려주는 걸 허락한다.
-        isJObjectLoad = true;
+
 
 
         /// 골드와 친구들 진짜 로딩
-        PlayerInventory.RecentDistance = double.Parse(ListModel.Instance.nonSaveJsonMoney[0].RecentDistance);
+        //PlayerInventory.RecentDistance = double.Parse(ListModel.Instance.nonSaveJsonMoney[0].RecentDistance);
         PlayerInventory.Money_Gold = double.Parse(ListModel.Instance.nonSaveJsonMoney[0].Money_Gold);
         PlayerInventory.Money_Elixir = long.Parse(ListModel.Instance.nonSaveJsonMoney[0].Money_Elixir);
 
@@ -960,9 +953,9 @@ public class PlayerPrefsManager : MonoBehaviour
             ObscuredPrefs.SetInt("FreeWeaponCnt", int.Parse(ListModel.Instance.nonSaveJsonMoney[1].CurrentAmaLV));
 
             /// 210117 업데이트 추가
-            if (ListModel.Instance.nonSaveJsonMoney[1].box_Coupon == null) ListModel.Instance.nonSaveJsonMoney[1].box_Coupon = "0";
+            if (ListModel.Instance.nonSaveJsonMoney[1].box_Coupon == null) ListModel.Instance.nonSaveJsonMoney[1].box_Coupon = "5";
             SwampyEnterCnt =  int.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_Coupon);
-            if (ListModel.Instance.nonSaveJsonMoney[1].box_E == null) ListModel.Instance.nonSaveJsonMoney[1].box_E = "0";
+            if (ListModel.Instance.nonSaveJsonMoney[1].box_E == null) ListModel.Instance.nonSaveJsonMoney[1].box_E = "5";
             SwampySkipCnt =  int.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_E);
 
             if (ListModel.Instance.nonSaveJsonMoney[1].box_D == null) ListModel.Instance.nonSaveJsonMoney[1].box_D = "0";
@@ -973,6 +966,8 @@ public class PlayerPrefsManager : MonoBehaviour
             Debug.LogError("특별 서버 불러오기 " + SwampyEnterCnt + " 장");
         }
 
+        /// 로딩바 올려주는 걸 허락한다.
+        isJObjectLoad = true;
 
         /// 리스트를 Prefs 로 저장
         TEST_SaveJson();

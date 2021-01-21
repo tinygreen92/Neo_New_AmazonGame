@@ -357,7 +357,7 @@ public class AmazonShopManager : MonoBehaviour
         /// 광고 시청 일일 업적
         ListModel.Instance.DAYlist_Update(7);
         /// 아마존 포션 추가
-        nm.CouponCheak("S_leaf_box", "tmpReword");
+        nm.CouponCheak("S_leaf_box", tmpReword.ToString());
         _AdsComp = false;
         /// 결정 조각 팝업 
         PopUpManager.instance.ShowGetPop(10, tmpReword.ToString());

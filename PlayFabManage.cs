@@ -32,6 +32,27 @@ public class PlayFabManage : MonoBehaviour
     private string myDisplayName;           // GPGSManager.GetLocalUserName()
 
 
+    //public void UpdateUserReadOnlyData()
+    //{
+    //    PlayFabServerAPI.UpdateUserReadOnlyData(new UpdateUserDataRequest()
+    //    {
+    //        PlayFabId = "user PlayFabId here - obtained from any successful LoginResult",
+    //        Data = new Dictionary<string, string>() {
+    //        {"Father", "Fred"},
+    //        {"Mother", "Alice"},
+    //        {"Sister", "Lucy"},
+    //        {"Brother", "Doug"}
+    //    },
+    //        Permission = UserDataPermission.Public
+    //    },
+    //    result => Debug.Log("Set read-only user data successful"),
+    //    error => {
+    //        Debug.Log("Got error updating read-only user data:");
+    //        Debug.Log(error.GenerateErrorReport());
+    //    });
+    //}
+
+
     #region <플레이팹 로그인 관련>
 
     // Start is called before the first frame update
@@ -379,7 +400,7 @@ public class PlayFabManage : MonoBehaviour
     /// </summary>
     void SetUserData()
     {
-        ListModel.Instance.nonSaveJsonMoney[0].RecentDistance = PlayerInventory.RecentDistance.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[0].RecentDistance = PlayerInventory.RecentDistance.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].Money_Gold = PlayerInventory.Money_Gold.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].Money_Elixir = PlayerInventory.Money_Elixir.ToString();
 
@@ -577,7 +598,7 @@ public class PlayFabManage : MonoBehaviour
                     tryResult = 0;
                     Debug.LogError("SECTOR_3 (Money_EnchantStone): " + result.Data["SECTOR_3"].Value);
                     if(long.TryParse(result.Data["SECTOR_3"].Value, out tryResult)) PlayerInventory.Money_EnchantStone = tryResult;
-                    else PlayerInventory.Money_Leaf = 0;
+                    else PlayerInventory.Money_EnchantStone = 0;
                     tryResult = 0;
 
                     ///---------------------------------------------------------------------------------------

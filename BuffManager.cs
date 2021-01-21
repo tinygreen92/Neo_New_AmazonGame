@@ -89,15 +89,12 @@ public class BuffManager : MonoBehaviour
             }
             /// 이미지 fill
             filedImgs[_id].fillAmount = (maxTime - time) / maxTime;
-            /// 타이머 텍스트 표기
-            buffTimeText[_id].text = (maxTime - time).ToString("F0");
 
             /// 종료 조건
             if (time >= maxTime)
             {
                 /// 버프 꺼줌
                 BuffOnOff(_id, false);
-                buffTimeText[_id].text = "";
                 break;
             }
         }
@@ -114,9 +111,12 @@ public class BuffManager : MonoBehaviour
 
                 time += Time.deltaTime;
                 cooltime = (ListModel.Instance.petList[_id - 3].coolTime - (PlayerInventory.Pet_lv(_id - 3) * 3));
+                /// 쿨타임 텍스트 표기
+                buffTimeText[_id].text = (cooltime - time).ToString("F0");
                 /// 탈출 조건
                 if (time >= cooltime)
                 {
+                    buffTimeText[_id].text = "";
                     break;
                 }
             }

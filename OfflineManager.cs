@@ -89,6 +89,7 @@ public class OfflineManager : MonoBehaviour
         if (PlayerInventory.RecentDistance < 1.0d || ObscuredPrefs.GetInt("isSeverDataLoad") != 0)
         {
             ObscuredPrefs.SetInt("isSeverDataLoad", 0);
+            ObscuredPrefs.Save();
             PlayerPrefsManager.isGetOfflineReword = true;
             return;
         }

@@ -44,8 +44,8 @@ public class RankManager : MonoBehaviour
             /// 랭킹 기록 시 로컬에 저장 한번 해주고
             PlayerPrefsManager.instance.TEST_SaveJson();
         }
-        ///// 로딩 뺑글이
-        //SystemPopUp.instance.LoopLoadingImg();
+        /// 로딩 뺑글이
+        SystemPopUp.instance.LoopLoadingImg();
         /// 지연 호출
         Invoke(nameof(InvoRank), 1.0f);
 

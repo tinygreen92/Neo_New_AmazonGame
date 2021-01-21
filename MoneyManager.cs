@@ -147,18 +147,6 @@ public class MoneyManager : MonoBehaviour
     //}
 
 
-    public void HyojungMoney()
-    {
-        PlayerInventory.RecentDistance = 1982;
-        PlayerInventory.Money_Dia = 1160;
-        PlayerInventory.Money_Gold = 716156488598053;
-        PlayerInventory.Money_Leaf = 114371;
-        PlayerInventory.Money_EnchantStone = 67466;
-        PlayerInventory.Money_AmazonCoin = 65;
-    }
-
-
-
     /// <summary>
     /// 올 머니에 붙어서 재화 다 올려줘
     /// </summary>

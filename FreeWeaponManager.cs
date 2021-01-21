@@ -173,14 +173,28 @@ public class FreeWeaponManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// 무료 버프 받기
+    /// </summary>
+    public void ShowBuffPopUP()
+    {
+        if (GuardImgs[2].activeSelf)
+        {
+            return;
+        }
+        /// 타이머 안돌면  팝업
+        PopUpManager.instance.ShowPopUP(32);
+    }
+
 
     /// <summary>
-    /// 무료 다이아 / 무료 뽑기 / 무료 포션 받기 하면 20초 대기.
+    /// 무료 다이아 / 무료 뽑기 / 무료 버프 받기 하면 20초 대기.
     /// </summary>
     public void AdsHolding20s()
     {
         GuardImgs[0].SetActive(true);
         GuardImgs[1].SetActive(true);
+        GuardImgs[2].SetActive(true);
         //
         StartCoroutine(hold20());
     }
@@ -192,15 +206,18 @@ public class FreeWeaponManager : MonoBehaviour
         WaitForSeconds delay = new WaitForSeconds(1f);
         guardText[0].text = currntTime.ToString();
         guardText[1].text = currntTime.ToString();
+        guardText[2].text = currntTime.ToString();
         while (currntTime > 1)
         {
             yield return delay;
             currntTime -= 1;
             guardText[0].text = currntTime.ToString();
             guardText[1].text = currntTime.ToString();
+            guardText[2].text = currntTime.ToString();
         }
         guardText[0].text = "";
         guardText[1].text = "";
+        guardText[2].text = "";
 
         /// 다이아 새로 고침
         if (freeDiaText.text == "FREE")
@@ -221,6 +238,9 @@ public class FreeWeaponManager : MonoBehaviour
         {
             GuardImgs[1].SetActive(true);
         }
+
+        /// 버프 새로 고침
+        GuardImgs[2].SetActive(false);
 
     }
 

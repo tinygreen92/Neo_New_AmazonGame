@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class PhotonChatManager : MonoBehaviour, IChatClientListener
 {
     [Header("-채팅창 업글 1.0.5")]
-    public Text noticeText;
     public GameObject special_L;
     public GameObject special_R;
 
@@ -133,24 +132,8 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
     }
 
 
-    private TouchScreenKeyboard keyboard;
-    string inputGoldText = "";
-
     void Update()
     {
-        if (TouchScreenKeyboard.visible == false && keyboard != null)
-        {
-            /// 가상 키보드에서 확인 버튼을 눌렀을때
-            if (keyboard.status == TouchScreenKeyboard.Status.Done)
-            {
-                SendChatMessage(InputMesseageBox.text);
-                InputMesseageBox.Select();
-                InputMesseageBox.text = "";
-                keyboard = null;
-            }
-        }
-
-
         if (chatClient != null)
         {
             chatClient.Service(); // make sure to call this regularly! it limits effort internally, so calling often is ok!
@@ -182,14 +165,12 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
     /// </summary>
     public void OnEnterSend()
     {
-        keyboard = TouchScreenKeyboard.Open(inputGoldText, TouchScreenKeyboardType.Default);
-
-        //if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
-        //{
-        //    SendChatMessage(InputMesseageBox.text);
-        //    InputMesseageBox.Select();
-        //    InputMesseageBox.text = "";
-        //}
+        if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
+        {
+            SendChatMessage(InputMesseageBox.text);
+            InputMesseageBox.Select();
+            InputMesseageBox.text = "";
+        }
     }
 
     /// <summary>
