@@ -389,9 +389,9 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
 
-    public void TEST_Distance()
+    public void TEST_Distance(float _dd)
     {
-        PlayerInventory.RecentDistance += 100.0d;
+        PlayerInventory.RecentDistance = _dd;
     }
 
 

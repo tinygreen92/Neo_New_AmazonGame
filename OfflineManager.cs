@@ -197,7 +197,7 @@ public class OfflineManager : MonoBehaviour
                 }
             }
             /// 거리 갱신
-            PlayerInventory.RecentDistance = applejack + 9.0d;
+            PlayerInventory.RecentDistance = Mathf.RoundToInt((float)(applejack + 9.0d));
         }
         else
         {
@@ -221,7 +221,7 @@ public class OfflineManager : MonoBehaviour
         monsterKillText.text = (_input * 0.1d).ToString("N0") + "마리";
 
         // 골드 계산
-        dtimeBae = (_input * 0.01d) * (3d * 1.15d * rainbowDash) * PlayerInventory.Player_Gold_Earned;
+        dtimeBae = (_input * 0.01d) * (3d * 1.15d * rainbowDash);
         dtimeBae *= PlayerInventory.Offline_Earned;
         PlayerInventory.Money_Gold += dtimeBae;
         ///  골드 업적 카운트 올리기
@@ -234,14 +234,14 @@ public class OfflineManager : MonoBehaviour
         /// 보스킬 0일 경우
         if (tmpDistance <= rainbowDash)
         {
-            ltimeBae1 += Mathf.CeilToInt((float)(PlayerInventory.Player_Leaf_Earned * 10.0d * (1.0d + (0.35d * (rainbowDash+1d)))));
+            ltimeBae1 += Mathf.CeilToInt((float)(10.0d * (1.0d + (0.35d * (rainbowDash+1d)))));
         }
         else
         {
             /// 나뭇잎 기본 획득량 공식 (거리 비례)
             for (double i = tmpDistance; i < rainbowDash; i += 10.0d)
             {
-                ltimeBae1 += Mathf.CeilToInt((float)(PlayerInventory.Player_Leaf_Earned * 10.0d * (1.0d + (0.35d * i))));
+                ltimeBae1 += Mathf.CeilToInt((float)(10.0d * (1.0d + (0.35d * i))));
             }
         }
 
@@ -251,7 +251,7 @@ public class OfflineManager : MonoBehaviour
         /// 1.0키로 도달 못하면 예외처리
         if (rainbowDash < 10.0d) ltimeBae1 = 0;
         /// _input * 0.01d  = 잡은 몬스터 수 * 0.1
-        ltimeBae1 = (long)(_input * 0.01d * ltimeBae1 * PlayerInventory.Offline_Earned);
+        ltimeBae1 = (long)(_input * 0.005d * ltimeBae1 * PlayerInventory.Offline_Earned);
         PlayerInventory.Money_Leaf += ltimeBae1;
         /// 나뭇잎 획득량 업적 올리기
         ListModel.Instance.ALLlist_Update(4, ltimeBae1);

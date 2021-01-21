@@ -144,8 +144,17 @@ public class DistanceManager : MonoBehaviour
             //Enemy_DropGold = 3d * 3d * Mathf.Pow(1.05f, reDist - 1) * PlayerInventory.Player_Gold_Earned;
             Enemy_Hp_Full = (0.1d * (reDist * reDist) + 0.1d * reDist + 4.5d) * 3d * PlayerInventory.Monster_Boss_HP;
             Enemy_DropGold =  (3d * 1.15d * reDist) * 5d * PlayerInventory.Player_Gold_Earned;
+            /// 1000 키로 마다 거리 체크해서
+            reDist = reDist / 10000;
+            /// 1.03 을 1000km 마다 
+            for (int i = 0; i < reDist; i++)
+            {
+                Enemy_Hp_Full *= 1.03d;
+                Enemy_DropGold *= 1.03d;
+            }
+
             Debug.LogWarning("BOSS_Hp_Full : " + Enemy_Hp_Full + " BOSS_DropGold : " + Enemy_DropGold);
-            //
+
             CreateEnemyBoss();
         }
         else                                                /// 일반몹
@@ -156,6 +165,15 @@ public class DistanceManager : MonoBehaviour
             //Enemy_DropGold = 3d * Mathf.Pow(1.05f, reDist) * PlayerInventory.Player_Gold_Earned;
             Enemy_Hp_Full = (0.1d * (reDist * reDist) + 0.1d * reDist + 4.5d) * PlayerInventory.Monster_Normal_HP;
             Enemy_DropGold = (3d * 1.15d * reDist) * PlayerInventory.Player_Gold_Earned;
+            /// 1000 키로 마다 거리 체크해서
+            reDist = reDist / 10000;
+            /// 1.03 을 1000km 마다 
+            for (int i = 0; i < reDist; i++)
+            {
+                Enemy_Hp_Full *= 1.03d;
+                Enemy_DropGold *= 1.03d;
+            }
+
             Debug.LogWarning("Enemy_Hp_Full : " + Enemy_Hp_Full + " Enemy_DropGold : " + Enemy_DropGold);
 
             /// 1~9 스테이지 일반몹 or 박스
