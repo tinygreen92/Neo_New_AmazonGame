@@ -17,7 +17,7 @@ public class ModelHandler : MonoBehaviour
     //public TextAsset SHPSHPSHOP;            /// 상점 텍스트 파일
     //public TextAsset Misson;            /// 미션 텍스트 파일
     //public TextAsset _mine;            /// 광산 텍스트 파일
-    public TextAsset _Swamp;            /// 숨겨진 늪지 텍스트 파일
+    //public TextAsset _Swamp;            /// 숨겨진 늪지 텍스트 파일
 
     //public void zTA_Parser_Swamp()
     //{
@@ -39,7 +39,11 @@ public class ModelHandler : MonoBehaviour
     //    }
     //}
 
-    private void Start()
+
+    /// <summary>
+    /// 게임 기초 공사
+    /// </summary>
+    public void TunaDataLoad()
     {
         /// 210113 _ 추가 데이터 파일 초기화 - >nonSaveJsonMoney [0]
         ListModel.Instance.InitNonJsonData();
@@ -79,18 +83,6 @@ public class ModelHandler : MonoBehaviour
             }
 
         }
-
-        ///update210117
-        ///--------------------------------------update210117 ----------------------------------------------
-        ///update210117
-        //if (!ObscuredPrefs.HasKey("update210117"))
-        //{
-        //    /// 로컬 데이터 로드
-        //    InitMoHa(false);
-        //    return;
-        //}
-
-
 
         /// ----------------------------------------- 통상 호출
 

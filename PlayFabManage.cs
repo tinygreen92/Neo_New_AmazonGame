@@ -14,6 +14,7 @@ using UnityEngine.UI;
 
 public class PlayFabManage : MonoBehaviour
 {
+    public ModelHandler mh;
     public IntroManager im;
     public NanooManager nm;
     public PhotonChatManager pcm;
@@ -58,6 +59,11 @@ public class PlayFabManage : MonoBehaviour
     // Start is called before the first frame update
     public void InitPlayfab(string _cusId)
     {
+        /// 플래이팹 로그인 확인되면 ModelHandler 로딩
+        PlayerPrefsManager.CursedId = _cusId;
+        mh.TunaDataLoad();
+
+        /// 플레이팹 로그인
         if (string.IsNullOrEmpty(PlayFabSettings.staticSettings.TitleId))
         {
             PlayFabSettings.staticSettings.TitleId = "947D2";
@@ -536,7 +542,10 @@ public class PlayFabManage : MonoBehaviour
          );
     }
 
-
+    /// <summary>
+    /// 서버 데이터에 남아있는 클라이언트 버전
+    /// </summary>
+    string curentVersion ="";
 
     /// <summary>
     ///  true - 쪼꼬미만 떼오기
@@ -549,6 +558,8 @@ public class PlayFabManage : MonoBehaviour
         long tryResult = 0;
         int tryResultt = 0;
         SystemPopUp.instance.LoopLoadingImg();
+        
+        /// 플레이팹 연결
         var request = new GetUserDataRequest() { PlayFabId = myPlayFabId };
         PlayFabClientAPI.GetUserData(request, (result) =>
         {
@@ -574,16 +585,23 @@ public class PlayFabManage : MonoBehaviour
                     /// 남아있는 찌꺼기 제거
                     ObscuredPrefs.DeleteAll();
                     PlayerPrefs.DeleteAll();
-                    //File.WriteAllText(Application.persistentDataPath + "/_data_", null);
 
-                    /// 버전 코드 별로 적용 데이터 다르게 ??
-                    //Debug.LogError("SECTOR_0 (버전정보): " + result.Data["SECTOR_0"].Value);
-
-                    /// TODO : 불러오기 했는데 tunamayo 가 없으면 예외처리
-                    if (result.Data.ContainsKey("SECTOR_5"))
+                    /// TODO : 불러오기 할때 _data_ 데이터 있을 때만 덮어쓰기 1.0.1 이슈 
+                    if (result.Data.ContainsKey("SECTOR_5") && result.Data.ContainsKey("SECTOR_0"))
                     {
-                        Debug.LogError("SECTOR_5 (JsonData): " + result.Data["SECTOR_5"].Value); // 제이와피
-                        File.WriteAllText(Application.persistentDataPath + "/_data_", result.Data["SECTOR_5"].Value); // 생성된 string을  _data_ 파일에 쓴다 
+                        curentVersion = result.Data["SECTOR_0"].Value;
+                        //Debug.LogError("SECTOR_5 (JsonData): " + result.Data["SECTOR_5"].Value); // 제이와피
+                        if (curentVersion == "1.0.1" || curentVersion == "1.0.2" || curentVersion == "1.0.3" || curentVersion == "1.0.4" || curentVersion == "1.0.5")
+                        {
+                            /// 1.0.6 이전 버전 데이터 처리
+                            File.WriteAllText(Application.persistentDataPath + "/_data_", result.Data["SECTOR_5"].Value);
+                        }
+                        else
+                        {
+                            /// 1.0.6 데이터 쪼개기
+                            PlayerPrefsManager.instance.NewSector5SaveJson(result.Data["SECTOR_5"].Value);
+                        }
+
                     }
 
                     ///---------------------------------------------------------------------------------------
@@ -625,7 +643,7 @@ public class PlayFabManage : MonoBehaviour
                     ObscuredPrefs.Save();
 
                     /// 파일에서 데이터 불러와서 리스트에 대입
-                    PlayerPrefsManager.instance.SeverLoadMaser(result.Data["SECTOR_0"].Value);
+                    PlayerPrefsManager.instance.SeverLoadMaser(curentVersion);
                     SystemPopUp.instance.StopLoopLoading();
 
                     // 팝업 뜰거

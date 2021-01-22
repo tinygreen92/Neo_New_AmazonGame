@@ -47,7 +47,7 @@ public class BattleGndManager : MonoBehaviour
     private float bgOffset;
     private void Update()
     {
-        if (isBGmovigPause) return;
+        if (isBGmovigPause || !PlayerPrefsManager.isJObjectLoad) return;
 
         bgOffset += Time.deltaTime * speed * PlayerInventory.Player_Move_Speed ;
 

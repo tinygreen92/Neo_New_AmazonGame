@@ -113,12 +113,12 @@ public class DailyManager : MonoBehaviour
 
         dailydRemaining = dailyEndTimestamp - UnbiasedTime.Instance.Now();
         /// 3600초마다 저장 = 정각 마다 로컬 저장
-        if (!isSave && dailydRemaining.Minutes == 59)
+        if (!isSave && dailydRemaining.Seconds == 59)
         {
             PlayerPrefsManager.instance.TEST_SaveJson();
-            Debug.LogError("3600초 저장! : " + dailydRemaining.Minutes);
+            Debug.LogError("60초 저장! : " + dailydRemaining.Seconds);
             isSave = true;
-            Invoke(nameof(InvoSaveTrigger), 61.0f);
+            Invoke(nameof(InvoSaveTrigger), 30.0f);
         }
 
         /// 24시간 카운트가 계속 돌아가는 상태 = 아직 날짜 안지남. / 출첵도 함.

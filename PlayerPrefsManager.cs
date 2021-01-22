@@ -136,7 +136,7 @@ public class PlayerPrefsManager : MonoBehaviour
     /// <summary>
     /// 210119Update
     /// </summary>
-    public TextAsset pie;
+    //public TextAsset pie;
     /// <summary>
     /// 210117Update
     /// </summary>
@@ -202,6 +202,12 @@ public class PlayerPrefsManager : MonoBehaviour
     public static ObscuredBool isBossBtnAlive;                           // 화면 전환 후 배틀 캔버스에 보스 도전버튼 표기 되어야함
     public static ObscuredBool isIdleModeOn;                   // 지금 방치모드 켜져있니?
     public static ObscuredBool isCheckOffline;                   // 오프라인 팝업 띄웠니?
+
+    /// <summary>
+    /// 이 데이터 파일이 진짜 구글 로그인 계정 데이터냐?
+    /// </summary>
+    public static ObscuredString CursedId;
+
 
     /// <summary>
     /// 공지사항 스트링 저장용
@@ -589,17 +595,7 @@ public class PlayerPrefsManager : MonoBehaviour
     #endregion
 
 
-    /// <summary>
-    /// int로 가져오는 건 스트링[]에 write한다.
-    /// </summary>
-    /// <param name="sd"></param>
-    /// <param name="dir"></param>
-    public void JObjectSave(object sd, int dir)
-    {
-        // JObject를 Serialize하여 json string 생성 
-        string savestring = JsonConvert.SerializeObject(sd);
-        tunamayo[dir] = AESEncrypt128(savestring);
-    }
+
 
     /// <summary>
     /// 확장 가능한 NonJson 리스트
@@ -621,13 +617,25 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// int로 가져오는 건 스트링[]에 write한다.
+    /// </summary>
+    /// <param name="sd"></param>
+    /// <param name="dir"></param>
+    public void JObjectSave(object sd, int dir)
+    {
+        // JObject를 Serialize하여 json string 생성 
+        string savestring = JsonConvert.SerializeObject(sd);
+        /// 서버저장 섹터5 를 위해서 한개로 꿍쳐줌.
+        tunamayo[dir] = AESEncrypt128(savestring);
+        /// 각 차일드 별로 분리해서 파일 저장
+        File.WriteAllText(Application.persistentDataPath + "/_data_child_" + dir, tunamayo[dir]);
+    }
     /// <summary>
     /// 리스트를 Json으로 저장 false 는 로컬 저장
     /// </summary>
     public void JObjectSave(bool _isSeverSave)
     {
-        Debug.LogError("아니 어디서 호출 되는겨");
         SystemPopUp.instance.LoopLoadingImg();
         JObjectSave(ListModel.Instance.petList, 0);
         JObjectSave(ListModel.Instance.charatorList, 1);
@@ -638,13 +646,13 @@ public class PlayerPrefsManager : MonoBehaviour
         JObjectSave(ListModel.Instance.heartList, 6);
         JObjectSave(ListModel.Instance.invisibleheartList, 7);
         JObjectSave(ListModel.Instance.supList, 8);
-
+        /// ---------- 변동없는 상점 리스트
         JObjectSave(ListModel.Instance.shopList, 9);
         JObjectSave(ListModel.Instance.shopListSPEC, 10);
         JObjectSave(ListModel.Instance.shopListNOR, 11);
         JObjectSave(ListModel.Instance.shopListPACK, 12);
         JObjectSave(ListModel.Instance.shopListAMA, 13);
-        //
+        ///
         JObjectSave(ListModel.Instance.mvpDataList, 14);
         //
         JObjectSave(ListModel.Instance.missionDAYlist, 15);
@@ -656,7 +664,7 @@ public class PlayerPrefsManager : MonoBehaviour
         //
         JObjectSave(ListModel.Instance.swampCaveData, 20);
 
-        // JObject를 Serialize하여 json string 생성 
+        //// JObject를 Serialize하여 json string 생성 
         string savestring = AESEncrypt128(JsonConvert.SerializeObject(tunamayo));
 
         /// 서버에 저장할래? 시름 말래?
@@ -667,8 +675,9 @@ public class PlayerPrefsManager : MonoBehaviour
         }
         else
         {
-            File.WriteAllText(Application.persistentDataPath + "/_data_", savestring); // 생성된 string을  _data_ 파일에 쓴다 
-
+            //File.WriteAllText(Application.persistentDataPath + "/_data_", savestring); // 생성된 string을  _data_ 파일에 쓴다 
+            File.WriteAllText(Application.persistentDataPath + "/_data_", "n1u2l3l"+ CursedId); // 이제 안쓰는 부모
+            /// 나머지 각 차일드 별로 분리해서 파일 저장된다
             SystemPopUp.instance.StopLoopLoading();
         }
     }
@@ -698,19 +707,31 @@ public class PlayerPrefsManager : MonoBehaviour
         /// 첫시작 파일은 리소시즈
         if (_isInit)
         {
+            Debug.LogError("mayo 는 게임 처음 실행하는 깨끗한 데이터 List[21]");
             loadstring = mayo.text;
-            Debug.LogError("게임 처음 실행하는 깨끗한 데이터 ");
+            /// 배열 복구
+            tunamayo = JsonConvert.DeserializeObject<string[]>(AESDecrypt128(loadstring));
         }
         /// 이후 파일은 여기서 불러와
         else
         {
             loadstring = File.ReadAllText(Application.persistentDataPath + "/_data_"); // string을 읽음 
-            Debug.LogError(" ReadAllText 로컬 데이터 충돌 체크 2단계");
+            
+            /// 1.0.6 전 데이터 는 현상유지
+            if (loadstring != "n1u2l3l"+ CursedId)
+            {
+                /// 배열 복구
+                tunamayo = JsonConvert.DeserializeObject<string[]>(AESDecrypt128(loadstring));
+            }
+            else
+            {
+                /// 각 차일드 별로 분리한 파일호출
+                for (int i = 0; i < tunamayo.Length; i++)
+                {
+                    tunamayo[i] = File.ReadAllText(Application.persistentDataPath + "/_data_child_" +i);
+                }
+            }
         }
-
-
-        /// 배열 복구
-        tunamayo = JsonConvert.DeserializeObject<string[]>(AESDecrypt128(loadstring));
 
         ListModel.Instance.petList = JsonConvert.DeserializeObject<List<PetContent>>(AESDecrypt128(tunamayo[0]));
         ListModel.Instance.charatorList = JsonConvert.DeserializeObject<List<CharatorContent>>(AESDecrypt128(tunamayo[1]));
@@ -724,12 +745,13 @@ public class PlayerPrefsManager : MonoBehaviour
 
 
         /// --------------------------------------------------------
-
         ListModel.Instance.shopList = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[9]));
         ListModel.Instance.shopListSPEC = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[10]));
         ListModel.Instance.shopListNOR = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[11]));
         ListModel.Instance.shopListPACK = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[12]));
         ListModel.Instance.shopListAMA = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[13]));
+        /// --------------------------------------------------------
+
 
         // 유료 구매 부분
         ListModel.Instance.mvpDataList = JsonConvert.DeserializeObject<List<MVP>>(AESDecrypt128(tunamayo[14]));
@@ -834,17 +856,34 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 1.0.6 이후에 서버에서 불러올 잘라낸 tunamayo 복호화.
+    /// </summary>
+    /// <param name="loadstring"></param>
+    public void NewSector5SaveJson(string loadstring)
+    {
+        tunamayo = JsonConvert.DeserializeObject<string[]>(AESDecrypt128(loadstring));
+    }
 
     /// <summary>
     /// 얘는 특별히 서버에서 불러오기 할때만 해준다.
     /// </summary>
     public void SeverLoadMaser(string _BulidNum)
     {
-        string loadstring = File.ReadAllText(Application.persistentDataPath + "/_data_"); // string을 읽음 
         Debug.LogError(" 해당 데이터는 " + _BulidNum + "버전인데스");
+        string loadstring = "";
+        if (_BulidNum == "1.0.1" || _BulidNum == "1.0.2" || _BulidNum == "1.0.3" || _BulidNum == "1.0.4" || _BulidNum == "1.0.5")
+        {
+            /// 1.0.6 이전 버전 데이터 처리
+            loadstring = File.ReadAllText(Application.persistentDataPath + "/_data_"); // string을 읽음 
+            tunamayo = JsonConvert.DeserializeObject<string[]>(AESDecrypt128(loadstring));
+        }
+        else
+        {
+            /// PFM.GetUserData 에서  NewSector5SaveJson 호출로 tunamayo 채워 넣었음.
+        }
 
         /// 배열 복구
-        tunamayo = JsonConvert.DeserializeObject<string[]>(AESDecrypt128(loadstring));
 
         ListModel.Instance.petList = JsonConvert.DeserializeObject<List<PetContent>>(AESDecrypt128(tunamayo[0]));
         ListModel.Instance.charatorList = JsonConvert.DeserializeObject<List<CharatorContent>>(AESDecrypt128(tunamayo[1]));
@@ -856,13 +895,15 @@ public class PlayerPrefsManager : MonoBehaviour
         ListModel.Instance.invisibleheartList = JsonConvert.DeserializeObject<List<HeartContent>>(AESDecrypt128(tunamayo[7]));
 
         /// --------------------------------------------------------
-
         ListModel.Instance.supList = JsonConvert.DeserializeObject<List<SupContent>>(AESDecrypt128(tunamayo[8]));
         ListModel.Instance.shopList = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[9]));
         ListModel.Instance.shopListSPEC = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[10]));
         ListModel.Instance.shopListNOR = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[11]));
         ListModel.Instance.shopListPACK = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[12]));
         ListModel.Instance.shopListAMA = JsonConvert.DeserializeObject<List<ShopPrice>>(AESDecrypt128(tunamayo[13]));
+        /// --------------------------------------------------------
+
+
         // 유료 구매 부분
         ListModel.Instance.mvpDataList = JsonConvert.DeserializeObject<List<MVP>>(AESDecrypt128(tunamayo[14]));
         //일퀘 / 업적 / 튜토리얼
@@ -872,7 +913,9 @@ public class PlayerPrefsManager : MonoBehaviour
         // 채굴 관련
         ListModel.Instance.mineCraft = JsonConvert.DeserializeObject<List<MineCraft>>(AESDecrypt128(tunamayo[18]));
         ListModel.Instance.axeDataList = JsonConvert.DeserializeObject<List<AxeStat>>(AESDecrypt128(tunamayo[19]));
-        ///늪지 관련
+
+
+        ///늪지 -> 서버 데이터가 1.0.4 버전 이하 라면 늪지 조정 버전
         if (_BulidNum == "1.0.3" || _BulidNum == "1.0.2" || _BulidNum == "1.0.1")
         {
             ListModel.Instance.swampCaveData = JsonConvert.DeserializeObject<List<SwampCave>>(AESDecrypt128(tuna.text));
@@ -882,7 +925,6 @@ public class PlayerPrefsManager : MonoBehaviour
             ListModel.Instance.swampCaveData = JsonConvert.DeserializeObject<List<SwampCave>>(AESDecrypt128(tunamayo[20]));
         }
         
-
 
         /// 유물 뽑은거 트리거 로드
         for (int i = 0; i < ListModel.Instance.heartList.Count; i++)
@@ -916,7 +958,6 @@ public class PlayerPrefsManager : MonoBehaviour
                 break;
             }
         }
-
 
 
 
@@ -1285,7 +1326,7 @@ public class PlayerPrefsManager : MonoBehaviour
         ObscuredPrefs.DeleteAll();
         PlayerPrefs.DeleteAll();
         // data 완전 초기화.
-        File.WriteAllText(Application.persistentDataPath + "/_data_", null); 
+        File.WriteAllText(Application.persistentDataPath + "/_data_", "n1u2l3l"+ CursedId); 
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

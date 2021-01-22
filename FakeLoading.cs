@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class FakeLoading : MonoBehaviour
 {
+    public GameObject babnd;
+    [Space]
     public BannerAdPanelController bac;
     public TutoManager tm;
     public OfflineManager om;
@@ -113,6 +115,9 @@ public class FakeLoading : MonoBehaviour
         {
             yield return new WaitForFixedUpdate();
         }
+
+        /// 미들 어스 활성화
+        babnd.SetActive(true);
 
         /// 무료 구매 몽땅하면 레드닷 꺼줌.
         var tmpppmt = ListModel.Instance.mvpDataList[0];
