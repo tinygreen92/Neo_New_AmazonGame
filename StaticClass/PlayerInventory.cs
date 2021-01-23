@@ -1061,7 +1061,7 @@ public static class PlayerInventory
     static ObscuredLong money_Elixir;             // 엘릭서
 
     static ObscuredLong money_Dia;                // 다이아
-    static ObscuredLong money_Leaf;               // 나뭇잎
+    static ObscuredDouble money_Leaf;               // 나뭇잎
     static ObscuredLong money_EnchantStone;            // 강화석
     static ObscuredLong money_AmazonStone;            // 아마존 결정
 
@@ -1170,14 +1170,18 @@ public static class PlayerInventory
         }
     }
 
-    public static ObscuredLong Money_Leaf    {
+    /// <summary>
+    /// 나뭇잎 상한 해제 
+    /// </summary>
+    public static ObscuredDouble Money_Leaf    {
         get { if (money_Leaf > 0) return money_Leaf; else return 0; }
         set
-        { 
-            money_Leaf = value; 
-            if (money_Leaf > 2000000000) money_Leaf = 2000000000;
+        {
+            money_Leaf = Math.Truncate(value);
+            if (money_Leaf > 9.99E+300) money_Leaf = 9.99E+300;
             MoneyManager.instance.DisplayLeaf();
         }
+
     }
     public static ObscuredLong Money_EnchantStone {
         get { if (money_EnchantStone > 0) return money_EnchantStone; else return 0; }

@@ -6,21 +6,17 @@ using UnityEngine;
 
 public class EasyMoblieManager : MonoBehaviour
 {
-    //public string[] MopubAdRewardedId;
-
-    void Awake()
+    // Start is called before the first frame update
+    void Start()
     {
+
         /// 이지모바일  init
         if (!RuntimeManager.IsInitialized()) RuntimeManager.Init();
         /// 모펍 sdk init
         //if (!MoPub.IsSdkInitialized) MoPub.InitializeSdk(MopubAdRewardedId[0]);
         DontDestroyOnLoad(gameObject);
-    }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Advertising.GrantDataPrivacyConsent(AdNetwork.MoPub);
+        Advertising.GrantDataPrivacyConsent();
         //Advertising.GrantDataPrivacyConsent(AdNetwork.MoPub);
 
         //MoPub.LoadRewardedVideoPluginsForAdUnits(MopubAdRewardedId);

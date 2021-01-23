@@ -119,9 +119,6 @@ public class NanooManager : MonoBehaviour
             /// 개인 랭킹 갱신
             Invoke(nameof(ShowRankingPersonal), 3.0f);
         }
-
-        /// 배너 오픈
-        OpenBanner();
     }
 
 
@@ -516,9 +513,9 @@ public class NanooManager : MonoBehaviour
                 ListModel.Instance.ALLlist_Update(3, double.Parse(_count));
                 break;
             case "leaf":
-                PlayerInventory.Money_Leaf += long.Parse(_count);
+                PlayerInventory.Money_Leaf += double.Parse(_count);
                 /// 나뭇잎 획득량 업적 올리기
-                ListModel.Instance.ALLlist_Update(4, long.Parse(_count));
+                ListModel.Instance.ALLlist_Update(4, double.Parse(_count));
                 break;
             case "diamond":
                 PlayerInventory.Money_Dia += long.Parse(_count);

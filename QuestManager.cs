@@ -160,10 +160,12 @@ public class QuestManager : MonoBehaviour
             {
                 /// Max 확장해주시고 (내부에서 curentValue 빼줌)
                 ListModel.Instance.ALLlist_Max_Update(i);
+                /// 모든 미션은 보상 수령후 횟수 초기화
+                ListModel.Instance.ALLlist_Update(i, -1);
                 /// 보상 지급
                 PlayerInventory.Money_Dia += int.Parse(ListModel.Instance.missionALLlist[i].reword);
                 /// 모두 받을 때까지 루프
-                if(i > 0) i--;
+                if (i > 0) i--;
             }
         }
 

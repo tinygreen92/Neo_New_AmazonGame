@@ -97,7 +97,7 @@ public class PopInventory : MonoBehaviour
                             }
                             continue;
                         case 2: 
-                            if(PlayerInventory.Money_Leaf < 1)
+                            if(PlayerInventory.Money_Leaf < 1.0d)
                             {
                                 moneyGOgroup[i].SetActive(false);
                                 emptyGOgroup[i].SetActive(true);
@@ -285,7 +285,7 @@ public class PopInventory : MonoBehaviour
                             }
                             continue;
                         case 2:
-                            if (PlayerInventory.Money_Leaf < 1)
+                            if (PlayerInventory.Money_Leaf < 1.0d)
                             {
                                 moneyGOgroup[i].SetActive(false);
                                 emptyGOgroup[i].SetActive(true);
@@ -642,7 +642,7 @@ public class PopInventory : MonoBehaviour
                     PlayerInventory.ticket_leaf_box = 0;
                     isLastPPOP = true;
                     /// 나뭇잎 묶음 = 1000~10000개 랜덤 드랍
-                    random = UnityEngine.Random.Range(100 * tmpAllamont, (500 * tmpAllamont) + 1);
+                    random = Random.Range(100 * tmpAllamont, (500 * tmpAllamont) + 1);
                     PlayerInventory.Money_Leaf += random;
                     /// 나뭇잎 획득량 업적 올리기
                     ListModel.Instance.ALLlist_Update(4, random);
@@ -655,7 +655,7 @@ public class PopInventory : MonoBehaviour
                 {
                     PlayerInventory.ticket_leaf_box--;
                     /// 나뭇잎 묶음 = 100~1000개 랜덤 드랍
-                    random = UnityEngine.Random.Range(100, 501);
+                    random = Random.Range(100, 501);
                     PlayerInventory.Money_Leaf += random;
                     /// 나뭇잎 획득량 업적 올리기
                     ListModel.Instance.ALLlist_Update(4, random);
@@ -946,7 +946,7 @@ public class PopInventory : MonoBehaviour
         //PlayerInventory.Money_Elixir++;
         PlayerInventory.Money_EnchantStone+=10;
         PlayerInventory.Money_Gold+=10;
-        PlayerInventory.Money_Leaf+=10;
+        PlayerInventory.Money_Leaf+=10.0d;
         //
 
         MoneyManager.instance.RefreshAllMoney();

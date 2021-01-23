@@ -111,13 +111,19 @@ public class ModelHandler : MonoBehaviour
         else PlayerInventory.Money_Gold = 0;
 
         /// --------------------------------------------------------------------------------------------------------------------
+        /// 나뭇잎 상한 해제
+        if (double.TryParse(ObscuredPrefs.GetString("Money_Leaf"), out dTryResult)) PlayerInventory.Money_Leaf = dTryResult;
+        else PlayerInventory.Money_Leaf = 0;
 
+
+
+
+
+        /// ------------------
         if (long.TryParse(ObscuredPrefs.GetString("Money_Elixir"), out lTryResult)) PlayerInventory.Money_Elixir = lTryResult;
         else PlayerInventory.Money_Elixir = 0;
         if (long.TryParse(ObscuredPrefs.GetString("Money_Dia"), out lTryResult)) PlayerInventory.Money_Dia = lTryResult;
         else PlayerInventory.Money_Dia = 0;
-        if (long.TryParse(ObscuredPrefs.GetString("Money_Leaf"), out lTryResult)) PlayerInventory.Money_Leaf = lTryResult;
-        else PlayerInventory.Money_Leaf = 0;
         if (long.TryParse(ObscuredPrefs.GetString("Money_EnchantStone"), out lTryResult)) PlayerInventory.Money_EnchantStone = lTryResult;
         else PlayerInventory.Money_EnchantStone = 0;
         if (long.TryParse(ObscuredPrefs.GetString("Money_AmazonCoin"), out lTryResult)) PlayerInventory.Money_AmazonCoin = lTryResult;

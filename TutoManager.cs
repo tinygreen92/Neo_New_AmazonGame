@@ -179,7 +179,7 @@ public class TutoManager : MonoBehaviour
             case 0: PlayerInventory.Money_Dia += int.Parse(ListModel.Instance.missionTUTOlist[0].rewordAmount);
                 PopUpManager.instance.ShowGetPop(1, ListModel.Instance.missionTUTOlist[0].rewordAmount);
                 break;
-            case 1: PlayerInventory.Money_Leaf += int.Parse(ListModel.Instance.missionTUTOlist[1].rewordAmount);
+            case 1: PlayerInventory.Money_Leaf += double.Parse(ListModel.Instance.missionTUTOlist[1].rewordAmount);
                 PopUpManager.instance.ShowGetPop(2, ListModel.Instance.missionTUTOlist[1].rewordAmount);
                 break;
             case 2: PlayerInventory.Money_Elixir += int.Parse(ListModel.Instance.missionTUTOlist[2].rewordAmount);
@@ -197,7 +197,7 @@ public class TutoManager : MonoBehaviour
             case 6: PlayerInventory.Money_Dia += int.Parse(ListModel.Instance.missionTUTOlist[6].rewordAmount); 
                 PopUpManager.instance.ShowGetPop(1, ListModel.Instance.missionTUTOlist[6].rewordAmount);
                 break;
-            case 7: PlayerInventory.Money_Leaf += int.Parse(ListModel.Instance.missionTUTOlist[7].rewordAmount);
+            case 7: PlayerInventory.Money_Leaf += double.Parse(ListModel.Instance.missionTUTOlist[7].rewordAmount);
                 PopUpManager.instance.ShowGetPop(2, ListModel.Instance.missionTUTOlist[7].rewordAmount);
                 break;
             case 8: PlayerInventory.Money_EnchantStone += int.Parse(ListModel.Instance.missionTUTOlist[8].rewordAmount);
@@ -206,7 +206,7 @@ public class TutoManager : MonoBehaviour
             case 9: PlayerInventory.Money_Elixir += int.Parse(ListModel.Instance.missionTUTOlist[9].rewordAmount); 
                 PopUpManager.instance.ShowGetPop(3, ListModel.Instance.missionTUTOlist[9].rewordAmount);
                 break;
-            case 10: PlayerInventory.Money_Leaf += int.Parse(ListModel.Instance.missionTUTOlist[10].rewordAmount);
+            case 10: PlayerInventory.Money_Leaf += double.Parse(ListModel.Instance.missionTUTOlist[10].rewordAmount);
                 PopUpManager.instance.ShowGetPop(2, ListModel.Instance.missionTUTOlist[10].rewordAmount);
                 break;
             case 11: PlayerInventory.Money_AmazonCoin += long.Parse(ListModel.Instance.missionTUTOlist[11].rewordAmount);
@@ -218,7 +218,7 @@ public class TutoManager : MonoBehaviour
             case 13: PlayerInventory.SetTicketCount("cave_enter", int.Parse(ListModel.Instance.missionTUTOlist[13].rewordAmount)); 
                 PopUpManager.instance.ShowGetPop(7, ListModel.Instance.missionTUTOlist[13].rewordAmount);
                 break;
-            case 14: PlayerInventory.Money_Leaf += int.Parse(ListModel.Instance.missionTUTOlist[14].rewordAmount);
+            case 14: PlayerInventory.Money_Leaf += double.Parse(ListModel.Instance.missionTUTOlist[14].rewordAmount);
                 PopUpManager.instance.ShowGetPop(2, ListModel.Instance.missionTUTOlist[14].rewordAmount);
                 break;
             case 15: PlayerInventory.SetBoxsCount("weapon_coupon", int.Parse(ListModel.Instance.missionTUTOlist[15].rewordAmount)); 
@@ -227,7 +227,7 @@ public class TutoManager : MonoBehaviour
             case 16: PlayerInventory.Money_EnchantStone += int.Parse(ListModel.Instance.missionTUTOlist[16].rewordAmount);
                 PopUpManager.instance.ShowGetPop(4, ListModel.Instance.missionTUTOlist[16].rewordAmount);
                 break;
-            case 17: PlayerInventory.Money_Leaf += int.Parse(ListModel.Instance.missionTUTOlist[17].rewordAmount);
+            case 17: PlayerInventory.Money_Leaf += double.Parse(ListModel.Instance.missionTUTOlist[17].rewordAmount);
                 PopUpManager.instance.ShowGetPop(2, ListModel.Instance.missionTUTOlist[17].rewordAmount);
                 break;
             case 18: PlayerInventory.Money_AmazonCoin += int.Parse(ListModel.Instance.missionTUTOlist[18].rewordAmount);
@@ -236,7 +236,7 @@ public class TutoManager : MonoBehaviour
             case 19: PlayerInventory.Money_Dia += int.Parse(ListModel.Instance.missionTUTOlist[19].rewordAmount); 
                 PopUpManager.instance.ShowGetPop(1, ListModel.Instance.missionTUTOlist[19].rewordAmount);
                 break;
-            case 20: PlayerInventory.Money_Leaf += int.Parse(ListModel.Instance.missionTUTOlist[20].rewordAmount);
+            case 20: PlayerInventory.Money_Leaf += double.Parse(ListModel.Instance.missionTUTOlist[20].rewordAmount);
                 PopUpManager.instance.ShowGetPop(2, ListModel.Instance.missionTUTOlist[20].rewordAmount);
                 break;
             case 21: PlayerInventory.Money_Elixir += int.Parse(ListModel.Instance.missionTUTOlist[21].rewordAmount); 
@@ -248,7 +248,7 @@ public class TutoManager : MonoBehaviour
             case 23: PlayerInventory.SetTicketCount("cave_enter", int.Parse(ListModel.Instance.missionTUTOlist[23].rewordAmount));
                 PopUpManager.instance.ShowGetPop(7, ListModel.Instance.missionTUTOlist[23].rewordAmount);
                 break;
-            case 24: PlayerInventory.Money_Leaf += int.Parse(ListModel.Instance.missionTUTOlist[24].rewordAmount);
+            case 24: PlayerInventory.Money_Leaf += double.Parse(ListModel.Instance.missionTUTOlist[24].rewordAmount);
                 PopUpManager.instance.ShowGetPop(2, ListModel.Instance.missionTUTOlist[24].rewordAmount);
                 /// 다음 미션은 보급품 1회 획득이니까 임시로 5초뒤 내려줌
                 sbm.MissionSupplySex();
@@ -267,7 +267,7 @@ public class TutoManager : MonoBehaviour
             case 28: PlayerInventory.SetBoxsCount("weapon_coupon", int.Parse(ListModel.Instance.missionTUTOlist[28].rewordAmount)); 
                 PopUpManager.instance.ShowGetPop(6, ListModel.Instance.missionTUTOlist[28].rewordAmount);
                 break;
-            case 29: PlayerInventory.Money_Leaf += int.Parse(ListModel.Instance.missionTUTOlist[29].rewordAmount);
+            case 29: PlayerInventory.Money_Leaf += double.Parse(ListModel.Instance.missionTUTOlist[29].rewordAmount);
                 PopUpManager.instance.ShowGetPop(2, ListModel.Instance.missionTUTOlist[29].rewordAmount);
                 break;
             case 30: PlayerInventory.Money_EnchantStone += int.Parse(ListModel.Instance.missionTUTOlist[30].rewordAmount);

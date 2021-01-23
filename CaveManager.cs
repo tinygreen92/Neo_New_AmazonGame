@@ -588,12 +588,12 @@ public class CaveManager : MonoBehaviour
     /// <param name="_isAdsWatch"></param>
     public void GetClearReword(bool _isAdsWatch)
     {
-        var tmpLeaf = Mathf.RoundToInt(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordLeaf * (_KC * (float)PlayerInventory.Player_Leaf_Earned));
-        var tmpES = Mathf.RoundToInt(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordEnchant * (_KC * (float)PlayerInventory.EnchantStone_Earned));
+        long tmpLeaf = Mathf.RoundToInt(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordLeaf * (_KC * (float)PlayerInventory.Player_Leaf_Earned));
+        long tmpES = Mathf.RoundToInt(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordEnchant * (_KC * (float)PlayerInventory.EnchantStone_Earned));
         //
         if (_isAdsWatch)
         {
-            PlayerInventory.Money_Leaf += tmpLeaf  * 2 ;
+            PlayerInventory.Money_Leaf += tmpLeaf  * 2d ;
             PlayerInventory.Money_EnchantStone += tmpES * 2;
             /// 나뭇잎 획득량 업적 올리기
             ListModel.Instance.ALLlist_Update(4, tmpLeaf * 2);
@@ -627,7 +627,7 @@ public class CaveManager : MonoBehaviour
         //
         if (_isAdsWatch)
         {
-            PlayerInventory.Money_Leaf += tmpLeaf * 2;
+            PlayerInventory.Money_Leaf += tmpLeaf * 2d;
             PlayerInventory.Money_EnchantStone += tmpES * 2;
             /// 나뭇잎 획득량 업적 올리기
             ListModel.Instance.ALLlist_Update(4, tmpLeaf * 2);

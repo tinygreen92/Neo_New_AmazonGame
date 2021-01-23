@@ -381,7 +381,7 @@ public class PlayerPrefsManager : MonoBehaviour
         //ObscuredPrefs.SetString("FreeDia", tmp);
 
         ObscuredPrefs.Save();
-        Debug.LogWarning("세이브 데이터 타임 " + tmp);
+        Debug.LogError("세이브 데이터 타임 " + tmp);
 
 
     }
@@ -631,11 +631,22 @@ public class PlayerPrefsManager : MonoBehaviour
         /// 각 차일드 별로 분리해서 파일 저장
         File.WriteAllText(Application.persistentDataPath + "/_data_child_" + dir, tunamayo[dir]);
     }
+
+    bool isSafySave;
     /// <summary>
     /// 리스트를 Json으로 저장 false 는 로컬 저장
     /// </summary>
     public void JObjectSave(bool _isSeverSave)
     {
+        if(StartManager.instance.isDebugMode)
+            SafySaveBtn.SetActive(false);
+        /// 너무 많이 불러오지 않게 텀 두기.
+        if (isSafySave)  
+            return;
+        /// 로컬 저장할때만 안전 저장 1초 딜레이
+        if(!_isSeverSave)
+            isSafySave = true;
+        /// 뺑글이
         SystemPopUp.instance.LoopLoadingImg();
         JObjectSave(ListModel.Instance.petList, 0);
         JObjectSave(ListModel.Instance.charatorList, 1);
@@ -679,7 +690,15 @@ public class PlayerPrefsManager : MonoBehaviour
             File.WriteAllText(Application.persistentDataPath + "/_data_", "n1u2l3l"+ CursedId); // 이제 안쓰는 부모
             /// 나머지 각 차일드 별로 분리해서 파일 저장된다
             SystemPopUp.instance.StopLoopLoading();
+            Invoke(nameof(SSSS), 1f);
         }
+    }
+    public GameObject SafySaveBtn;
+    void SSSS()
+    {
+        isSafySave = false;
+        if (StartManager.instance.isDebugMode)
+            SafySaveBtn.SetActive(true);
     }
 
 
@@ -961,7 +980,7 @@ public class PlayerPrefsManager : MonoBehaviour
 
 
 
-        /// 골드와 친구들 진짜 로딩
+        /// 거리는  result.Data["SECTOR_7"].Value 에서 덮어씌우기
         //PlayerInventory.RecentDistance = double.Parse(ListModel.Instance.nonSaveJsonMoney[0].RecentDistance);
         PlayerInventory.Money_Gold = double.Parse(ListModel.Instance.nonSaveJsonMoney[0].Money_Gold);
         PlayerInventory.Money_Elixir = long.Parse(ListModel.Instance.nonSaveJsonMoney[0].Money_Elixir);

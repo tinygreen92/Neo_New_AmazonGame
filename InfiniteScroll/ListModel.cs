@@ -1020,9 +1020,16 @@ public class ListModel : MonoBehaviour
         sc.reword = missionALLlist[_index].reword;
         sc.refreshMulti = missionALLlist[_index].refreshMulti;
         sc.maxValue = missionALLlist[_index].maxValue;
-        sc.curentValue = (long.Parse(missionALLlist[_index].curentValue) + _value).ToString();
-        sc.rewordAmount = missionALLlist[_index].rewordAmount;
+        if (_value == -1)
+        {
+            sc.curentValue = "0";
+        }
+        else
+        {
+            sc.curentValue = (long.Parse(missionALLlist[_index].curentValue) + _value).ToString();
+        }
 
+        sc.rewordAmount = missionALLlist[_index].rewordAmount;
         missionALLlist[_index] = sc;
         /// 레드닷 체크
         if(long.Parse(sc.curentValue) >= long.Parse(sc.maxValue))

@@ -260,19 +260,19 @@ public class PetItem : MonoBehaviour
                 /// 각각 업그레이드 비용이 다름
                 if (thisLevel == 1)
                 {
-                    PlayerInventory.Money_Leaf -= Mathf.CeilToInt((float)(PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade));
+                    PlayerInventory.Money_Leaf -= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade;
                 }
                 else if (_index == 1)
                 {
-                    PlayerInventory.Money_Leaf -= Mathf.CeilToInt((float)(PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.15f));
+                    PlayerInventory.Money_Leaf -= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.15f;
                 }
                 else if (_index == 4)
                 {
-                    PlayerInventory.Money_Leaf -= Mathf.CeilToInt((float)(PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.3f));
+                    PlayerInventory.Money_Leaf -= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.3f;
                 }
                 else
                 {
-                    PlayerInventory.Money_Leaf -= Mathf.CeilToInt((float)(PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.2f));
+                    PlayerInventory.Money_Leaf -= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.2f;
                 }
 
                 /// 강화 성공/실패 계산
@@ -407,22 +407,22 @@ public class PetItem : MonoBehaviour
             /// 각각 업그레이드 비용이 다름
             if (thisLevel == 1)
             {
-                if (PlayerInventory.Money_Leaf >= Mathf.CeilToInt((float)(PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade))) return true;
+                if (PlayerInventory.Money_Leaf >= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade) return true;
                 else return false;
             }
             else if (_index == 1)
             {
-                if (PlayerInventory.Money_Leaf >= Mathf.CeilToInt((float)(PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.15f))) return true;
+                if (PlayerInventory.Money_Leaf >= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.15f) return true;
                 else return false;
             }
             else if (_index == 4)
             {
-                if (PlayerInventory.Money_Leaf >= Mathf.CeilToInt((float)(PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.3f))) return true;
+                if (PlayerInventory.Money_Leaf >= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.3f) return true;
                 else return false;
             }
             else
             {
-                if (PlayerInventory.Money_Leaf >= Mathf.CeilToInt((float)(PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.2f))) return true;
+                if (PlayerInventory.Money_Leaf >= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.2f) return true;
                 else return false;
             }
 

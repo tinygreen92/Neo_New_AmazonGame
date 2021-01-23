@@ -1,5 +1,6 @@
 ﻿using CodeStage.AntiCheat.Storage;
 using DG.Tweening;
+using EasyMobile;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,18 +23,6 @@ public class FakeLoading : MonoBehaviour
     float alpha;
     // Start is called before the first frame update
 
-    void Start()
-    {
-        /// 타이틀 이미지, 로딩바 뒷쪽 활성화
-        transform.GetChild(0).gameObject.SetActive(true);
-        transform.GetChild(1).gameObject.SetActive(true);
-        /// 뒷 배경 활성화
-        selfimg = GetComponent<Image>();
-        selfimg.enabled = true;
-        loadingBar.fillAmount = 0;
-
-        StartCoroutine(Loading());
-    }
     /// <summary>
     /// 테스트 버튼에 붙이자 -> json 리셋후 종료
     /// </summary>
@@ -60,6 +49,34 @@ public class FakeLoading : MonoBehaviour
 #endif
     }
 
+    void Start()
+    {
+        /// 타이틀 이미지, 로딩바 뒷쪽 활성화 -> 수동으로 켜주자
+        //transform.GetChild(0).gameObject.SetActive(true);
+        //transform.GetChild(1).gameObject.SetActive(true);
+        /// 뒷 배경 활성화
+        selfimg = GetComponent<Image>();
+        //selfimg.enabled = true;
+        //loadingBar.fillAmount = 0;
+
+        /// 퍼미션 요청
+        //AndroidRuntimePermissions.Permission result = AndroidRuntimePermissions.RequestPermission("android.permission.WRITE_EXTERNAL_STORAGE");
+        //if (result == AndroidRuntimePermissions.Permission.Granted)
+        //    Debug.Log("We have permission to access external storage!");
+        //else
+        //    Debug.Log("Permission state: " + result);
+
+        //Requesting WRITE_EXTERNAL_STORAGE and CAMERA permissions simultaneously
+        //AndroidRuntimePermissions.Permission[] result = AndroidRuntimePermissions.RequestPermissions("android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.ACCESS_COARSE_LOCATION");
+        //if (result[0] == AndroidRuntimePermissions.Permission.Granted && result[1] == AndroidRuntimePermissions.Permission.Granted)
+        //    Debug.Log("We have all the permissions!");
+        //else
+        //    Debug.Log("Some permission(s) are not granted...");
+
+
+        StartCoroutine(Loading());
+    }
+
 
     IEnumerator Loading()
     {
@@ -73,7 +90,7 @@ public class FakeLoading : MonoBehaviour
         while (currentTime < 1f)
         {
             currentTime += Time.deltaTime / (lastTime * 2f);
-            loadingBar.fillAmount = Mathf.SmoothStep(0, 0.6f, currentTime);
+            loadingBar.fillAmount = Mathf.SmoothStep(0.3f, 0.6f, currentTime);
             yield return null;
         }
         //
@@ -109,6 +126,7 @@ public class FakeLoading : MonoBehaviour
         {
             yield return new WaitForFixedUpdate();
         }
+
 
 
         while (!PlayerPrefsManager.isJObjectLoad)
@@ -192,6 +210,7 @@ public class FakeLoading : MonoBehaviour
             yield return null;
         }
 
+        om.InitNanooBanner();
 
         ///// 데이터 불러오기 재실행이면 우편함 날려줌
         //if (ObscuredPrefs.GetInt("isSeverDataLoad") != 0)

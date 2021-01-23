@@ -22,6 +22,15 @@ public class OfflineManager : MonoBehaviour
     [Header("-보상 텍스트 -> 동영상 두배 문구 전환 ")]
     public Text rewordDesc;
 
+    /// <summary>
+    /// 페이크 로딩에서 나누 배너 오픈 해준다
+    /// </summary>
+    public void InitNanooBanner()
+    {
+        /// 배너 오픈
+        nm.OpenBanner();
+    }
+
 
     DateTime unbiasedRemaining;
 
@@ -151,7 +160,7 @@ public class OfflineManager : MonoBehaviour
     double dtimeBae = 0;
     double rainbowDash = 0;
     long applejack = 0;
-    long ltimeBae1 = 0;
+    double ltimeBae1 = 0;
     long ltimeBae2 = 0;
     long ltimeBae3 = 0;
 
@@ -234,14 +243,14 @@ public class OfflineManager : MonoBehaviour
         /// 보스킬 0일 경우
         if (tmpDistance <= rainbowDash)
         {
-            ltimeBae1 += Mathf.CeilToInt((float)(10.0d * (1.0d + (0.35d * (rainbowDash+1d)))));
+            ltimeBae1 += 10.0d * (1.0d + (0.35d * (rainbowDash + 1d)));
         }
         else
         {
             /// 나뭇잎 기본 획득량 공식 (거리 비례)
             for (double i = tmpDistance; i < rainbowDash; i += 10.0d)
             {
-                ltimeBae1 += Mathf.CeilToInt((float)(10.0d * (1.0d + (0.35d * i))));
+                ltimeBae1 += (10.0d * (1.0d + (0.35d * i)));
             }
         }
 
@@ -251,7 +260,7 @@ public class OfflineManager : MonoBehaviour
         /// 1.0키로 도달 못하면 예외처리
         if (rainbowDash < 10.0d) ltimeBae1 = 0;
         /// _input * 0.01d  = 잡은 몬스터 수 * 0.1
-        ltimeBae1 = (long)(_input * 0.005d * ltimeBae1 * PlayerInventory.Offline_Earned);
+        ltimeBae1 = _input * 0.005d * ltimeBae1 * PlayerInventory.Offline_Earned;
         PlayerInventory.Money_Leaf += ltimeBae1;
         /// 나뭇잎 획득량 업적 올리기
         ListModel.Instance.ALLlist_Update(4, ltimeBae1);

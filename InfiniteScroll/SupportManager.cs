@@ -109,9 +109,9 @@ public class SupportManager : MonoBehaviour
         /// 2. 표기 사라지면 실제 플레이어 골드에 더해줌 
         earnGold = ListModel.Instance.supList[_id].currentEarnGold * 0.5d;
         earnGold *= (double.Parse(ListModel.Instance.supList[_id].supporterLevel) + 1d);
-        Debug.Log(name + _id + "번 인덱스 유물 전  골드 "+ earnGold);
-        Debug.Log(name + _id + "번 인덱스 평균치   골드 "+ Math.Truncate(earnGold));
-        Debug.Log(name + _id + "번 인덱스 적용 골드 "+ earnGold * PlayerInventory.Soozip_Gold_Earned + " 수집!");
+        //Debug.Log(name + _id + "번 인덱스 유물 전  골드 "+ earnGold);
+        //Debug.Log(name + _id + "번 인덱스 평균치   골드 "+ Math.Truncate(earnGold));
+        //Debug.Log(name + _id + "번 인덱스 적용 골드 "+ earnGold * PlayerInventory.Soozip_Gold_Earned + " 수집!");
 
         PlayerInventory.Money_Gold += Math.Truncate(earnGold) * PlayerInventory.Soozip_Gold_Earned;
         ///  골드 업적 카운트 올리기

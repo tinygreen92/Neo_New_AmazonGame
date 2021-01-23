@@ -244,10 +244,10 @@ public class MissionItem : MonoBehaviour
 
         /// Max 확장해주시고 (내부에서 curentValue 빼줌)
         ListModel.Instance.ALLlist_Max_Update(index);
+        /// 모든 미션은 보상 수령후 횟수 초기화
+        ListModel.Instance.ALLlist_Update(index, -1);
         /// 보상 지급
         PlayerInventory.Money_Dia += int.Parse(ListModel.Instance.missionALLlist[index].reword);
-        //giftGetText.text = joy + ListModel.Instance.missionALLlist[index].reword;
-        //giftGetPop.SetActive(true);
         /// 레드닷 끄기
         RedDotManager.instance.RedDot[5].SetActive(false);
         /// 평생 미션 1 모두 받기 회색  0

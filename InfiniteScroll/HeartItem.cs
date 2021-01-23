@@ -264,7 +264,7 @@ public class HeartItem : MonoBehaviour
         if (DisableImage.sprite == BtnSprite[0] || MaxButton.activeSelf) return;
 
         /// 멀티플 적용 받고 나뭇잎 소모
-        PlayerInventory.Money_Leaf -= Mathf.CeilToInt((float)(PlayerInventory.Leaf_Cost * GetMutipleUpgrade(mutiple, thisLevel)));
+        PlayerInventory.Money_Leaf -= PlayerInventory.Leaf_Cost * GetMutipleUpgrade(mutiple, thisLevel);
         /// TODO : 나뭇잎 서버 통신
 
         /// 음영 없고 나뭇잎 강화. +1 +10 +100

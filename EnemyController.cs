@@ -133,9 +133,9 @@ public class EnemyController : MonoBehaviour
                     HBM.DropLeaf();
                     /// 나뭇잎 기본 획득량 공식 (거리 비례)
                     double currentLeaf = 5.0d * (1.0d + (0.35d * PlayerInventory.RecentDistance));
-                    PlayerInventory.Money_Leaf += Mathf.CeilToInt((float)(PlayerInventory.Player_Leaf_Earned * currentLeaf));
+                    PlayerInventory.Money_Leaf += PlayerInventory.Player_Leaf_Earned * currentLeaf;
                     /// 나뭇잎 획득량 업적 올리기
-                    ListModel.Instance.ALLlist_Update(4, Mathf.CeilToInt((float)(PlayerInventory.Player_Leaf_Earned * currentLeaf)));
+                    ListModel.Instance.ALLlist_Update(4, PlayerInventory.Player_Leaf_Earned * currentLeaf);
                     /// 나뭇잎 주사위 굴리기 1% = 10*(1+(0.35*Lv))
                     randomseed = Random.Range(0, 100f);
                     if (randomseed < 10.1f)

@@ -556,6 +556,7 @@ public class PlayFabManage : MonoBehaviour
     {
         /// 새로운 영혼 씌우기
         long tryResult = 0;
+        double dtryResult = 0;
         int tryResultt = 0;
         SystemPopUp.instance.LoopLoadingImg();
         
@@ -611,7 +612,7 @@ public class PlayFabManage : MonoBehaviour
                     else PlayerInventory.Money_Dia = 0;
                     tryResult = 0;
                     Debug.LogError("SECTOR_2 (Money_Leaf): " + result.Data["SECTOR_2"].Value);
-                    if(long.TryParse(result.Data["SECTOR_2"].Value, out tryResult)) PlayerInventory.Money_Leaf = tryResult;
+                    if(double.TryParse(result.Data["SECTOR_2"].Value, out dtryResult)) PlayerInventory.Money_Leaf = dtryResult;
                     else PlayerInventory.Money_Leaf = 0;
                     tryResult = 0;
                     Debug.LogError("SECTOR_3 (Money_EnchantStone): " + result.Data["SECTOR_3"].Value);
