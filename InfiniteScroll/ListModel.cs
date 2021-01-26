@@ -183,7 +183,6 @@ public class MVP                 /// 유료 결제 트리거 보관
 
 }
 
-
 [System.Serializable]
 public class AxeStat                 /// 저장소 + 곡괭이질 스탯
 {
@@ -210,7 +209,6 @@ public class NonJson                 /// 계속 추가 수정 가능한 돈
 {
     public string RecentDistance;
     public string Money_Gold;
-    ///
     public string Money_Elixir;
     public string Money_AmazonCoin;
     public string AmazonStoneCount;
@@ -227,15 +225,19 @@ public class NonJson                 /// 계속 추가 수정 가능한 돈
     //
     public string ticket_reinforce_box;
     public string ticket_leaf_box;
+    //
     public string ticket_pvp_enter;
     public string ticket_cave_enter;
     public string ticket_cave_clear;
-    //
+    // 
     public string S_reinforce_box;
+    /// <summary>
+    /// 아마존 포션
+    /// </summary>
     public string S_leaf_box;
+    //
     public string mining;
     public string amber;
-
     /// <summary>
     ///  [int] 튜토리얼 클리어 트리거
     /// </summary>
@@ -243,7 +245,14 @@ public class NonJson                 /// 계속 추가 수정 가능한 돈
 
 }
 
+/// --------------------     21-01-25 업데이트 데이터 리틀 빅 쪼개기----------------------------
 
+[System.Serializable]
+public class LittleBigPet
+{
+    public string petLevel;
+    public string isEnable;
+}
 
 
 public class ListModel : MonoBehaviour

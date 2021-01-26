@@ -13,6 +13,8 @@ public class StartManager : MonoBehaviour
     public string NOTICE2;
     [Header("- 디버그 공지사항용")]
     public Text headChatTxt;
+    public Text versionTxt;
+    public Text uidTxt;
     [Header("- 개발자용 빌드일 때 체크")]
     public bool isDeerveloperMode;
     [Header("- 디버그 모드시 체크")]
@@ -25,14 +27,14 @@ public class StartManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        Application.targetFrameRate = 59;
+        Application.targetFrameRate = 45;
         Application.runInBackground = true;
 
         /// ------------------------------------------------------------------ ///
         
         if (isDebugMode) return;
         // 로그 비활성화
-        Debug.unityLogger.logEnabled = false;
+        //Debug.unityLogger.logEnabled = false;
         // 화면 꺼짐 방지
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }
@@ -48,12 +50,16 @@ public class StartManager : MonoBehaviour
         }
     }
 
+    void InvoQuit()
+    {
+        Application.Quit();
+    }
+
     void Update()
     {
 #if UNITY_ANDROID
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            PlayerPrefsManager.instance.TEST_SaveJson();
             // Ask if user wants to exit
             NativeUI.AlertPopup alert = NativeUI.ShowTwoButtonAlert("게임 종료",
                                             "아마존 탈출하기 : 방치형 RPG를 종료하시겠습니까?",
@@ -65,10 +71,13 @@ public class StartManager : MonoBehaviour
                 {
                     if (button == 0)
                     {
-
-                        Application.Quit();
+                        /// 종료하시겠습니까 ? 종료 누르면 발동
+                        PlayerPrefsManager.instance.TEST_SaveJson();
+                        /// 소리 꺼주고
+                        AudioManager.instance.AllMute();
+                        Invoke(nameof(InvoQuit), 0.3f);
                     }
-                        
+
                 };
         }
 

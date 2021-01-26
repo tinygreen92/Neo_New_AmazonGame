@@ -200,6 +200,11 @@ public class FakeLoading : MonoBehaviour
         PlayerInventory.Money_AmazonCoin += 0;
         PlayerInventory.AmazonStoneCount += 0;
 
+        /// 나누 배너 보여주기
+        om.InitNanooBanner();
+
+
+        /// 서서히 사라지는 중
         currentTime = 0;
         while (currentTime < 1f)
         {
@@ -209,8 +214,8 @@ public class FakeLoading : MonoBehaviour
             loadingBar.color = new Color(1f, 1f, 1f, alpha);
             yield return null;
         }
-
-        om.InitNanooBanner();
+        /// 페이크 로딩창 끄기.
+        gameObject.SetActive(false);
 
         ///// 데이터 불러오기 재실행이면 우편함 날려줌
         //if (ObscuredPrefs.GetInt("isSeverDataLoad") != 0)
@@ -220,8 +225,6 @@ public class FakeLoading : MonoBehaviour
         //    Debug.LogError("우편함 날리기");
         //}
 
-        /// 페이크 로딩창 끄기.
-        gameObject.SetActive(false);
         /// 광고제거 했으면 배너 제거 + 속도 1.1배
         bac.Banner525Hide();
         /// 출석체크 동작

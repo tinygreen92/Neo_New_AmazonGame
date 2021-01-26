@@ -211,16 +211,16 @@ public class ModelHandler : MonoBehaviour
     /// </summary>
     public void TEST_RESTE_JSON()
     {
-        //ListModel.Instance.supList.Clear();
-        //ListModel.Instance.charatorList.Clear();
-        //ListModel.Instance.invisibleheartList.Clear();
-        //ListModel.Instance.invisibleruneList.Clear();
-        //ListModel.Instance.weaponList.Clear();
-        //ListModel.Instance.petList.Clear();
-        //ListModel.Instance.shopList.Clear();
-        //ListModel.Instance.shopListSPEC.Clear();
-        //ListModel.Instance.shopListNOR.Clear();
-        //ListModel.Instance.mineCraft.Clear();
+        ListModel.Instance.supList.Clear();
+        ListModel.Instance.charatorList.Clear();
+        ListModel.Instance.invisibleheartList.Clear();
+        ListModel.Instance.invisibleruneList.Clear();
+        ListModel.Instance.weaponList.Clear();
+        ListModel.Instance.petList.Clear();
+        ListModel.Instance.shopList.Clear();
+        ListModel.Instance.shopListSPEC.Clear();
+        ListModel.Instance.shopListNOR.Clear();
+        ListModel.Instance.mineCraft.Clear();
         //
         ObscuredPrefs.DeleteAll();
         PlayerPrefs.DeleteAll();

@@ -112,7 +112,7 @@ public class DailyManager : MonoBehaviour
         if (!isFristRun) return;
 
         dailydRemaining = dailyEndTimestamp - UnbiasedTime.Instance.Now();
-        /// 3600초마다 저장 = 정각 마다 로컬 저장
+        /// 1분 마다 저장
         if (!isSave && dailydRemaining.Seconds == 59)
         {
             PlayerPrefsManager.instance.TEST_SaveJson();

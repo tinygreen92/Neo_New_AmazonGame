@@ -127,8 +127,8 @@ public class PlayerPrefsManager : MonoBehaviour
     public void zJObjectSaveNew()
     {
         // JObject를 Serialize하여 json string 생성 
-        string savestring = JsonConvert.SerializeObject(ListModel.Instance.swampCaveData);
-        File.WriteAllText(Application.persistentDataPath + "/_Pie_.txt", AESEncrypt128(savestring)); // 생성된 string을  _data_ 파일에 쓴다 
+        string savestring = JsonConvert.SerializeObject(ListModel.Instance.nonSaveJsonMoney);
+        File.WriteAllText(Application.persistentDataPath + "/_Mdsvp_.txt", savestring); // 생성된 string을  _data_ 파일에 쓴다 
     }
 
 
@@ -249,11 +249,11 @@ public class PlayerPrefsManager : MonoBehaviour
     void OnApplicationQuit()
     {
         /* 앱이 종료 될 때 처리 */
-        /// 서버에 저장하고 리셋하면 저장 하지 마
-        if (!isResetAferSave) 
-        {
-            TEST_SaveJson();
-        }
+        ///// 서버에 저장하고 리셋하면 저장 하지 마
+        //if (!isResetAferSave) 
+        //{
+        //    TEST_SaveJson();
+        //}
     }
 
     bool isPaused;
@@ -304,12 +304,14 @@ public class PlayerPrefsManager : MonoBehaviour
 
     }
 
+
     /// <summary>
     /// Prefs  [로컬]에 저장
     /// JObjectSave -> tunamato[21] 에 데이터 저장
     /// </summary>
     public void TEST_SaveJson()
     {
+
         /// 임시 골드 등등 저장
         ObscuredPrefs.SetString("RecentDistance", PlayerInventory.RecentDistance.ToString());
         ObscuredPrefs.SetString("Money_Gold", PlayerInventory.Money_Gold.ToString());
@@ -382,7 +384,6 @@ public class PlayerPrefsManager : MonoBehaviour
 
         ObscuredPrefs.Save();
         Debug.LogError("세이브 데이터 타임 " + tmp);
-
 
     }
 
@@ -646,8 +647,7 @@ public class PlayerPrefsManager : MonoBehaviour
         /// 로컬 저장할때만 안전 저장 1초 딜레이
         if(!_isSeverSave)
             isSafySave = true;
-        /// 뺑글이
-        SystemPopUp.instance.LoopLoadingImg();
+
         JObjectSave(ListModel.Instance.petList, 0);
         JObjectSave(ListModel.Instance.charatorList, 1);
         JObjectSave(ListModel.Instance.weaponList, 2);
@@ -689,7 +689,6 @@ public class PlayerPrefsManager : MonoBehaviour
             //File.WriteAllText(Application.persistentDataPath + "/_data_", savestring); // 생성된 string을  _data_ 파일에 쓴다 
             File.WriteAllText(Application.persistentDataPath + "/_data_", "n1u2l3l"+ CursedId); // 이제 안쓰는 부모
             /// 나머지 각 차일드 별로 분리해서 파일 저장된다
-            SystemPopUp.instance.StopLoopLoading();
             Invoke(nameof(SSSS), 1f);
         }
     }
@@ -727,9 +726,8 @@ public class PlayerPrefsManager : MonoBehaviour
         if (_isInit)
         {
             Debug.LogError("mayo 는 게임 처음 실행하는 깨끗한 데이터 List[21]");
-            loadstring = mayo.text;
             /// 배열 복구
-            tunamayo = JsonConvert.DeserializeObject<string[]>(AESDecrypt128(loadstring));
+            tunamayo = JsonConvert.DeserializeObject<string[]>(AESDecrypt128(mayo.text));
         }
         /// 이후 파일은 여기서 불러와
         else
@@ -740,7 +738,7 @@ public class PlayerPrefsManager : MonoBehaviour
             if (loadstring != "n1u2l3l"+ CursedId)
             {
                 /// 배열 복구
-                tunamayo = JsonConvert.DeserializeObject<string[]>(AESDecrypt128(loadstring));
+                tunamayo = JsonConvert.DeserializeObject<string[]>(AESDecrypt128(mayo.text));
             }
             else
             {
@@ -751,6 +749,7 @@ public class PlayerPrefsManager : MonoBehaviour
                 }
             }
         }
+
 
         ListModel.Instance.petList = JsonConvert.DeserializeObject<List<PetContent>>(AESDecrypt128(tunamayo[0]));
         ListModel.Instance.charatorList = JsonConvert.DeserializeObject<List<CharatorContent>>(AESDecrypt128(tunamayo[1]));
@@ -1331,16 +1330,16 @@ public class PlayerPrefsManager : MonoBehaviour
     public void InvoMyDate2()
     {
         /// 로컬 데이터 리셋 후 종료
-        //ListModel.Instance.supList.Clear();
-        //ListModel.Instance.charatorList.Clear();
-        //ListModel.Instance.invisibleheartList.Clear();
-        //ListModel.Instance.invisibleruneList.Clear();
-        //ListModel.Instance.weaponList.Clear();
-        //ListModel.Instance.petList.Clear();
-        //ListModel.Instance.shopList.Clear();
-        //ListModel.Instance.shopListSPEC.Clear();
-        //ListModel.Instance.shopListNOR.Clear();
-        //ListModel.Instance.mineCraft.Clear();
+        ListModel.Instance.supList.Clear();
+        ListModel.Instance.charatorList.Clear();
+        ListModel.Instance.invisibleheartList.Clear();
+        ListModel.Instance.invisibleruneList.Clear();
+        ListModel.Instance.weaponList.Clear();
+        ListModel.Instance.petList.Clear();
+        ListModel.Instance.shopList.Clear();
+        ListModel.Instance.shopListSPEC.Clear();
+        ListModel.Instance.shopListNOR.Clear();
+        ListModel.Instance.mineCraft.Clear();
         //
         ObscuredPrefs.DeleteAll();
         PlayerPrefs.DeleteAll();

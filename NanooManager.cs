@@ -355,8 +355,9 @@ public class NanooManager : MonoBehaviour
                         case "diamond": IconImg.sprite = pm.IconSprs[17]; break;
                         case "cave_clear": IconImg.sprite = pm.IconSprs[18]; break;
                         case "elixr": IconImg.sprite = pm.IconSprs[19]; break;
-                        //
-                        case "S_leaf_box": IconImg.sprite = pm.IconSprs[20]; break;
+                        /// 아마존 포션
+                        case "S_leaf_box": IconImg.sprite = pm.IconSprs[12]; break;
+                            //
                         case "S_reinforce_box": IconImg.sprite = pm.IconSprs[21]; break;
                         case "mining": IconImg.sprite = pm.IconSprs[22]; break;
                         case "amber": IconImg.sprite = pm.IconSprs[23]; break;

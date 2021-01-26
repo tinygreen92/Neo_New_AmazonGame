@@ -61,6 +61,10 @@ public class PlayFabManage : MonoBehaviour
     {
         /// 플래이팹 로그인 확인되면 ModelHandler 로딩
         PlayerPrefsManager.CursedId = _cusId;
+        /// 회원정보 표기
+        StartManager.instance.uidTxt.text = "uid : " + _cusId;
+        StartManager.instance.versionTxt.text = "ver : " + Application.version;
+        /// 로컬 데이터 준비
         mh.TunaDataLoad();
 
         /// 플레이팹 로그인
@@ -77,6 +81,7 @@ public class PlayFabManage : MonoBehaviour
                                                Debug.LogWarning("Something went wrong with your first API call.  :(");
                                                Debug.LogWarning("Here's some debug information:");
                                                Debug.LogWarning(error.GenerateErrorReport());
+                                               /// 차단 계정 메시지는 여기로
                                                StartManager.instance.headChatTxt.text = error.GenerateErrorReport();
                                            });
     }
@@ -406,7 +411,7 @@ public class PlayFabManage : MonoBehaviour
     /// </summary>
     void SetUserData()
     {
-        //ListModel.Instance.nonSaveJsonMoney[0].RecentDistance = PlayerInventory.RecentDistance.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].RecentDistance = PlayerInventory.RecentDistance.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].Money_Gold = PlayerInventory.Money_Gold.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].Money_Elixir = PlayerInventory.Money_Elixir.ToString();
 
@@ -429,9 +434,11 @@ public class PlayFabManage : MonoBehaviour
         ListModel.Instance.nonSaveJsonMoney[0].ticket_cave_enter = PlayerInventory.ticket_cave_enter.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].ticket_cave_clear = PlayerInventory.ticket_cave_clear.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].S_reinforce_box = PlayerInventory.S_reinforce_box.ToString();
-
+        ///
+        /// ------------------------------------------- 아마존 포션 저장
         ListModel.Instance.nonSaveJsonMoney[0].S_leaf_box = PlayerInventory.S_leaf_box.ToString();
-
+        ///
+        ///
         ListModel.Instance.nonSaveJsonMoney[0].mining = PlayerInventory.mining.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].amber = PlayerInventory.amber.ToString();
         ///  인트 저장
@@ -459,6 +466,7 @@ public class PlayFabManage : MonoBehaviour
         ListModel.Instance.nonSaveJsonMoney[1].box_E = PlayerPrefsManager.SwampySkipCnt.ToString();
         ///[1].update210117 (안쓰는거 같은데)
         ListModel.Instance.nonSaveJsonMoney[1].box_D = "0";
+
         //ListModel.Instance.nonSaveJsonMoney[1].box_C = PlayerInventory.box_C.ToString();
         //ListModel.Instance.nonSaveJsonMoney[1].box_B = PlayerInventory.box_B.ToString();
         //ListModel.Instance.nonSaveJsonMoney[1].box_A = PlayerInventory.box_A.ToString();
