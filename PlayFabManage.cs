@@ -396,21 +396,22 @@ public class PlayFabManage : MonoBehaviour
                                                 );
     }
 
-
+    /// <summary>
+    /// JObjectSave(bool _isSeverSave) 에서 넘어옴
+    /// </summary>
+    /// <param name="_mamayoyo"></param>
     public void SaveTunaMayo(string _mamayoyo)
     {
-        mamayoyo = _mamayoyo;
-        SetUserData();
+        SetUserData(_mamayoyo);
     }
-
-    string mamayoyo;
 
     /// <summary>
     /// 데이터 밀어넣기 -> 서버에 저장 생각날때마다 해줄 것
     /// JObjectSave (true) 로 호출
     /// </summary>
-    void SetUserData()
+    void SetUserData(string _mamayoyo)
     {
+        //
         ListModel.Instance.nonSaveJsonMoney[0].RecentDistance = PlayerInventory.RecentDistance.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].Money_Gold = PlayerInventory.Money_Gold.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].Money_Elixir = PlayerInventory.Money_Elixir.ToString();
@@ -444,7 +445,9 @@ public class PlayFabManage : MonoBehaviour
         ///  인트 저장
         ListModel.Instance.nonSaveJsonMoney[0].isTutoAllClear = PlayerPrefsManager. isTutoAllClear ? 525 : 0;
 
-        ///... [1] [2] 쭉쭉 저장 가능하게
+
+
+
         ///[1].RecentDistance = DailyCount_Cheak (출석체크 일자 저장)
         ListModel.Instance.nonSaveJsonMoney[1].RecentDistance = PlayerPrefsManager.DailyCount_Cheak.ToString();
         ///[1].Money_Gold 
@@ -464,9 +467,10 @@ public class PlayFabManage : MonoBehaviour
         ListModel.Instance.nonSaveJsonMoney[1].box_Coupon = PlayerPrefsManager.SwampyEnterCnt.ToString();
         ///[1].SwampySkipCnt
         ListModel.Instance.nonSaveJsonMoney[1].box_E = PlayerPrefsManager.SwampySkipCnt.ToString();
-        ///[1].update210117 (안쓰는거 같은데)
-        ListModel.Instance.nonSaveJsonMoney[1].box_D = "0";
-
+        
+        
+        ///... [1] [2] 쭉쭉 저장 가능하게
+        //ListModel.Instance.nonSaveJsonMoney[1].box_D = "651";
         //ListModel.Instance.nonSaveJsonMoney[1].box_C = PlayerInventory.box_C.ToString();
         //ListModel.Instance.nonSaveJsonMoney[1].box_B = PlayerInventory.box_B.ToString();
         //ListModel.Instance.nonSaveJsonMoney[1].box_A = PlayerInventory.box_A.ToString();
@@ -498,9 +502,9 @@ public class PlayFabManage : MonoBehaviour
                 { "SECTOR_2", PlayerInventory.Money_Leaf.ToString()},
                 { "SECTOR_3", PlayerInventory.Money_EnchantStone.ToString() },
                 { "SECTOR_4", PlayerPrefsManager.instance.ZZoGGoMiDataSave() },              /// 쪼꼬미 데이터
-                { "SECTOR_5", mamayoyo},                                                                                            /// json 저장
+                { "SECTOR_5", _mamayoyo},                                                                                            /// 실전압축 json 저장 [16]
                 { "SECTOR_6", PlayerInventory.isSuperUser.ToString() },                                         ///  광고 제거 구매 여부 저장
-                { "SECTOR_7",  PlayerInventory.RecentDistance.ToString() },                                  /// 거리
+                { "SECTOR_7",  (PlayerInventory.RecentDistance -1d).ToString("F0") },                                  /// 거리
                 { "SECTOR_8", PlayerPrefsManager.instance.NonJsonDataOutput() },                /// 확장 가능한 NonJson 리스트
                 { "SECTOR_9", "9"},
             },
@@ -530,25 +534,25 @@ public class PlayFabManage : MonoBehaviour
 
 
 
-    void GetUserSector5()
-    {
-        var request = new GetUserDataRequest() { PlayFabId = myPlayFabId };
-        PlayFabClientAPI.GetUserData(request, (result) =>
-        {
-            /// 섹터 5 만 없을 경우 처리
-            if (result.Data != null || !result.Data.ContainsKey("SECTOR_5"))        /// 예외처리
-            {
-                PlayerPrefsManager.isMissingFive = true;
-                Debug.LogError("섹터 5 불러오기 성공");
-            }
-        },
-        (error) =>
-        {
-            SystemPopUp.instance.StopLoopLoading();
-            Debug.LogError("섹터 5 불러오기 실패");
-        }
-         );
-    }
+    //void GetUserSector5()
+    //{
+    //    var request = new GetUserDataRequest() { PlayFabId = myPlayFabId };
+    //    PlayFabClientAPI.GetUserData(request, (result) =>
+    //    {
+    //        /// 섹터 5 만 없을 경우 처리
+    //        if (result.Data != null || !result.Data.ContainsKey("SECTOR_5"))        /// 예외처리
+    //        {
+    //            PlayerPrefsManager.isMissingFive = true;
+    //            Debug.LogError("섹터 5 불러오기 성공");
+    //        }
+    //    },
+    //    (error) =>
+    //    {
+    //        SystemPopUp.instance.StopLoopLoading();
+    //        Debug.LogError("섹터 5 불러오기 실패");
+    //    }
+    //     );
+    //}
 
     /// <summary>
     /// 서버 데이터에 남아있는 클라이언트 버전
@@ -607,7 +611,7 @@ public class PlayFabManage : MonoBehaviour
                         }
                         else
                         {
-                            /// 1.0.6 데이터 쪼개기
+                            /// 1.0.6 데이터 쪼개기 16개 짜리 실전 압축 데이터 이다.
                             PlayerPrefsManager.instance.NewSector5SaveJson(result.Data["SECTOR_5"].Value);
                         }
 
@@ -630,13 +634,12 @@ public class PlayFabManage : MonoBehaviour
 
                     ///---------------------------------------------------------------------------------------
 
-
                     Debug.LogError("SECTOR_6 (isSuperUser): " + result.Data["SECTOR_6"].Value);
                     if(int.TryParse(result.Data["SECTOR_6"].Value, out tryResultt)) PlayerInventory.isSuperUser = tryResultt;
                     else PlayerInventory.isSuperUser = 0;
 
                     Debug.LogError("SECTOR_7 (RecentDistance): " + result.Data["SECTOR_7"].Value);
-                    if(long.TryParse(result.Data["SECTOR_7"].Value, out tryResult)) PlayerInventory.RecentDistance = tryResult-1;
+                    if(double.TryParse(result.Data["SECTOR_7"].Value, out dtryResult)) PlayerInventory.RecentDistance = dtryResult;
                     else PlayerInventory.RecentDistance = 0;
 
                     Debug.LogError("SECTOR_8 (nonSaveJsonMoney): " + result.Data["SECTOR_8"].Value);
@@ -649,6 +652,7 @@ public class PlayFabManage : MonoBehaviour
                     /// 초반 초기화 완료 됐을때 키 초기화 [로컬에만 존재]
                     ObscuredPrefs.SetInt("isSeverDataLoad", 609);
                     ObscuredPrefs.SetInt("tunamayo", 22);
+                    ObscuredPrefs.SetInt("update210117", 117);
                     ObscuredPrefs.Save();
 
                     /// 파일에서 데이터 불러와서 리스트에 대입

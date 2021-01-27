@@ -112,7 +112,7 @@ public class CharactorItem : MonoBehaviour
             case 2:
                 ChractorLvUp(false);
                 DescBox[2].text = ListModel.Instance.charatorList[_index].description;
-                EffectBox[2].text = PlayerInventory.stat_attack_speed.ToString("F1");        /// 소수점 1자리, 공격속도 증가
+                EffectBox[2].text = PlayerInventory.stat_attack_speed.ToString("F2");        /// 소수점 1자리, 공격속도 증가
                 break;
 
             case 3:
@@ -130,7 +130,7 @@ public class CharactorItem : MonoBehaviour
             case 5:
                 ChractorLvUp(false);
                 DescBox[2].text = ListModel.Instance.charatorList[_index].description;
-                EffectBox[2].text = PlayerInventory.stat_cri_dps.ToString("F1") + "%";        ///  
+                EffectBox[2].text = PlayerInventory.stat_cri_dps.ToString("F2") + "%";        ///  
                 break;
 
             //case 6:
@@ -165,7 +165,7 @@ public class CharactorItem : MonoBehaviour
             /// < 획득골드량 > 배수 곱하기 해서 텍스트 뿌려주기.
             EarnGoldBox.text = T_PLUS + PlayerPrefsManager.instance.DoubleToStringNumber(GetMutipleEarnGold(mutiple, 0)) + " (" + mutiple + ")";
         }
-        else if(_index == 2 || _index == 3 ||_index == 4)
+        else if(_index == 2 || _index == 3 ||_index == 4 || _index == 5)
         {
             UpgradeBox.text = PlayerPrefsManager.instance.DoubleToStringNumber(GetMutipleUpgrade(mutiple, thisLevel));
             /// < 획득골드량 > 배수 곱하기 해서 텍스트 뿌려주기.
@@ -175,8 +175,7 @@ public class CharactorItem : MonoBehaviour
         {
             UpgradeBox.text = PlayerPrefsManager.instance.DoubleToStringNumber(GetMutipleUpgrade(mutiple, thisLevel));
             /// < 획득골드량 > 배수 곱하기 해서 텍스트 뿌려주기.
-            if (_index == 5) EarnGoldBox.text = T_PLUS + GetMutipleEarnGold(mutiple, 0).ToString("F1") + "% (" + mutiple + ")";
-            else EarnGoldBox.text = T_PLUS + GetMutipleEarnGold(mutiple, 0).ToString("F0") + " (" + mutiple + ")";
+            EarnGoldBox.text = T_PLUS + GetMutipleEarnGold(mutiple, 0).ToString("F0") + " (" + mutiple + ")";
         }
 
 

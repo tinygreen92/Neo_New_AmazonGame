@@ -50,10 +50,7 @@ public class StartManager : MonoBehaviour
         }
     }
 
-    void InvoQuit()
-    {
-        Application.Quit();
-    }
+
 
     void Update()
     {
@@ -72,15 +69,21 @@ public class StartManager : MonoBehaviour
                     if (button == 0)
                     {
                         /// 종료하시겠습니까 ? 종료 누르면 발동
+                        PlayerPrefsManager.instance.isResetAferSave = true;
                         PlayerPrefsManager.instance.TEST_SaveJson();
-                        /// 소리 꺼주고
+                        /// 소리 꺼주고 로딩 돌리고 1초뒤에 꺼
                         AudioManager.instance.AllMute();
-                        Invoke(nameof(InvoQuit), 0.3f);
+                        SystemPopUp.instance.LoopLoadingImg();
+                        Invoke(nameof(InvoQuit), 1f);
                     }
 
                 };
         }
 
 #endif
+    }
+    void InvoQuit()
+    {
+        Application.Quit();
     }
 }

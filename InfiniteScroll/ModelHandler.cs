@@ -53,11 +53,13 @@ public class ModelHandler : MonoBehaviour
         /// 나중에 추가 데이터 생기면 nonSaveJsonMoney [n] 생성해서 여기에 저장하면 됨
        // ListModel.Instance.InitNonJsonData(); 
 
-        /// 완전 초기화 후에 쌔삥 데이터로 갈아 끼워줌
+        /// 완전 게임 처음 시작하거나
+        /// 완전 초기화 후에 실행하거나
         if (!ObscuredPrefs.HasKey("tunamayo"))
         {
-            /// update210114 적용
+            /// 이전 데이터 다 적용
             ObscuredPrefs.SetInt("update210114", 214);
+            ObscuredPrefs.SetInt("update210117", 956);
             ObscuredPrefs.Save();
             /// 파일에서 데이터 불러와서 리스트에 대입
             PlayerPrefsManager.instance.JObjectLoad(true);
@@ -86,7 +88,6 @@ public class ModelHandler : MonoBehaviour
 
         /// ----------------------------------------- 통상 호출
 
-
         /// 로컬 데이터 로드
         InitMoHa(false);
 
@@ -105,89 +106,44 @@ public class ModelHandler : MonoBehaviour
     /// <param name="_isLocal"></param>
     void InitMoHa(bool _isLocal)
     {
-        if (double.TryParse(ObscuredPrefs.GetString("RecentDistance"), out dTryResult)) PlayerInventory.RecentDistance = dTryResult;
-        else PlayerInventory.RecentDistance = 0;
-        if (double.TryParse(ObscuredPrefs.GetString("Money_Gold"), out dTryResult)) PlayerInventory.Money_Gold = dTryResult;
-        else PlayerInventory.Money_Gold = 0;
-
-        /// --------------------------------------------------------------------------------------------------------------------
-        /// 나뭇잎 상한 해제
-        if (double.TryParse(ObscuredPrefs.GetString("Money_Leaf"), out dTryResult)) PlayerInventory.Money_Leaf = dTryResult;
-        else PlayerInventory.Money_Leaf = 0;
-
-
-
-
-
-        /// ------------------
-        if (long.TryParse(ObscuredPrefs.GetString("Money_Elixir"), out lTryResult)) PlayerInventory.Money_Elixir = lTryResult;
-        else PlayerInventory.Money_Elixir = 0;
-        if (long.TryParse(ObscuredPrefs.GetString("Money_Dia"), out lTryResult)) PlayerInventory.Money_Dia = lTryResult;
-        else PlayerInventory.Money_Dia = 0;
-        if (long.TryParse(ObscuredPrefs.GetString("Money_EnchantStone"), out lTryResult)) PlayerInventory.Money_EnchantStone = lTryResult;
-        else PlayerInventory.Money_EnchantStone = 0;
-        if (long.TryParse(ObscuredPrefs.GetString("Money_AmazonCoin"), out lTryResult)) PlayerInventory.Money_AmazonCoin = lTryResult;
-        else PlayerInventory.Money_AmazonCoin = 0;
-
-
-
-        if (int.TryParse(ObscuredPrefs.GetString("box_Coupon"), out iTryResult)) PlayerInventory.box_Coupon = iTryResult;
-        else PlayerInventory.box_Coupon = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("box_E"), out iTryResult)) PlayerInventory.box_E = iTryResult;
-        else PlayerInventory.box_E = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("box_D"), out iTryResult)) PlayerInventory.box_D = iTryResult;
-        else PlayerInventory.box_D = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("box_C"), out iTryResult)) PlayerInventory.box_C = iTryResult;
-        else PlayerInventory.box_C = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("box_B"), out iTryResult)) PlayerInventory.box_B = iTryResult;
-        else PlayerInventory.box_B = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("box_A"), out iTryResult)) PlayerInventory.box_A = iTryResult;
-        else PlayerInventory.box_A = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("box_S"), out iTryResult)) PlayerInventory.box_S = iTryResult;
-        else PlayerInventory.box_S = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("box_L"), out iTryResult)) PlayerInventory.box_L = iTryResult;
-        else PlayerInventory.box_L = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("ticket_reinforce_box"), out iTryResult)) PlayerInventory.ticket_reinforce_box = iTryResult;
-        else PlayerInventory.ticket_reinforce_box = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("ticket_leaf_box"), out iTryResult)) PlayerInventory.ticket_leaf_box = iTryResult;
-        else PlayerInventory.ticket_leaf_box = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("ticket_pvp_enter"), out iTryResult)) PlayerInventory.ticket_pvp_enter = iTryResult;
-        else PlayerInventory.ticket_pvp_enter = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("ticket_cave_enter"), out iTryResult)) PlayerInventory.ticket_cave_enter = iTryResult;
-        else PlayerInventory.ticket_cave_enter = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("ticket_cave_clear"), out iTryResult)) PlayerInventory.ticket_cave_clear = iTryResult;
-        else PlayerInventory.ticket_cave_clear = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("S_reinforce_box"), out iTryResult)) PlayerInventory.S_reinforce_box = iTryResult;
-        else PlayerInventory.S_reinforce_box = 0;
-
-        if (int.TryParse(ObscuredPrefs.GetString("S_leaf_box"), out iTryResult)) PlayerInventory.S_leaf_box = iTryResult;
-        else PlayerInventory.S_leaf_box = 0;
-
-        if (int.TryParse(ObscuredPrefs.GetString("mining"), out iTryResult)) PlayerInventory.mining = iTryResult;
-        else PlayerInventory.mining = 0;
-        if (int.TryParse(ObscuredPrefs.GetString("amber"), out iTryResult)) PlayerInventory.amber = iTryResult;
-        else PlayerInventory.amber = 0;
-
-        /// 튜토리얼 클리어 했니?
-        PlayerPrefsManager.isTutoAllClear = ObscuredPrefs.GetInt("isTutoAllClear", 0) != 0 ? true : false;
-        /// 출석체크 며칠째니?
-        PlayerPrefsManager.DailyCount_Cheak = ObscuredPrefs.GetInt("DailyCount_Cheak", 0);
-
-        /// 210115 업데이트 추가
-        PlayerPrefsManager.isDailyCheak = ObscuredPrefs.GetInt("isDailyCheak", 0) != 0 ? true : false;
-        PlayerPrefsManager.ZogarkMissionCnt = ObscuredPrefs.GetInt("ZogarkMissionCnt", 0);
-        PlayerPrefsManager.AmaAdsTimer = ObscuredPrefs.GetInt("AmaAdsTimer", 0);
-        PlayerPrefsManager.FreeDiaCnt = ObscuredPrefs.GetInt("FreeDiaCnt", 0);
-        PlayerPrefsManager.FreeWeaponCnt = ObscuredPrefs.GetInt("FreeWeaponCnt", 0);
-
-        /// 210117 업데이트 추가
-        PlayerPrefsManager.SwampyEnterCnt = ObscuredPrefs.GetInt("SwampyEnterCnt", 5);
-        PlayerPrefsManager.SwampySkipCnt = ObscuredPrefs.GetInt("SwampySkipCnt", 5);
+        /// 뉴 데이터 -
+        GameDataBox data = DataBoxCopy.instance.LoadBox();
         //
-
-
-
-
+        PlayerInventory.RecentDistance = data.RecentDistance;
+        PlayerInventory.Money_Gold = data.Money_Gold;
+        PlayerInventory.Money_Elixir = data.Money_Elixir;
+        PlayerInventory.Money_Dia = data.Money_Dia;
+        PlayerInventory.Money_Leaf = data.Money_Leaf;
+        PlayerInventory.Money_EnchantStone = data.Money_EnchantStone;
+        PlayerInventory.Money_AmazonCoin = data.Money_AmazonCoin;
+        PlayerInventory.AmazonStoneCount = data.AmazonStoneCount;
+        PlayerInventory.CurrentAmaLV = data.CurrentAmaLV;
+        PlayerInventory.box_Coupon = data.box_Coupon;
+        PlayerInventory.box_E = data.box_E;
+        PlayerInventory.box_D = data.box_D;
+        PlayerInventory.box_C = data.box_C;
+        PlayerInventory.box_B = data.box_B;
+        PlayerInventory.box_A = data.box_A;
+        PlayerInventory.box_S = data.box_S;
+        PlayerInventory.box_L = data.box_L;
+        PlayerInventory.ticket_leaf_box = data.ticket_leaf_box;
+        PlayerInventory.ticket_pvp_enter = data.ticket_pvp_enter;
+        PlayerInventory.ticket_cave_enter = data.ticket_cave_enter;
+        PlayerInventory.ticket_cave_clear = data.ticket_cave_clear;
+        PlayerInventory.S_leaf_box = data.S_leaf_box;
+        PlayerInventory.mining = data.mining;
+        PlayerInventory.amber = data.amber;
+        //
+        PlayerPrefsManager.DailyCount_Cheak = data.DailyCount_Cheak;
+        PlayerPrefsManager.isTutoAllClear = data.isTutoAllClear != 0 ? true : false;
+        PlayerPrefsManager.isDailyCheak = data.isDailyCheak != 0 ? true : false;
+        PlayerPrefsManager.ZogarkMissionCnt = data.ZogarkMissionCnt;
+        PlayerPrefsManager.AmaAdsTimer = data.AmaAdsTimer;
+        PlayerPrefsManager.FreeDiaCnt = data.FreeDiaCnt;
+        PlayerPrefsManager.FreeWeaponCnt = data.FreeWeaponCnt;
+        PlayerPrefsManager.SwampyEnterCnt = data.SwampyEnterCnt;
+        PlayerPrefsManager.SwampySkipCnt = data.SwampySkipCnt;
+        //
         /// 파일에서 데이터 불러와서 리스트에 대입
         PlayerPrefsManager.instance.JObjectLoad(_isLocal);
     }
@@ -211,16 +167,6 @@ public class ModelHandler : MonoBehaviour
     /// </summary>
     public void TEST_RESTE_JSON()
     {
-        ListModel.Instance.supList.Clear();
-        ListModel.Instance.charatorList.Clear();
-        ListModel.Instance.invisibleheartList.Clear();
-        ListModel.Instance.invisibleruneList.Clear();
-        ListModel.Instance.weaponList.Clear();
-        ListModel.Instance.petList.Clear();
-        ListModel.Instance.shopList.Clear();
-        ListModel.Instance.shopListSPEC.Clear();
-        ListModel.Instance.shopListNOR.Clear();
-        ListModel.Instance.mineCraft.Clear();
         //
         ObscuredPrefs.DeleteAll();
         PlayerPrefs.DeleteAll();

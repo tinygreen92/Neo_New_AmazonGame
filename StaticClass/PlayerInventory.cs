@@ -178,7 +178,7 @@ public static class PlayerInventory
     }                                                 //  유물 아마존 포인트 획득확률 증가
     public static ObscuredDouble heart_equiped_offline_earned
     {
-        get { return heartIndexs[28] != 0 ? ListModel.Instance.heartList[heartIndexs[28] - 1].powerToLvUP * Heart_lv(28) * 0.01d : 0; }
+        get { return heartIndexs[28] != 0 ? Heart_lv(28) * 0.01d : 0; }
     }                                                             //  유물 오프라인 보상 증가
     public static ObscuredDouble heart_equiped_offline_time
     {
@@ -951,6 +951,12 @@ public static class PlayerInventory
     {
         get
         {
+            /// 210126 유물 보상 5% -> 1% 너프
+            if (heart_equiped_offline_earned != 0)
+            {
+                ListModel.Instance.Heart_myNeaf(heartIndexs[28] - 1, 1f);
+            }
+
             return 1.0d +  (heart_equiped_offline_earned + rune_equiped_offline_earned);
         }
     }

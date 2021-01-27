@@ -245,15 +245,6 @@ public class NonJson                 /// 계속 추가 수정 가능한 돈
 
 }
 
-/// --------------------     21-01-25 업데이트 데이터 리틀 빅 쪼개기----------------------------
-
-[System.Serializable]
-public class LittleBigPet
-{
-    public string petLevel;
-    public string isEnable;
-}
-
 
 public class ListModel : MonoBehaviour
 {
@@ -341,6 +332,21 @@ public class ListModel : MonoBehaviour
         sc.charMaxLevel = charatorList[_index].charMaxLevel;
         sc.nextUpgradeCost = charatorList[_index].nextUpgradeCost;
         sc.powerPer = charatorList[_index].powerPer;
+        sc.title = charatorList[_index].title;
+        sc.description = charatorList[_index].description;
+        charatorList[_index] = sc;
+    }
+
+
+    public void Chara_NerfThis(int _index, float _level)
+    {
+        CharatorContent sc;
+
+        sc.index = charatorList[_index].index;
+        sc.charLevel = charatorList[_index].charLevel;                                   /// <- 해당 레벨로 바꿔주면 다른 조건은 따라온다
+        sc.charMaxLevel = charatorList[_index].charMaxLevel;
+        sc.nextUpgradeCost = charatorList[_index].nextUpgradeCost;
+        sc.powerPer = _level;
         sc.title = charatorList[_index].title;
         sc.description = charatorList[_index].description;
         charatorList[_index] = sc;
@@ -889,6 +895,45 @@ public class ListModel : MonoBehaviour
         /// 신규로 추가해준다.
         heartList.Add(sc);
     }
+
+
+
+    public void Heart_invisNeaf(int _index, float _value)
+    {
+        HeartContent sc;
+        // 주석 눈에 잘띄는 색
+        sc.index = invisibleheartList[_index].index;                             /// <- 인벤토리에 들어온 순서대로 인덱스 지정해줌
+        sc.heartLevel = invisibleheartList[_index].heartLevel;
+        sc.maxLevel = invisibleheartList[_index].maxLevel;
+        sc.powerToLvUP = _value;
+        sc.nextUpgradeNeed = invisibleheartList[_index].nextUpgradeNeed;
+        sc.leafToLvUP = invisibleheartList[_index].leafToLvUP;
+        sc.dropTable = invisibleheartList[_index].dropTable;
+        sc.descHead = invisibleheartList[_index].descHead;
+        sc.descTail = invisibleheartList[_index].descTail;
+        sc.imgIndex = invisibleheartList[_index].imgIndex;
+        sc.heartName = invisibleheartList[_index].heartName;
+
+        invisibleheartList[_index] = sc;
+    }
+    public void Heart_myNeaf(int _index, float _value)
+    {
+        HeartContent sc;
+        sc.index = heartList[_index].index;
+        sc.heartLevel = heartList[_index].heartLevel;                                     /// <- 해당 레벨로 바꿔주면 다른 조건은 따라온다
+        sc.maxLevel = heartList[_index].maxLevel;
+        sc.powerToLvUP = _value;
+        sc.nextUpgradeNeed = heartList[_index].nextUpgradeNeed;
+        sc.leafToLvUP = heartList[_index].leafToLvUP;
+        sc.dropTable = heartList[_index].dropTable;
+        sc.descHead = heartList[_index].descHead;
+        sc.descTail = heartList[_index].descTail;
+        sc.imgIndex = heartList[_index].imgIndex;
+        sc.heartName = heartList[_index].heartName;
+
+        heartList[_index] = sc;
+    }
+
 
     #endregion
 

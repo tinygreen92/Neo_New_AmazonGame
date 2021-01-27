@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class FakeLoading : MonoBehaviour
 {
+    public GameObject TextObss;
     public GameObject babnd;
     [Space]
     public BannerAdPanelController bac;
@@ -28,18 +29,18 @@ public class FakeLoading : MonoBehaviour
     /// </summary>
     void TEST_RESTE_JSON()
     {
-        ListModel.Instance.supList.Clear();
-        ListModel.Instance.charatorList.Clear();
-        ListModel.Instance.invisibleheartList.Clear();
-        ListModel.Instance.invisibleruneList.Clear();
-        ListModel.Instance.weaponList.Clear();
-        ListModel.Instance.petList.Clear();
-        ListModel.Instance.shopList.Clear();
-        ListModel.Instance.shopListSPEC.Clear();
-        ListModel.Instance.shopListNOR.Clear();
-        ListModel.Instance.mineCraft.Clear();
+        //ListModel.Instance.supList.Clear();
+        //ListModel.Instance.charatorList.Clear();
+        //ListModel.Instance.invisibleheartList.Clear();
+        //ListModel.Instance.invisibleruneList.Clear();
+        //ListModel.Instance.weaponList.Clear();
+        //ListModel.Instance.petList.Clear();
+        //ListModel.Instance.shopList.Clear();
+        //ListModel.Instance.shopListSPEC.Clear();
+        //ListModel.Instance.shopListNOR.Clear();
+        //ListModel.Instance.mineCraft.Clear();
         //
-        CodeStage.AntiCheat.Storage.ObscuredPrefs.DeleteAll();
+        ObscuredPrefs.DeleteAll();
         PlayerPrefs.DeleteAll();
 
 #if UNITY_EDITOR
@@ -203,6 +204,8 @@ public class FakeLoading : MonoBehaviour
         /// 나누 배너 보여주기
         om.InitNanooBanner();
 
+        /// 텍스트 오브젝트 사라지기
+        TextObss.SetActive(false);
 
         /// 서서히 사라지는 중
         currentTime = 0;
