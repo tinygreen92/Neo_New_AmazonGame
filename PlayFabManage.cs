@@ -285,131 +285,127 @@ public class PlayFabManage : MonoBehaviour
 
 
 
-    /// <summary>
-    /// 유료 재화를 서버에서 불러오기
-    /// </summary>
-    /// <param name="_CurrCode">공백""하면 모든 재화 다 불러서 저장.</param>
-    public int GetVirtualCurrency(string _CurrCode)
-    {
-        int iResult = 0;
+    ///// <summary>
+    ///// 유료 재화를 서버에서 불러오기
+    ///// </summary>
+    ///// <param name="_CurrCode">공백""하면 모든 재화 다 불러서 저장.</param>
+    //public int GetVirtualCurrency(string _CurrCode)
+    //{
+    //    int iResult = 0;
 
-        PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(),
-        (result) =>
-        {
-            switch (_CurrCode)
-            {
-                case "DA":
-                    iResult = result.VirtualCurrency["DA"];
-                    break;
+    //    PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(),
+    //    (result) =>
+    //    {
+    //        switch (_CurrCode)
+    //        {
+    //            case "DA":
+    //                iResult = result.VirtualCurrency["DA"];
+    //                break;
 
-                case "LF":
-                    iResult = result.VirtualCurrency["LF"];
-                    break;
+    //            case "LF":
+    //                iResult = result.VirtualCurrency["LF"];
+    //                break;
 
-                case "ES":
-                    iResult = result.VirtualCurrency["ES"];
-                    break;
+    //            case "ES":
+    //                iResult = result.VirtualCurrency["ES"];
+    //                break;
 
-                default:
-                    /// 최초 로그인시 서버 저장된 유료 재화 싹다 긁어옴
-                    //PlayerInventory.Money_Dia = result.VirtualCurrency["DA"];
-                    //PlayerInventory.Money_Leaf = result.VirtualCurrency["LF"];
-                    //PlayerInventory.Money_EnchantStone = result.VirtualCurrency["ES"];
-                    iResult = -1;
-                    //Debug.LogError("가상화폐 로딩 이 제일 느려 ");
-                    break;
-            }
-        },
-        (error) =>
-        {
-            Debug.LogError(error.GenerateErrorReport());
-            SceneManager.LoadScene(0);
-        }
+    //            default:
+    //                /// 최초 로그인시 서버 저장된 유료 재화 싹다 긁어옴
+    //                //PlayerInventory.Money_Dia = result.VirtualCurrency["DA"];
+    //                //PlayerInventory.Money_Leaf = result.VirtualCurrency["LF"];
+    //                //PlayerInventory.Money_EnchantStone = result.VirtualCurrency["ES"];
+    //                iResult = -1;
+    //                //Debug.LogError("가상화폐 로딩 이 제일 느려 ");
+    //                break;
+    //        }
+    //    },
+    //    (error) =>
+    //    {
+    //        Debug.LogError(error.GenerateErrorReport());
+    //        SceneManager.LoadScene(0);
+    //    }
 
-        );
+    //    );
 
-        return iResult;
-    }
-
-
-    /// <summary>
-    /// 가상화폐 재고는 충분한지?
-    /// </summary>
-    /// <returns></returns>
-    public bool IsEnoughVC(string _CurrCode, int _amount)
-    {
-        if (GetVirtualCurrency(_CurrCode) >= _amount)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    //    return iResult;
+    //}
 
 
-    /// <summary>
-    /// 유료 화폐 추가하기
-    /// </summary>
-    /// <param name="_CurrCode">DA / LF / ES</param>
-    public void AddVirtualCurrency(string _CurrCode, int _Amount)
-    {
-        PlayFabClientAPI.AddUserVirtualCurrency(new AddUserVirtualCurrencyRequest() { VirtualCurrency = _CurrCode, Amount = _Amount },
-                                                (result) => 
-                                                { 
-                                                    Debug.LogWarning("돈 획득");
-                                                    /// 재화  표시기에 표기
-                                                    GetVirtualCurrency("");
-                                                },
-                                                (error) => 
-                                                {
-                                                    Debug.LogWarning("돈 추가 에러");
-                                                    SceneManager.LoadScene(0);
-                                                }
-                                                );
-    }
+    ///// <summary>
+    ///// 가상화폐 재고는 충분한지?
+    ///// </summary>
+    ///// <returns></returns>
+    //public bool IsEnoughVC(string _CurrCode, int _amount)
+    //{
+    //    if (GetVirtualCurrency(_CurrCode) >= _amount)
+    //    {
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        return false;
+    //    }
+    //}
 
-    /// <summary>
-    /// 유료화폐 소모 -> 상점 연동하는게 더 안전할지도
-    /// </summary>
-    public void SubVirtualCurrency(string _CurrCode, int _Amount)
-    {
-        if (!IsEnoughVC(_CurrCode, _Amount))
-        {
-            Debug.LogError(_Amount + "보다 재화가 적음! 강제 return");
-            return;
-        }
-        /// 서버에서 돈 소모
-        PlayFabClientAPI.SubtractUserVirtualCurrency(new SubtractUserVirtualCurrencyRequest() { VirtualCurrency = _CurrCode, Amount = _Amount },
-                                                (result) =>
-                                                {
-                                                    Debug.LogWarning("돈 소모");
-                                                    /// 재화  표시기에 표기
-                                                    GetVirtualCurrency("");
-                                                },
-                                                (error) =>
-                                                {
-                                                    Debug.LogWarning("돈 소모 에러");
-                                                    SceneManager.LoadScene(0);
-                                                }
-                                                );
-    }
+
+    ///// <summary>
+    ///// 유료 화폐 추가하기
+    ///// </summary>
+    ///// <param name="_CurrCode">DA / LF / ES</param>
+    //public void AddVirtualCurrency(string _CurrCode, int _Amount)
+    //{
+    //    PlayFabClientAPI.AddUserVirtualCurrency(new AddUserVirtualCurrencyRequest() { VirtualCurrency = _CurrCode, Amount = _Amount },
+    //                                            (result) => 
+    //                                            { 
+    //                                                Debug.LogWarning("돈 획득");
+    //                                                /// 재화  표시기에 표기
+    //                                                GetVirtualCurrency("");
+    //                                            },
+    //                                            (error) => 
+    //                                            {
+    //                                                Debug.LogWarning("돈 추가 에러");
+    //                                                SceneManager.LoadScene(0);
+    //                                            }
+    //                                            );
+    //}
+
+    ///// <summary>
+    ///// 유료화폐 소모 -> 상점 연동하는게 더 안전할지도
+    ///// </summary>
+    //public void SubVirtualCurrency(string _CurrCode, int _Amount)
+    //{
+    //    if (!IsEnoughVC(_CurrCode, _Amount))
+    //    {
+    //        Debug.LogError(_Amount + "보다 재화가 적음! 강제 return");
+    //        return;
+    //    }
+    //    /// 서버에서 돈 소모
+    //    PlayFabClientAPI.SubtractUserVirtualCurrency(new SubtractUserVirtualCurrencyRequest() { VirtualCurrency = _CurrCode, Amount = _Amount },
+    //                                            (result) =>
+    //                                            {
+    //                                                Debug.LogWarning("돈 소모");
+    //                                                /// 재화  표시기에 표기
+    //                                                GetVirtualCurrency("");
+    //                                            },
+    //                                            (error) =>
+    //                                            {
+    //                                                Debug.LogWarning("돈 소모 에러");
+    //                                                SceneManager.LoadScene(0);
+    //                                            }
+    //                                            );
+    //}
 
     /// <summary>
     /// JObjectSave(bool _isSeverSave) 에서 넘어옴
     /// </summary>
     /// <param name="_mamayoyo"></param>
-    public void SaveTunaMayo(string _mamayoyo)
+    public void SaveTunaMayo(string dataBox, string realMayo)
     {
-        SetUserData(_mamayoyo);
+        /// 플레이팹 api 호출
+        SetUserData(dataBox, realMayo);
     }
-
-    /// <summary>
-    /// 데이터 밀어넣기 -> 서버에 저장 생각날때마다 해줄 것
-    /// JObjectSave (true) 로 호출
-    /// </summary>
-    void SetUserData(string _mamayoyo)
+    void SetUserData(string _mamayoyo, string realMayo)
     {
         //
         ListModel.Instance.nonSaveJsonMoney[0].RecentDistance = PlayerInventory.RecentDistance.ToString();
@@ -504,9 +500,9 @@ public class PlayFabManage : MonoBehaviour
                 { "SECTOR_4", PlayerPrefsManager.instance.ZZoGGoMiDataSave() },              /// 쪼꼬미 데이터
                 { "SECTOR_5", _mamayoyo},                                                                                            /// 실전압축 json 저장 [16]
                 { "SECTOR_6", PlayerInventory.isSuperUser.ToString() },                                         ///  광고 제거 구매 여부 저장
-                { "SECTOR_7",  (PlayerInventory.RecentDistance -1d).ToString("F0") },                                  /// 거리
+                { "SECTOR_7",  (PlayerInventory.RecentDistance -1d).ToString("F0") },                   /// 거리
                 { "SECTOR_8", PlayerPrefsManager.instance.NonJsonDataOutput() },                /// 확장 가능한 NonJson 리스트
-                { "SECTOR_9", "9"},
+                { "SECTOR_9", realMayo},                                                                                                    ///  유물 / 룬
             },
             Permission = UserDataPermission.Public
         };
@@ -525,10 +521,13 @@ public class PlayFabManage : MonoBehaviour
                 else
                 {
                     SystemPopUp.instance.StopLoopLoading();
-
                 }
             },
-            (error) => Debug.LogError("SECTOR_데이터 저장 실패")
+            (error) =>
+            {
+                Debug.LogError("SECTOR_데이터 저장 실패");
+                SystemPopUp.instance.StopLoopLoading();
+            }
             );
     }
 
@@ -645,14 +644,18 @@ public class PlayFabManage : MonoBehaviour
                     Debug.LogError("SECTOR_8 (nonSaveJsonMoney): " + result.Data["SECTOR_8"].Value);
                     PlayerPrefsManager.instance.NonJsonDataLoad(result.Data["SECTOR_8"].Value);
 
-                    //Debug.LogError("SECTOR_9 (_______): " + result.Data["SECTOR_9"].Value);
+                    Debug.LogError("SECTOR_9 (NonDataBoxList): " + result.Data["SECTOR_9"].Value);
+                    PlayerPrefsManager.instance.NonDataBoxList(result.Data["SECTOR_9"].Value);
 
                     ///// 파일에서 데이터 불러와서 리스트에 대입
                     //PlayerPrefsManager.isLoadingComp = true;
-                    /// 초반 초기화 완료 됐을때 키 초기화 [로컬에만 존재]
+                    /// 초반 초기화 완료 됐을때 오프라인 보상 안 받게.
                     ObscuredPrefs.SetInt("isSeverDataLoad", 609);
+                    /// 서버 로드 후 최초 실행때 초기화 막아주기
                     ObscuredPrefs.SetInt("tunamayo", 22);
-                    ObscuredPrefs.SetInt("update210117", 117);
+                    /// 이전 업데이트 다 적용
+                    ObscuredPrefs.SetInt("update210114", 214);
+                    ObscuredPrefs.SetInt("update210117", 956);
                     ObscuredPrefs.Save();
 
                     /// 파일에서 데이터 불러와서 리스트에 대입

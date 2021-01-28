@@ -1184,7 +1184,7 @@ public static class PlayerInventory
         set
         {
             money_Leaf = Math.Truncate(value);
-            if (money_Leaf > 9.99E+300) money_Leaf = 9.99E+300;
+            if (money_Leaf > 2000000000) money_Leaf = 2000000000;
             MoneyManager.instance.DisplayLeaf();
         }
 

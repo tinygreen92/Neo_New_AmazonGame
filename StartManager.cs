@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class StartManager : MonoBehaviour
 {
+    public GameObject DevelText;
+    public GameObject TestBtn;
     [TextArea]
     public string NOTICE;
     [TextArea]
@@ -32,9 +34,15 @@ public class StartManager : MonoBehaviour
 
         /// ------------------------------------------------------------------ ///
         
-        if (isDebugMode) return;
-        // 로그 비활성화
-        //Debug.unityLogger.logEnabled = false;
+        /// 개발자 모드만 켜서 빌드했냐? 로그 보는 용도.
+        if (isDeerveloperMode)
+        {
+            DevelText.SetActive(true);
+            TestBtn.SetActive(true);
+            return;
+        }
+        // 로그 비황성화
+        Debug.unityLogger.logEnabled = false;
         // 화면 꺼짐 방지
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }

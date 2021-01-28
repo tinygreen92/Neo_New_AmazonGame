@@ -30,10 +30,10 @@ public class FakeSceneEscape : MonoBehaviour
         while (!asyncScene.isDone)
         {
             yield return new WaitForFixedUpdate();
-            Debug.Log("로딩 얼마??" + asyncScene.progress);
+            //Debug.Log("로딩 얼마??" + asyncScene.progress);
 
-            currentTime += Time.deltaTime / 5f;
-            loadingBar.fillAmount = Mathf.SmoothStep(0, 0.3f, currentTime);
+            currentTime += Time.deltaTime;
+            loadingBar.fillAmount = Mathf.Lerp(0, 0.3f, currentTime);
 
             if (asyncScene.progress >= 0.9f)
             {

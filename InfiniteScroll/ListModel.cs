@@ -291,8 +291,6 @@ public class ListModel : MonoBehaviour
     }
 
 
-
-
     /// <summary>
     /// 펫 활성화 갱신
     /// </summary>
@@ -900,37 +898,27 @@ public class ListModel : MonoBehaviour
 
     public void Heart_invisNeaf(int _index, float _value)
     {
-        HeartContent sc;
-        // 주석 눈에 잘띄는 색
-        sc.index = invisibleheartList[_index].index;                             /// <- 인벤토리에 들어온 순서대로 인덱스 지정해줌
-        sc.heartLevel = invisibleheartList[_index].heartLevel;
-        sc.maxLevel = invisibleheartList[_index].maxLevel;
-        sc.powerToLvUP = _value;
-        sc.nextUpgradeNeed = invisibleheartList[_index].nextUpgradeNeed;
-        sc.leafToLvUP = invisibleheartList[_index].leafToLvUP;
-        sc.dropTable = invisibleheartList[_index].dropTable;
-        sc.descHead = invisibleheartList[_index].descHead;
-        sc.descTail = invisibleheartList[_index].descTail;
-        sc.imgIndex = invisibleheartList[_index].imgIndex;
-        sc.heartName = invisibleheartList[_index].heartName;
-
-        invisibleheartList[_index] = sc;
+        /// 추적하기
+        for (int i = 0; i < invisibleheartList.Count; i++)
+        {
+            if(invisibleheartList[i].imgIndex == "29")
+            {
+                HeartContent sc = invisibleheartList[i];
+                sc.powerToLvUP = 1f;
+                /// 갱신
+                invisibleheartList[i] = sc;
+                return;
+            }
+        }
     }
     public void Heart_myNeaf(int _index, float _value)
     {
-        HeartContent sc;
-        sc.index = heartList[_index].index;
-        sc.heartLevel = heartList[_index].heartLevel;                                     /// <- 해당 레벨로 바꿔주면 다른 조건은 따라온다
-        sc.maxLevel = heartList[_index].maxLevel;
+        HeartContent sc = heartList[_index];
+        /// 이미 값이 바뀌어있으면 return;
+        if (sc.powerToLvUP == _value)
+            return;
         sc.powerToLvUP = _value;
-        sc.nextUpgradeNeed = heartList[_index].nextUpgradeNeed;
-        sc.leafToLvUP = heartList[_index].leafToLvUP;
-        sc.dropTable = heartList[_index].dropTable;
-        sc.descHead = heartList[_index].descHead;
-        sc.descTail = heartList[_index].descTail;
-        sc.imgIndex = heartList[_index].imgIndex;
-        sc.heartName = heartList[_index].heartName;
-
+        // 갱신
         heartList[_index] = sc;
     }
 
@@ -1344,11 +1332,180 @@ public class ListModel : MonoBehaviour
 
 
 
-    public void SecondNonJson()
+    ///--------------------------------  DataBopCopy 데이터 저장용   -------------------------------------///
+    ///
+    public void Sector5LoadBox(SeverDataBox data)
     {
+        // 펫  0 
+        for (int i = 0; i < data.petLevel.Length; i++)
+        {
+            Pet_UnBoxing(i, data.petLevel[i], data.petIsEnable[i]);
+        }
+        // 캐릭터 1 
+        for (int i = 0; i < data.charLevel.Length; i++)
+        {
+            Chara_UnBoxing(i, data.charLevel[i]);
+        }
+        //  무기  2 
+        for (int i = 0; i < data.weaponLevel.Length; i++)
+        {
+            Weapon_UnBoxing(i, data.weaponLevel[i], data.weaAmount[i], data.weaIsEnable[i]);
+        }
+        // 수집 8 
+        for (int i = 0; i < data.supporterLevel.Length; i++)
+        {
+            Supporter_UnBoxing(i, data.supporterLevel[i], data.supIsEnable[i]);
+        }
+        // 일일 미션  15
+        for (int i = 0; i < data.curentDayValue.Length; i++)
+        {
+            DAYlist_UnBoxing(i, data.curentDayValue[i]);
+        }
+        // 업적  16
+        for (int i = 0; i < data.maxAllValue.Length; i++)
+        {
+            ALLlist_UnBoxing(i, data.maxAllValue[i], data.curentAllValue[i]);
+        }
+        // 튜토리얼 17
+        for (int i = 0; i < data.curentTutoValue.Length; i++)
+        {
+            TUTO_UnBoxing(i, data.curentTutoValue[i]);
+        }
+        // 광산 해금18
+        for (int i = 0; i < data.mineIsEnable.Length; i++)
+        {
+            Mine_UnBoxing(i, data.mineIsEnable[i]);
+        }
+        // 늪지 킬카운터 20
+        for (int i = 0; i < data.killCount.Length; i++)
+        {
+            swampCaveData[i].killCount = data.killCount[i].ToString();
+        }
 
+
+        /// 로컬 파일로 저장
+        PlayerPrefsManager.instance.NewNewSector5();
     }
+    void Pet_UnBoxing(int _index, int _lv, bool _isTrue)
+    {
+        PetContent sc;
+        sc.petLevel = _lv.ToString();
+        sc.isEnable = _isTrue  ? "TRUE" : "FALSE";
+        // 주석 눈에 잘띄는 색
+        sc.index = petList[_index].index;
+        sc.needUpgrade = petList[_index].needUpgrade;
+        sc.usingTimeDam = petList[_index].usingTimeDam;
+        sc.percentDam = petList[_index].percentDam;
+        sc.coolTime = petList[_index].coolTime;
+        sc.Desc = petList[_index].Desc;
 
+        petList[_index] = sc;
+    }
+    void Chara_UnBoxing(int _index, int _level)
+    {
+        CharatorContent sc;
+        sc.charLevel = _level.ToString();                                       /// <- 해당 레벨로 바꿔주면 다른 조건은 따라온다
+
+        sc.index = charatorList[_index].index;
+        sc.charMaxLevel = charatorList[_index].charMaxLevel;
+        sc.nextUpgradeCost = charatorList[_index].nextUpgradeCost;
+        sc.powerPer = charatorList[_index].powerPer;
+        sc.title = charatorList[_index].title;
+        sc.description = charatorList[_index].description;
+        charatorList[_index] = sc;
+    }
+    void Weapon_UnBoxing(int _index, int _Lv, int _Amont,  bool _isTrue)
+    {
+        WeaponContent sc;
+        sc.weaponLevel = _Lv.ToString();
+        sc.weaAmount = _Amont.ToString();
+        sc.isEnable = _isTrue ? "TRUE" : "FALSE";
+        // 주석 눈에 잘띄는 색
+        sc.index = weaponList[_index].index;
+        sc.headRank = weaponList[_index].headRank;
+        sc.tailRank = weaponList[_index].tailRank;
+        sc.startPower = weaponList[_index].startPower;
+        sc.increedPower = weaponList[_index].increedPower;
+        sc.nextUpgradeCost = weaponList[_index].nextUpgradeCost;
+        sc.rankUpDia = weaponList[_index].rankUpDia;
+        sc.rankUpENstone = weaponList[_index].rankUpENstone;
+        sc.startPassFail = weaponList[_index].startPassFail;
+        sc.passFailPer = weaponList[_index].passFailPer;
+
+        weaponList[_index] = sc;
+    }
+    void Supporter_UnBoxing(int _index, int _level, bool _isTrue)
+    {
+        SupContent sc;
+        sc.supporterLevel = _level.ToString();
+        sc.isEnable = _isTrue ? "TRUE" : "FALSE";
+
+        sc.index = supList[_index].index;
+        sc.supporterName = supList[_index].supporterName;
+        sc.maxTime = supList[_index].maxTime;
+        sc.currentEarnGold = supList[_index].currentEarnGold;
+        sc.nextUpgradeNeed = supList[_index].nextUpgradeNeed;
+
+        supList[_index] = sc;
+    }
+    void DAYlist_UnBoxing(int _index, int _value)
+    {
+        MissonSchool sc;
+        sc.curentValue = _value.ToString();
+
+        sc.category = missionDAYlist[_index].category;
+        sc.korDesc = missionDAYlist[_index].korDesc;
+        sc.engDesc = missionDAYlist[_index].engDesc;
+        sc.reword = missionDAYlist[_index].reword;
+        sc.refreshMulti = missionDAYlist[_index].refreshMulti;
+        sc.maxValue = missionDAYlist[_index].maxValue;
+        sc.rewordAmount = missionDAYlist[_index].rewordAmount;
+
+        missionDAYlist[_index] = sc;
+    }
+    void ALLlist_UnBoxing(int _index, string _maxValue, string _curValue)
+    {
+        MissonSchool sc;
+        sc.maxValue = _maxValue;
+        sc.curentValue = _curValue;
+
+        sc.category = missionALLlist[_index].category;
+        sc.korDesc = missionALLlist[_index].korDesc;
+        sc.engDesc = missionALLlist[_index].engDesc;
+        sc.reword = missionALLlist[_index].reword;
+        sc.refreshMulti = missionALLlist[_index].refreshMulti;
+        sc.rewordAmount = missionALLlist[_index].rewordAmount;
+
+        missionALLlist[_index] = sc;
+    }
+    void TUTO_UnBoxing(int _index, int _Amount)
+    {
+        MissonSchool sc;
+        sc.curentValue = _Amount.ToString();
+
+        sc.category = missionTUTOlist[_index].category;
+        sc.korDesc = missionTUTOlist[_index].korDesc;
+        sc.engDesc = missionTUTOlist[_index].engDesc;
+        sc.reword = missionTUTOlist[_index].reword;
+        sc.refreshMulti = missionTUTOlist[_index].refreshMulti;
+        sc.maxValue = missionTUTOlist[_index].maxValue;
+        sc.rewordAmount = missionTUTOlist[_index].rewordAmount;
+
+        missionTUTOlist[_index] = sc;
+    }
+    void Mine_UnBoxing(int _index, string _string)
+    {
+        MineCraft sc;
+        sc.isEnable = _string;
+        // 주석 눈에 잘띄는 색
+        sc.stage = mineCraft[_index].stage;
+        sc.mine_hp = mineCraft[_index].mine_hp;
+        sc.reword_es = mineCraft[_index].reword_es;
+        sc.reword_ama = mineCraft[_index].reword_ama;
+        sc.unlockDia = mineCraft[_index].unlockDia;
+
+        mineCraft[_index] = sc;
+    }
 
 }
 

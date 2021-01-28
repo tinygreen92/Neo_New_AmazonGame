@@ -94,6 +94,9 @@ public class OfflineManager : MonoBehaviour
 
     public void OfflineInit()
     {
+        /// 안쓰는 거지만 유물 ListModel.Instance.Heart_myNeaf(heartIndexs[28] - 1, 1f) 갱신
+        var tmppp = PlayerInventory.Offline_Earned;
+
         /// 거리 짧을때 혹은 서버 데이터 로드해서 재실행하면 오프라인 보상 패스. 
         if (PlayerInventory.RecentDistance < 1.0d || ObscuredPrefs.GetInt("isSeverDataLoad") != 0)
         {
