@@ -168,7 +168,9 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
         if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
         {
             SendChatMessage(InputMesseageBox.text);
+            /// 활성화 상태니까 -> 비활성화
             InputMesseageBox.Select();
+            InputMesseageBox.ActivateInputField();
             InputMesseageBox.text = "";
         }
     }
@@ -181,7 +183,9 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
         if (InputMesseageBox != null)
         {
             SendChatMessage(InputMesseageBox.text);
+            /// 활성화 상태니까 -> 비활성화
             InputMesseageBox.Select();
+            InputMesseageBox.ActivateInputField();
             InputMesseageBox.text = "";
         }
     }

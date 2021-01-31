@@ -118,7 +118,7 @@ public class OfflineManager : MonoBehaviour
             int reMinutes = resultTime.Minutes;
             int reSeconds = resultTime.Seconds;
             /// 초단위
-            int maxTime = Mathf.RoundToInt((float)PlayerInventory.Offline_Time);
+            int maxTime = (int)Math.Truncate(PlayerInventory.Offline_Time);
             Debug.LogWarning("maxTime : " + maxTime + " resultTime.TotalSeconds : " + resultTime.TotalSeconds);
             /// 3시간 넘거나 하루가 지나면 -> 최대치로 고정
             if (resultTime.TotalSeconds >= maxTime || resultTime.Days > 0)
@@ -187,34 +187,42 @@ public class OfflineManager : MonoBehaviour
         // 이론상 최대거리 계산
         rainbowDash = (_input * 0.1d) + tmpDistance;
         /// 0.1km 단위 절삭
-        applejack = Mathf.FloorToInt((float)(rainbowDash *0.1d));
+        applejack = (long)Math.Truncate(rainbowDash *0.1d);
         applejack *= 10;
 
         Debug.LogWarning("오프라인 초 : " + _input + " 최대 거리 :  " + rainbowDash  + "m" + " 애플 거리" + applejack  +"m");
 
+        long bossDist = applejack;
         double playerDps = PlayerInventory.Player_DPS * 30.0d;
-        double lastBossHp = GetLastBossHp(applejack);
+        double lastBossHp = GetLastBossHp(bossDist);
         // 최대거리 가는 동안 올 보스 킬 가능?
         if (playerDps < lastBossHp)
         {
             /// 최대거리 보스 못 잡았음
-            for (long i = applejack; i > tmpDistance; applejack -= 10)
+            for (long i = bossDist; i > tmpDistance; bossDist -= 10)
             {
                 /// 어디까지 잡았니?
-                if (playerDps > GetLastBossHp(applejack))
+                if (playerDps > GetLastBossHp(bossDist))
                 {
                     /// 잡은 보스 + 0.9km
-                    Debug.LogWarning("플레이어 dps : " + playerDps + " 보스 거리 :  " + applejack);
+                    Debug.LogWarning("플레이어 dps : " + playerDps + " 보스 거리 :  " + bossDist);
                     break;
                 }
             }
-            /// 거리 갱신
-            PlayerInventory.RecentDistance = Mathf.RoundToInt((float)(applejack + 9.0d));
+            /// 보스 거리가 절삭 거리보다 크다면?
+            if (bossDist >= applejack)
+            {
+                PlayerInventory.RecentDistance = Math.Truncate(bossDist + 9.0d);
+            }
+            /// 원래 거리가 더 크다면
+            else
+            {
+                PlayerInventory.RecentDistance = Math.Truncate(tmpDistance + 9.0d);
+            }
         }
         else
         {
-            /// 거리 갱신
-            PlayerInventory.RecentDistance = Mathf.RoundToInt((float)rainbowDash);
+            PlayerInventory.RecentDistance = Math.Truncate(rainbowDash);
         }
         // 거리 표기
         DistanceManager.instance.TextDistDisplay(PlayerInventory.RecentDistance);
@@ -274,7 +282,7 @@ public class OfflineManager : MonoBehaviour
         PlayerInventory.SetTicketCount("reinforce_box", (int)ltimeBae2);
 
         // 아마존 결정 조각
-        ltimeBae3 = Mathf.CeilToInt(_input / 500.0f);
+        ltimeBae3 = (long)Math.Truncate(_input / 500.0f);
         ltimeBae3 = (long)(ltimeBae3 * PlayerInventory.Offline_Earned);
         //PlayerInventory.AmazonStoneCount += ltimeBae3;
         ///// 결정조각  업적  카운트
@@ -353,7 +361,7 @@ public class OfflineManager : MonoBehaviour
         PlayerInventory.Money_Leaf += ltimeBae1;
         /// 나뭇잎 획득량 업적 올리기
         ListModel.Instance.ALLlist_Update(4, ltimeBae1);
-        rewordText[1].text = PlayerPrefsManager.instance.DoubleToStringNumber(ltimeBae2 * 2);
+        rewordText[1].text = PlayerPrefsManager.instance.DoubleToStringNumber(ltimeBae1 * 2d);
 
         PlayerInventory.Money_EnchantStone += ltimeBae2;
         ///  강화석 업적 카운트 올리기

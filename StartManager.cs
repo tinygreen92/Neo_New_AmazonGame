@@ -15,8 +15,6 @@ public class StartManager : MonoBehaviour
     public string NOTICE2;
     [Header("- 디버그 공지사항용")]
     public Text headChatTxt;
-    public Text versionTxt;
-    public Text uidTxt;
     [Header("- 개발자용 빌드일 때 체크")]
     public bool isDeerveloperMode;
     [Header("- 디버그 모드시 체크")]

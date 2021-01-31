@@ -49,6 +49,16 @@ public class HpBarManager : MonoBehaviour
         CoinDropManager.instance.DropLeaf(enemyPos, coinCentPos);
     }
 
+    public void DropAmaCoin()
+    {
+        CoinDropManager.instance.DropAmaCoin(enemyPos, coinCentPos);
+    }
+
+    public void DropPotion()
+    {
+        CoinDropManager.instance.DropPotion(enemyPos, coinCentPos);
+    }
+
 
     public void SubEnemyHP()
     {

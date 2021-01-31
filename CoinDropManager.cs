@@ -7,6 +7,7 @@ public class CoinDropManager : MonoBehaviour
     public Transform eneObj;
     public Transform leafObj;
     public Transform zogarkObj;
+    public Transform potionObj;
 
     public Transform[] m_goldPosList;
     public static CoinDropManager instance;
@@ -49,10 +50,9 @@ public class CoinDropManager : MonoBehaviour
 
     }
 
+
     public void DropLeaf(GameObject deadEnemy, GameObject coinPos)
     {
-        /// 결정 조각 떨궈주기
-        DropZogark(deadEnemy, coinPos);
         // 골드 드랍 오브젝트 갯수 맥스 15개.
         randomValue = Random.Range(3, 15);
 
@@ -73,7 +73,8 @@ public class CoinDropManager : MonoBehaviour
 
     }
 
-    void DropZogark(GameObject deadEnemy, GameObject coinPos)
+
+    public void DropAmaCoin(GameObject deadEnemy, GameObject coinPos)
     {
         Transform coinObject = Instantiate(zogarkObj, Vector3.zero, Quaternion.identity); // 프리팹 생성
 
@@ -84,8 +85,22 @@ public class CoinDropManager : MonoBehaviour
         int randomPos = Random.Range(0, m_goldPosList.Length); // 리스트에 올려둔 위치값.
 
         coinObject.GetComponent<DropGold>().Init(deadEnemy.transform.position, coinPos.transform.position, m_goldPosList[randomPos].position);
-
     }
+
+
+    public void DropPotion(GameObject deadEnemy, GameObject coinPos)
+    {
+        Transform coinObject = Instantiate(potionObj, Vector3.zero, Quaternion.identity); // 프리팹 생성
+
+        coinObject.SetParent(gameObject.transform); // 에너미 부모 위치에 생성
+        coinObject.localScale = new Vector3(1.2f, 1.2f, 1.2f); // 스케일 값 1 고정
+        coinObject.localPosition = Vector3.zero; // 뒤틀리는거 방지
+
+        int randomPos = Random.Range(0, m_goldPosList.Length); // 리스트에 올려둔 위치값.
+
+        coinObject.GetComponent<DropGold>().Init(deadEnemy.transform.position, coinPos.transform.position, m_goldPosList[randomPos].position);
+    }
+
 
 
 }

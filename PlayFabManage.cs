@@ -14,6 +14,12 @@ using UnityEngine.UI;
 
 public class PlayFabManage : MonoBehaviour
 {
+    [Header("- 버전 닉네임")]
+    public Text versionTxt;
+    public Text uidTxt;
+    public Text versionConfigTxt;
+    public Text uidConfigTxt;
+    [Header("- 매니저 놈들")]
     public ModelHandler mh;
     public IntroManager im;
     public NanooManager nm;
@@ -62,8 +68,10 @@ public class PlayFabManage : MonoBehaviour
         /// 플래이팹 로그인 확인되면 ModelHandler 로딩
         PlayerPrefsManager.CursedId = _cusId;
         /// 회원정보 표기
-        StartManager.instance.uidTxt.text = "uid : " + _cusId;
-        StartManager.instance.versionTxt.text = "ver : " + Application.version;
+        uidTxt.text = "uid : " + _cusId;
+        uidConfigTxt.text = "uid : " + _cusId;
+        versionTxt.text = "ver : " + Application.version;
+        versionConfigTxt.text = "ver : " + Application.version;
         /// 로컬 데이터 준비
         mh.TunaDataLoad();
 
@@ -407,7 +415,59 @@ public class PlayFabManage : MonoBehaviour
     }
     void SetUserData(string _mamayoyo, string realMayo)
     {
-        //
+        /// JSON 화 되지 않는 것들 저장
+        NonJsonDataBoxSave();
+
+        /// 여기는 인터넷 연결 해서 처리하는 구간
+        var request = new UpdateUserDataRequest()
+        {
+            Data = new Dictionary<string, string>()
+            {
+                /// 알파벳 순서 enemyAllData 에 차곡 차곡 10개씩 cnt / 10 == index 0 부터 시작
+                /// { "SECTOR_0", PlayerPrefsManager.instance.LoadStringJsonn("isilpus")}, 
+                { "SECTOR_0", Application.version},
+                { "SECTOR_1", PlayerInventory.Money_Dia.ToString() },
+                { "SECTOR_2", PlayerInventory.Money_Leaf.ToString()},
+                { "SECTOR_3", PlayerInventory.Money_EnchantStone.ToString() },
+                { "SECTOR_4", PlayerPrefsManager.instance.ZZoGGoMiDataSave() },              /// 쪼꼬미 데이터
+                { "SECTOR_5", _mamayoyo},                                                                                            /// 실전압축 json 저장 [16]
+                { "SECTOR_6", PlayerInventory.isSuperUser.ToString() },                                         ///  광고 제거 구매 여부 저장
+                { "SECTOR_7",  (PlayerInventory.RecentDistance -1d).ToString("F0") },                   /// 거리
+                { "SECTOR_8", PlayerPrefsManager.instance.NonJsonDataOutput() },                /// 확장 가능한 NonJson 리스트
+                { "SECTOR_9", realMayo},                                                                                                    ///  유물 / 룬 json
+            },
+            Permission = UserDataPermission.Public
+        };
+
+        PlayFabClientAPI.UpdateUserData(request,
+            (result) =>
+            {
+                Debug.LogError("SECTOR_데이터 저장 성공!! " + myPlayFabId);
+                /// 서버에 올리고 로컬 초기화
+                if (PlayerPrefsManager.instance.isResetAferSave)
+                {
+                    Time.timeScale = 0;
+                    PlayerPrefsManager.instance.InvoMyDate2();
+                }
+                /// 그냥 서버 저장
+                else
+                {
+                    SystemPopUp.instance.StopLoopLoading();
+                }
+            },
+            (error) =>
+            {
+                Debug.LogError("SECTOR_데이터 저장 실패");
+                SystemPopUp.instance.StopLoopLoading();
+            }
+            );
+    }
+
+    /// <summary>
+    /// 인벤토리 아이템 , 횟수제한, 출석체크 등 저장
+    /// </summary>
+    void NonJsonDataBoxSave()
+    {
         ListModel.Instance.nonSaveJsonMoney[0].RecentDistance = PlayerInventory.RecentDistance.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].Money_Gold = PlayerInventory.Money_Gold.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].Money_Elixir = PlayerInventory.Money_Elixir.ToString();
@@ -439,7 +499,7 @@ public class PlayFabManage : MonoBehaviour
         ListModel.Instance.nonSaveJsonMoney[0].mining = PlayerInventory.mining.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].amber = PlayerInventory.amber.ToString();
         ///  인트 저장
-        ListModel.Instance.nonSaveJsonMoney[0].isTutoAllClear = PlayerPrefsManager. isTutoAllClear ? 525 : 0;
+        ListModel.Instance.nonSaveJsonMoney[0].isTutoAllClear = PlayerPrefsManager.isTutoAllClear ? 525 : 0;
 
 
 
@@ -463,8 +523,8 @@ public class PlayFabManage : MonoBehaviour
         ListModel.Instance.nonSaveJsonMoney[1].box_Coupon = PlayerPrefsManager.SwampyEnterCnt.ToString();
         ///[1].SwampySkipCnt
         ListModel.Instance.nonSaveJsonMoney[1].box_E = PlayerPrefsManager.SwampySkipCnt.ToString();
-        
-        
+
+
         ///... [1] [2] 쭉쭉 저장 가능하게
         //ListModel.Instance.nonSaveJsonMoney[1].box_D = "651";
         //ListModel.Instance.nonSaveJsonMoney[1].box_C = PlayerInventory.box_C.ToString();
@@ -484,53 +544,7 @@ public class PlayFabManage : MonoBehaviour
         /////  인트 저장
         //ListModel.Instance.nonSaveJsonMoney[1].isTutoAllClear = PlayerPrefsManager.isTutoAllClear ? 525 : 0;
 
-
-
-        /// 여기는 인터넷 연결 해서 처리하는 구간
-        var request = new UpdateUserDataRequest()
-        {
-            Data = new Dictionary<string, string>()
-            {
-                /// 알파벳 순서 enemyAllData 에 차곡 차곡 10개씩 cnt / 10 == index 0 부터 시작
-                /// { "SECTOR_0", PlayerPrefsManager.instance.LoadStringJsonn("isilpus")}, 
-                { "SECTOR_0", Application.version},
-                { "SECTOR_1", PlayerInventory.Money_Dia.ToString() },
-                { "SECTOR_2", PlayerInventory.Money_Leaf.ToString()},
-                { "SECTOR_3", PlayerInventory.Money_EnchantStone.ToString() },
-                { "SECTOR_4", PlayerPrefsManager.instance.ZZoGGoMiDataSave() },              /// 쪼꼬미 데이터
-                { "SECTOR_5", _mamayoyo},                                                                                            /// 실전압축 json 저장 [16]
-                { "SECTOR_6", PlayerInventory.isSuperUser.ToString() },                                         ///  광고 제거 구매 여부 저장
-                { "SECTOR_7",  (PlayerInventory.RecentDistance -1d).ToString("F0") },                   /// 거리
-                { "SECTOR_8", PlayerPrefsManager.instance.NonJsonDataOutput() },                /// 확장 가능한 NonJson 리스트
-                { "SECTOR_9", realMayo},                                                                                                    ///  유물 / 룬
-            },
-            Permission = UserDataPermission.Public
-        };
-
-        PlayFabClientAPI.UpdateUserData(request,
-            (result) =>
-            {
-                Debug.LogError("SECTOR_데이터 저장 성공!! " + myPlayFabId);
-                /// 서버에 올리고 로컬 초기화
-                if (PlayerPrefsManager.instance.isResetAferSave)
-                {
-                    Time.timeScale = 0;
-                    PlayerPrefsManager.instance.InvoMyDate2();
-                }
-                /// 그냥 서버 저장
-                else
-                {
-                    SystemPopUp.instance.StopLoopLoading();
-                }
-            },
-            (error) =>
-            {
-                Debug.LogError("SECTOR_데이터 저장 실패");
-                SystemPopUp.instance.StopLoopLoading();
-            }
-            );
     }
-
 
 
     //void GetUserSector5()
@@ -605,6 +619,7 @@ public class PlayFabManage : MonoBehaviour
                         //Debug.LogError("SECTOR_5 (JsonData): " + result.Data["SECTOR_5"].Value); // 제이와피
                         if (curentVersion == "1.0.1" || curentVersion == "1.0.2" || curentVersion == "1.0.3" || curentVersion == "1.0.4" || curentVersion == "1.0.5")
                         {
+                            Debug.LogError(" 해당 1.0.6 이전 버전 데이터 처리 ");
                             /// 1.0.6 이전 버전 데이터 처리
                             File.WriteAllText(Application.persistentDataPath + "/_data_", result.Data["SECTOR_5"].Value);
                         }
@@ -638,7 +653,7 @@ public class PlayFabManage : MonoBehaviour
                     else PlayerInventory.isSuperUser = 0;
 
                     Debug.LogError("SECTOR_7 (RecentDistance): " + result.Data["SECTOR_7"].Value);
-                    if(double.TryParse(result.Data["SECTOR_7"].Value, out dtryResult)) PlayerInventory.RecentDistance = dtryResult;
+                    if (double.TryParse(result.Data["SECTOR_7"].Value, out dtryResult)) PlayerInventory.RecentDistance = dtryResult;
                     else PlayerInventory.RecentDistance = 0;
 
                     Debug.LogError("SECTOR_8 (nonSaveJsonMoney): " + result.Data["SECTOR_8"].Value);
@@ -656,6 +671,7 @@ public class PlayFabManage : MonoBehaviour
                     /// 이전 업데이트 다 적용
                     ObscuredPrefs.SetInt("update210114", 214);
                     ObscuredPrefs.SetInt("update210117", 956);
+                    ObscuredPrefs.SetInt("update210128", 455);
                     ObscuredPrefs.Save();
 
                     /// 파일에서 데이터 불러와서 리스트에 대입
@@ -676,7 +692,9 @@ public class PlayFabManage : MonoBehaviour
          );
     }
 
-
+    /// <summary>
+    /// 게임 버전 낮으면 이곳으로 이동
+    /// </summary>
     public void GameUpdatePlz()
     {
         Application.OpenURL("market://details?id=" + URL);

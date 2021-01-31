@@ -60,6 +60,7 @@ public class ModelHandler : MonoBehaviour
             /// 이전 데이터 다 적용
             ObscuredPrefs.SetInt("update210114", 214);
             ObscuredPrefs.SetInt("update210117", 956);
+            ObscuredPrefs.SetInt("update210128", 455);
             ObscuredPrefs.Save();
             /// 파일에서 데이터 불러와서 리스트에 대입
             PlayerPrefsManager.instance.JObjectLoad(true);
@@ -86,6 +87,22 @@ public class ModelHandler : MonoBehaviour
 
         }
 
+        ///update210128
+        ///----------------------------------------------update210128---------------------------------------
+        ///update210128
+        if (!ObscuredPrefs.HasKey("update210128"))
+        {
+            /// 파일에서 데이터 불러와서 리스트에 대입
+            PlayerPrefsManager.instance.SuperDataPatch();
+
+            /// 초반 초기화 완료 됐을때 키 초기화
+            ObscuredPrefs.SetInt("update210128", 455);
+            ObscuredPrefs.Save();
+            return;
+        }
+
+
+
         /// ----------------------------------------- 통상 호출
 
         /// 로컬 데이터 로드
@@ -106,6 +123,9 @@ public class ModelHandler : MonoBehaviour
     /// <param name="_isLocal"></param>
     void InitMoHa(bool _isLocal)
     {
+        /// 파일에서 데이터 불러와서 리스트에 대입
+        PlayerPrefsManager.instance.JObjectLoad(_isLocal);
+
         /// 뉴 데이터 -
         GameDataBox data = DataBoxCopy.instance.LoadBox();
         //
@@ -144,8 +164,6 @@ public class ModelHandler : MonoBehaviour
         PlayerPrefsManager.SwampyEnterCnt = data.SwampyEnterCnt;
         PlayerPrefsManager.SwampySkipCnt = data.SwampySkipCnt;
         //
-        /// 파일에서 데이터 불러와서 리스트에 대입
-        PlayerPrefsManager.instance.JObjectLoad(_isLocal);
     }
 
     ///// <summary>

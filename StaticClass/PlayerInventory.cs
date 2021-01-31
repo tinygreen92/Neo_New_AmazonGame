@@ -1141,29 +1141,6 @@ public static class PlayerInventory
         }
     }
 
-    ///--------------------------------  DIAMOND 유료 재화  -------------------------------------/// 
-
-
-    //public static ObscuredLong Money_Dia     {
-    //    get { return MoneyManager.instance.PFM.GetVirtualCurrency("DA"); }
-    //    set 
-    //    { 
-    //        money_Dia = value;
-    //        /// 다이아 감산
-    //        if (value < 0)
-    //        {
-    //            MoneyManager.instance.PFM.SubVirtualCurrency("DA", (int)money_Dia);
-    //        }
-    //        /// 다이아 가산
-    //        else
-    //        {
-    //            if (money_Dia > 2000000000) money_Dia = 2000000000;
-    //            MoneyManager.instance.PFM.AddVirtualCurrency("DA", (int)money_Dia);
-    //        }
-
-    //        MoneyManager.instance.DisplayDia();
-    //    }
-    //}
 
     public static ObscuredLong Money_Dia
     {
@@ -1184,7 +1161,7 @@ public static class PlayerInventory
         set
         {
             money_Leaf = Math.Truncate(value);
-            if (money_Leaf > 2000000000) money_Leaf = 2000000000;
+            if (money_Leaf > 9.99E+300) money_Leaf = 9.99E+300;
             MoneyManager.instance.DisplayLeaf();
         }
 
@@ -1255,7 +1232,7 @@ public static class PlayerInventory
             Debug.LogError("호출 어디야");
             amazonStoneCount = value;
             /// 유물 경험치 요구 유물 적용
-            MaxGage = Mathf.CeilToInt(((CurrentAmaLV + 1) * 100 * (float)AmazonPoint_Cost));
+            MaxGage = (int)Math.Truncate((CurrentAmaLV + 1) * 100d * AmazonPoint_Cost);
             /// TODO : 증가 시켰는데 맥스 요구 보다 높으면 이월 시키고 결정지급 / 게이지 돌파하면 이월 시키고 게이지 증가
             if (amazonStoneCount >= MaxGage && amazonStoneCount != 0)
             {

@@ -111,11 +111,14 @@ public class EnemyController : MonoBehaviour
             {
                 HBM.cm.GoldDropPos.SetActive(true);
             }
-            /// 없으면? 숨겨진 늪지다.
+            /// 드롭 골드가 있으면 일반 몬스터다
             if (dEnemy_DropGold > 0)
             {
+
                 HBM.SetHpBarFill(0);
                 HBM.DropGold();
+                /// 나뭇잎 기본 획득량 공식 (거리 비례) (보스는 100% 일반은 5%)
+                double currentLeaf = 5.0d * (1.0d + (0.35d * PlayerInventory.RecentDistance));
                 /// 근데 방금 죽인게 보스라면?
                 if (PlayerInventory.RecentDistance != 0 && IsBossStage() && HBM.isBossAlive)
                 {
@@ -126,17 +129,16 @@ public class EnemyController : MonoBehaviour
                     if (PlayerPrefsManager.currentTutoIndex == 22) ListModel.Instance.TUTO_Update(22);
                     if (PlayerPrefsManager.currentTutoIndex == 44) ListModel.Instance.TUTO_Update(44);
                     /// 아마존 결정 무조건 획득
+                    HBM.DropAmaCoin();
                     PlayerInventory.Money_AmazonCoin++;
                     /// 아마존 결정 획득 팝업
                     //PopUpManager.instance.ShowGetPop(0, "1");
                     /// 나뭇잎 100% 드랍
                     HBM.DropLeaf();
-                    /// 나뭇잎 기본 획득량 공식 (거리 비례)
-                    double currentLeaf = 5.0d * (1.0d + (0.35d * PlayerInventory.RecentDistance));
                     PlayerInventory.Money_Leaf += PlayerInventory.Player_Leaf_Earned * currentLeaf;
                     /// 나뭇잎 획득량 업적 올리기
                     ListModel.Instance.ALLlist_Update(4, PlayerInventory.Player_Leaf_Earned * currentLeaf);
-                    /// 나뭇잎 주사위 굴리기 1% = 10*(1+(0.35*Lv))
+                    /// 강화/나뭇 박스 1개씩 드랍
                     randomseed = Random.Range(0, 100f);
                     if (randomseed < 10.1f)
                     {
@@ -147,14 +149,22 @@ public class EnemyController : MonoBehaviour
                 }
                 /// 몬스터 킬 카운터 +1
                 HBM.fm.State_Monster_KillCount++;
-                /// 아마존 결정 획득 주사위 굴리기 
+
+                /// 아마존 포션 획득 주사위 굴리기 
                 randomseed = Random.Range(0, 100f);
                 if (randomseed < PlayerInventory.AmazonPoint_Earned)
                 {
                     /// 아마존 포션 추가
+                    HBM.DropPotion();
                     PlayerInventory.SetTicketCount("S_leaf_box", 1);
-                    ///// 아마존 결정 조각 1개 획득 팝업
-                    //PopUpManager.instance.ShowPopUP(25);
+                }
+                if (randomseed > 94.9f)
+                {
+                    /// 나뭇잎 5% 드랍
+                    HBM.DropLeaf();
+                    PlayerInventory.Money_Leaf += PlayerInventory.Player_Leaf_Earned * currentLeaf;
+                    /// 나뭇잎 획득량 업적 올리기
+                    ListModel.Instance.ALLlist_Update(4, PlayerInventory.Player_Leaf_Earned * currentLeaf);
                 }
             }
             /// 공격 동작 멈추기

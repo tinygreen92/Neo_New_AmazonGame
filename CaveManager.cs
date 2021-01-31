@@ -1,5 +1,6 @@
 ﻿using EasyMobile;
 using Lean.Localization;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -588,7 +589,7 @@ public class CaveManager : MonoBehaviour
     /// <param name="_isAdsWatch"></param>
     public void GetClearReword(bool _isAdsWatch)
     {
-        long tmpLeaf = Mathf.RoundToInt(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordLeaf * (_KC * (float)PlayerInventory.Player_Leaf_Earned));
+        double tmpLeaf = Math.Truncate(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordLeaf * (_KC * PlayerInventory.Player_Leaf_Earned));
         long tmpES = Mathf.RoundToInt(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordEnchant * (_KC * (float)PlayerInventory.EnchantStone_Earned));
         //
         if (_isAdsWatch)
@@ -596,7 +597,7 @@ public class CaveManager : MonoBehaviour
             PlayerInventory.Money_Leaf += tmpLeaf  * 2d ;
             PlayerInventory.Money_EnchantStone += tmpES * 2;
             /// 나뭇잎 획득량 업적 올리기
-            ListModel.Instance.ALLlist_Update(4, tmpLeaf * 2);
+            ListModel.Instance.ALLlist_Update(4, tmpLeaf * 2d);
             ///  강화석 업적 카운트 올리기
             ListModel.Instance.ALLlist_Update(5, tmpES * 2);
         }
@@ -621,7 +622,7 @@ public class CaveManager : MonoBehaviour
     {
         float _KC = float.Parse(ListModel.Instance.swampCaveData[currentMyDan - 1].killCount);
         //
-        var tmpLeaf = Mathf.RoundToInt(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordLeaf * (_KC * (float)PlayerInventory.Player_Leaf_Earned));
+        double tmpLeaf = Math.Truncate(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordLeaf * (_KC * PlayerInventory.Player_Leaf_Earned));
         var tmpES = Mathf.RoundToInt(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordEnchant * (_KC * (float)PlayerInventory.EnchantStone_Earned));
 
         //
@@ -630,7 +631,7 @@ public class CaveManager : MonoBehaviour
             PlayerInventory.Money_Leaf += tmpLeaf * 2d;
             PlayerInventory.Money_EnchantStone += tmpES * 2;
             /// 나뭇잎 획득량 업적 올리기
-            ListModel.Instance.ALLlist_Update(4, tmpLeaf * 2);
+            ListModel.Instance.ALLlist_Update(4, tmpLeaf * 2d);
             ///  강화석 업적 카운트 올리기
             ListModel.Instance.ALLlist_Update(5, tmpES * 2);
 

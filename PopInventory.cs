@@ -645,7 +645,7 @@ public class PopInventory : MonoBehaviour
                     random = Random.Range(100 * tmpAllamont, (500 * tmpAllamont) + 1);
                     PlayerInventory.Money_Leaf += random;
                     /// 나뭇잎 획득량 업적 올리기
-                    ListModel.Instance.ALLlist_Update(4, random);
+                    ListModel.Instance.ALLlist_Update(4, random * 1d);
                     /// 미니팝업 세팅
                     miniIcon.sprite = miniSprs[1];
                     miniAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(random);
@@ -658,7 +658,7 @@ public class PopInventory : MonoBehaviour
                     random = Random.Range(100, 501);
                     PlayerInventory.Money_Leaf += random;
                     /// 나뭇잎 획득량 업적 올리기
-                    ListModel.Instance.ALLlist_Update(4, random);
+                    ListModel.Instance.ALLlist_Update(4, random * 1d);
                     /// 미니팝업 세팅
                     miniIcon.sprite = miniSprs[1];
                     miniAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(random);

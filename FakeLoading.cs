@@ -220,13 +220,13 @@ public class FakeLoading : MonoBehaviour
         /// 페이크 로딩창 끄기.
         gameObject.SetActive(false);
 
-        ///// 데이터 불러오기 재실행이면 우편함 날려줌
-        //if (ObscuredPrefs.GetInt("isSeverDataLoad") != 0)
-        //{
-        //    GameObject.Find("NanooManager").GetComponent<NanooManager>().PostboxDelete();
-        //    GameObject.Find("NanooManager").GetComponent<NanooManager>().PostboxRedDot();
-        //    Debug.LogError("우편함 날리기");
-        //}
+        /// 데이터 불러오기 재실행이면 우편함 날려줌
+        if (ObscuredPrefs.GetInt("isSeverDataLoad") != 0)
+        {
+            GameObject.Find("NanooManager").GetComponent<NanooManager>().PostboxDelete();
+            GameObject.Find("NanooManager").GetComponent<NanooManager>().PostboxRedDot();
+            Debug.LogError("우편함 날리기");
+        }
 
         /// 광고제거 했으면 배너 제거 + 속도 1.1배
         bac.Banner525Hide();

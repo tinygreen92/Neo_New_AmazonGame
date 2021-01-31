@@ -110,7 +110,7 @@ public class DistanceManager : MonoBehaviour
     /// <summary>
     /// 현재 거리
     /// </summary>
-    private int reDist;
+    private long reDist;
     private double Enemy_Hp_Full;
     private double Enemy_DropGold;
 
@@ -126,7 +126,7 @@ public class DistanceManager : MonoBehaviour
         Random.InitState((int)temp);
         float randomseed = Random.Range(0, 100f);
 
-        reDist = Mathf.RoundToInt((float)PlayerInventory.RecentDistance);
+        reDist = (long)System.Math.Truncate(PlayerInventory.RecentDistance);
         TextDistDisplay(reDist);
 
         /// PlayerInventory.RecentDistance

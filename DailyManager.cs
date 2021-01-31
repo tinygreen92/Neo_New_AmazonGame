@@ -343,6 +343,8 @@ public class DailyManager : MonoBehaviour
         ListModel.Instance.mvpDataList[0].daily_11 = 0;
         ListModel.Instance.mvpDataList[0].daily_12 = 0;
         ListModel.Instance.mvpDataList[0].daily_13 = 0;
+        RedDotManager.instance.RedDot[9].SetActive(true);
+        RedDotManager.instance.RedDot[10].SetActive(true);
 
         /// 주간 갱신 
         ResetMonday(ListModel.Instance.mvpDataList[0].weekend_Day);
@@ -358,6 +360,8 @@ public class DailyManager : MonoBehaviour
             ListModel.Instance.mvpDataList[0].mouth_22 = 0;
             ListModel.Instance.mvpDataList[0].mouth_23 = 0;
             ListModel.Instance.mvpDataList[0].mouth_Day = 0;
+            RedDotManager.instance.RedDot[13].SetActive(true);
+            RedDotManager.instance.RedDot[14].SetActive(true);
         }
 
         /// 날짜 지나면 레드닷 활성화
@@ -391,6 +395,8 @@ public class DailyManager : MonoBehaviour
             ListModel.Instance.mvpDataList[0].weekend_16 = 0;
             ListModel.Instance.mvpDataList[0].weekend_17 = 0;
             ListModel.Instance.mvpDataList[0].weekend_Day = 0;
+            RedDotManager.instance.RedDot[11].SetActive(true);
+            RedDotManager.instance.RedDot[12].SetActive(true);
         }
         /// 일요일은 지났는데 일요일에 초기화 했으면
         else if(dayWeek != 0 &&  _weekDay == 0)
@@ -400,6 +406,9 @@ public class DailyManager : MonoBehaviour
             ListModel.Instance.mvpDataList[0].weekend_16 = 0;
             ListModel.Instance.mvpDataList[0].weekend_17 = 0;
             ListModel.Instance.mvpDataList[0].weekend_Day = 0;
+            ListModel.Instance.mvpDataList[0].weekend_Day = 0;
+            RedDotManager.instance.RedDot[11].SetActive(true);
+            RedDotManager.instance.RedDot[12].SetActive(true);
         }
     }
 
