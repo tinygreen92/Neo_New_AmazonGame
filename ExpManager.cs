@@ -47,13 +47,13 @@ public class ExpManager : MonoBehaviour
     /// <summary>
     /// 테스트 버튼에 달라붙음
     /// </summary>
-    public void TEST_CLICKED_AMA()
+    public void TEST_CLICKED_AMA(int _amont)
     {
         //PlayerInventory.AmazonStoneCount += 20;
         ///// 결정조각  업적  카운트
         //ListModel.Instance.ALLlist_Update(2, 20);
         /// 아마존 포션 추가
-        PlayerInventory.SetTicketCount("S_leaf_box", 20);
+        PlayerInventory.SetTicketCount("S_leaf_box", _amont);
     }
 }
 

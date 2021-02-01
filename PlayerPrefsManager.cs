@@ -595,6 +595,84 @@ public class PlayerPrefsManager : MonoBehaviour
     /// <returns></returns>
     public string NonJsonDataOutput()
     {
+        /// 세이브랑 변환 같이
+        ListModel.Instance.nonSaveJsonMoney[0].RecentDistance = PlayerInventory.RecentDistance.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].Money_Gold = PlayerInventory.Money_Gold.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].Money_Elixir = PlayerInventory.Money_Elixir.ToString();
+
+        ListModel.Instance.nonSaveJsonMoney[0].Money_AmazonCoin = PlayerInventory.Money_AmazonCoin.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].AmazonStoneCount = PlayerInventory.AmazonStoneCount.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].CurrentAmaLV = PlayerInventory.CurrentAmaLV.ToString();
+
+        ListModel.Instance.nonSaveJsonMoney[0].box_Coupon = PlayerInventory.box_Coupon.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_E = PlayerInventory.box_E.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_D = PlayerInventory.box_D.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_C = PlayerInventory.box_C.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_B = PlayerInventory.box_B.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_A = PlayerInventory.box_A.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_S = PlayerInventory.box_S.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].box_L = PlayerInventory.box_L.ToString();
+
+        ListModel.Instance.nonSaveJsonMoney[0].ticket_reinforce_box = PlayerInventory.ticket_reinforce_box.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].ticket_leaf_box = PlayerInventory.ticket_leaf_box.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].ticket_pvp_enter = PlayerInventory.ticket_pvp_enter.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].ticket_cave_enter = PlayerInventory.ticket_cave_enter.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].ticket_cave_clear = PlayerInventory.ticket_cave_clear.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].S_reinforce_box = PlayerInventory.S_reinforce_box.ToString();
+        ///
+        /// ------------------------------------------- 아마존 포션 저장
+        ListModel.Instance.nonSaveJsonMoney[0].S_leaf_box = PlayerInventory.S_leaf_box.ToString();
+        ///
+        ///
+        ListModel.Instance.nonSaveJsonMoney[0].mining = PlayerInventory.mining.ToString();
+        ListModel.Instance.nonSaveJsonMoney[0].amber = PlayerInventory.amber.ToString();
+        ///  인트 저장
+        ListModel.Instance.nonSaveJsonMoney[0].isTutoAllClear = PlayerPrefsManager.isTutoAllClear ? 525 : 0;
+
+
+
+
+        ///[1].RecentDistance = DailyCount_Cheak (출석체크 일자 저장)
+        ListModel.Instance.nonSaveJsonMoney[1].RecentDistance = PlayerPrefsManager.DailyCount_Cheak.ToString();
+        ///[1].Money_Gold 
+        ListModel.Instance.nonSaveJsonMoney[1].Money_Gold = PlayerPrefsManager.isDailyCheak == true ? "TRUE" : "FALSE";
+        ///[1].Money_Elixir
+        ListModel.Instance.nonSaveJsonMoney[1].Money_Elixir = PlayerPrefsManager.ZogarkMissionCnt.ToString();
+        ///[1].Money_AmazonCoin
+        ListModel.Instance.nonSaveJsonMoney[1].Money_AmazonCoin = PlayerPrefsManager.AmaAdsTimer.ToString();
+        ///[1].AmazonStoneCount
+        ListModel.Instance.nonSaveJsonMoney[1].AmazonStoneCount = PlayerPrefsManager.FreeDiaCnt.ToString();
+        ///[1].FreeWeaponCnt
+        ListModel.Instance.nonSaveJsonMoney[1].CurrentAmaLV = PlayerPrefsManager.FreeWeaponCnt.ToString();
+
+        /// 0117 추가 데이터
+
+        ///[1].SwampyEnterCnt
+        ListModel.Instance.nonSaveJsonMoney[1].box_Coupon = PlayerPrefsManager.SwampyEnterCnt.ToString();
+        ///[1].SwampySkipCnt
+        ListModel.Instance.nonSaveJsonMoney[1].box_E = PlayerPrefsManager.SwampySkipCnt.ToString();
+
+
+        ///... [1] [2] 쭉쭉 저장 가능하게
+        //ListModel.Instance.nonSaveJsonMoney[1].box_D = "651";
+        //ListModel.Instance.nonSaveJsonMoney[1].box_C = PlayerInventory.box_C.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].box_B = PlayerInventory.box_B.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].box_A = PlayerInventory.box_A.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].box_S = PlayerInventory.box_S.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].box_L = PlayerInventory.box_L.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].ticket_reinforce_box = PlayerInventory.ticket_reinforce_box.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].ticket_leaf_box = PlayerInventory.ticket_leaf_box.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].ticket_pvp_enter = PlayerInventory.ticket_pvp_enter.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].ticket_cave_enter = PlayerInventory.ticket_cave_enter.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].ticket_cave_clear = PlayerInventory.ticket_cave_clear.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].S_reinforce_box = PlayerInventory.S_reinforce_box.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].S_leaf_box = PlayerInventory.S_leaf_box.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].mining = PlayerInventory.mining.ToString();
+        //ListModel.Instance.nonSaveJsonMoney[1].amber = PlayerInventory.amber.ToString();
+        /////  인트 저장
+        //ListModel.Instance.nonSaveJsonMoney[1].isTutoAllClear = PlayerPrefsManager.isTutoAllClear ? 525 : 0;
+
+
         string savestring = JsonConvert.SerializeObject(ListModel.Instance.nonSaveJsonMoney);
         return AESEncrypt128(savestring);
     }
@@ -832,7 +910,11 @@ public class PlayerPrefsManager : MonoBehaviour
         else
         {
             /// 잘못된 접근은 꺼라.
-            Application.Quit();
+            #if UNITY_EDITOR
+                        UnityEditor.EditorApplication.isPlaying = false;
+            #else
+                    Application.Quit(); // 어플리케이션 종료
+            #endif
             return;
         }
 
@@ -1638,25 +1720,6 @@ public class PlayerPrefsManager : MonoBehaviour
         JObjectSave(true);
         isResetAferSave = true;
     }
-
-    /// <summary>
-    /// 서버 저장 후 리셋일 때 호출
-    /// </summary>
-    public void InvoMyDate2()
-    {
-        /// 로컬 데이터 리셋 후 종료
-        ObscuredPrefs.DeleteAll();
-        PlayerPrefs.DeleteAll();
-        // data 완전 초기화.
-        File.WriteAllText(Application.persistentDataPath + "/_data_", "n1u2l3l"+ CursedId); 
-
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit(); // 어플리케이션 종료
-#endif
-    }
-
 
 
     /// <summary>
