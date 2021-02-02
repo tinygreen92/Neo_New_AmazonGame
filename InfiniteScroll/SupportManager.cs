@@ -46,8 +46,8 @@ public class SupportManager : MonoBehaviour
     private void Awake()
     {
         C_Routine = new Coroutine[30];
-    }
 
+    }
 
     /// <summary>
     /// <수집> 외부에서 영구적인 코루틴 타이머 호출
@@ -73,11 +73,14 @@ public class SupportManager : MonoBehaviour
         return result;
     }
 
+    bool isMotherItemInit;
     /// <summary>
     /// 수집된 저장된 
     /// </summary>
     public void InitTimeLoad()
     {
+        if (isMotherItemInit)
+            return;
         for (int i = 0; i < currentTimes.Length; i++)
         {
             /// 레벨 1 이상일때만
@@ -86,6 +89,8 @@ public class SupportManager : MonoBehaviour
                 DieHardCoTimer(i);
             }
         }
+        /// 첫실행시 한번만
+        isMotherItemInit = true;
     }
 
     /// <summary>
@@ -95,23 +100,20 @@ public class SupportManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator TimerStart(int _id)
     {
-        float time = currentTimes[_id];
-
         yield return null;
 
         while (true)
         {
             yield return new WaitForFixedUpdate();
 
-            time += Time.deltaTime;
-            currentTimes[_id] = time;
+            currentTimes[_id] += Time.deltaTime;
 
-            if (time >= MaxTime(_id))
+            if (currentTimes[_id] >= MaxTime(_id))
             {
-                time = 0;
                 /// 골드 획득
                 GetSoozipGold(_id);
-                yield return new WaitForFixedUpdate();
+                yield return new WaitForSeconds(0.1f);
+                currentTimes[_id] = 0;
             }
         }
 

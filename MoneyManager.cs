@@ -164,7 +164,7 @@ public class MoneyManager : MonoBehaviour
     private bool isAddMoneyTyping;
     private bool isSubMoneyTyping;
     //
-    string inputGoldText = "100";
+    string inputGoldText = "10000000000";
     /// 골드 증가 메서드 입력 받음.
     public void AddAllTest()
     {

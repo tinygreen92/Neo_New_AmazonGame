@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class MineManager : MonoBehaviour
 {
+    [Header(" - 얘가 엑티브면 동굴 안에 들어와있다")]
+    public GameObject SuperMomObject;
+    [Space]
     public Text[] AmberBtnText;
     public Transform Pet_INFINITI;
     [Header(" - 안전 운행 뉴 팝업")]
@@ -84,10 +87,14 @@ public class MineManager : MonoBehaviour
     /// </summary>
     int _index;
     public int recentCoinSoMo;
+
+    /// <summary>
+    /// 채굴권 소모하여 채굴하시겠습니까? -> 확인
+    /// </summary>
     public void Clicked_MinningStart()
     {
         if (PlayerInventory.mining < recentCoinSoMo) return;
-        /// 레벨 만큼 소모
+        /// 채굴권 소모
         PlayerInventory.SetTicketCount("mining", -recentCoinSoMo);
         /// 광산 1회 진행
         if (PlayerPrefsManager.currentTutoIndex == 29) ListModel.Instance.TUTO_Update(29);
@@ -95,7 +102,7 @@ public class MineManager : MonoBehaviour
         ListModel.Instance.ALLlist_Update(8, 1);
         /// 채굴 업적
         ListModel.Instance.DAYlist_Update(9);
-        /// 외부 코루틴 시작
+        /// 채굴 코루틴 시작.
         DieHardCoTimer(_index);
         /// 팝업 닫아줌
         PopUpManager.instance.HidePopUP(29);
@@ -118,13 +125,18 @@ public class MineManager : MonoBehaviour
         {
             currentHPs[i] = 0;
         }
+
     }
 
+    /// <summary>
+    /// 글로벌 채굴하는 코루틴 작동
+    /// </summary>
+    /// <param name="_id"></param>
     public void DieHardCoTimer(int _id)
     {
         if(C_Routine[_id] == null)
             C_Routine[_id] = StartCoroutine(OrignalWork(_id));
-        /// 채굴시작 클릭시
+        /// ing 일때는 애니메이션
         anim.Play("Player_Mine", -1, 0f);
     }
     /// <summary>
@@ -137,63 +149,68 @@ public class MineManager : MonoBehaviour
             StopCoroutine(C_Routine[_index]);
             C_Routine[_index] = null;
         }
-        /// mine_hp 는 상한선 -> 이 수치로  채우면 채굴이 끝난다. 
-        currentHPs[_index] = ListModel.Instance.mineCraft[_index].mine_hp;
-        /// 
+        /// 진행도 초기화.
+        currentHPs[_index] = 0;
+        /// 채굴 완료 띄워주고
         ListModel.Instance.Mine_Unlock(_index, "COMP");
+        /// 버튼 내용 새로고침
         RefleshAllItem();
         /// 빨간 점 띄우기
         RedDotManager.instance.RedDot[6].SetActive(true);
     }
 
-
+    bool isMotherItemInit;
     /// <summary>
     /// 로컬에서 저장된 채굴 시간 불러올 때.
     /// </summary>
     public void InitTimeLoad()
     {
-        for (int i = 0; i < ListModel.Instance.mineCraft.Count; i++)
+        if (isMotherItemInit)
+            return;
+        for (int i = 0; i < currentHPs.Length; i++)
         {
             if (ListModel.Instance.mineCraft[i].isEnable == "ING")
             {
+                Debug.LogError("몇번 돌아가니!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 C_Routine[i] = StartCoroutine(OrignalWork(i));
             }
         }
+        /// 최초 실행시만 실행
+        isMotherItemInit = true;
     }
 
 
-    float MAX_HP;
-    float fPower;
-    float fSpeed;
-
     /// <summary>
-    /// 채굴 시작
+    /// 실제 채굴이 이루어 지는 코루틴
     /// </summary>
     /// <param name="_index"></param>
     /// <returns></returns>
     IEnumerator OrignalWork(int _index)
     {
         yield return null;
-
+        /// 상태 0 이나 TRUE 일때 채굴 시도
         ListModel.Instance.Mine_Unlock(_index, "ING");
+        /// 새로고침 -> 버튼 내용 바뀐다.
         RefleshAllItem();
 
-        MAX_HP = ListModel.Instance.mineCraft[_index].mine_hp;
+        float MAX_HP = ListModel.Instance.mineCraft[_index].mine_hp;
 
         while (true)
         {
-            fPower = GetMineStat(0);
-            fSpeed = GetMineStat(1);
             /// 속도 만큼 대기
-            yield return new WaitForSeconds(60.0f / (60.0f + fSpeed));
-            currentHPs[_index] += fPower;
-            /// 채굴 끝나면 브레이크
-            if (currentHPs[_index] >= MAX_HP) break;
-            /// 호박석 굴림
+            yield return new WaitForSeconds(60.0f / (60.0f + GetMineStat(1)));
+            /// 속도에 파워 만큼 진행도 올려줌
+            currentHPs[_index] += GetMineStat(0);
+            /// 진행도 올릴 때 마다 호박석 굴림
             HoBak(_index);
+            /// 채굴 끝나면 브레이크
+            if (currentHPs[_index] >= MAX_HP) 
+                break;
         }
-        /// 
+        /// 완료됨 상태 저장
         ListModel.Instance.Mine_Unlock(_index, "COMP");
+        /// 새로고침 -> 버튼 내용 바뀐다.
+        // 바깥에 나가있을때 오류 뿜는데?
         RefleshAllItem();
         /// 빨간 점 띄우기
         RedDotManager.instance.RedDot[6].SetActive(true);

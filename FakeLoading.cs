@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 public class FakeLoading : MonoBehaviour
 {
+    public SupportManager sm;
+    public MineManager mm;
+    [Space]
     public GameObject TextObss;
     public GameObject babnd;
     [Space]
@@ -236,6 +239,17 @@ public class FakeLoading : MonoBehaviour
         om.OfflineInit();
         /// 접속하기 업적
         ListModel.Instance.DAYlist_Update(6);
+
+
+
+
+
+
+
+        /// 수집 한번 싹 돌려주기
+        sm.InitTimeLoad();
+        /// 채굴 한번 싹 돌려주기
+        mm.InitTimeLoad();
     }
 
 

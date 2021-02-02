@@ -361,12 +361,12 @@ public class SupportItem : MonoBehaviour
     }
 
     /// <summary>
-    /// 슬라이더 코루틴
+    /// 서포트 이미지 슬라이더 코루틴
     /// </summary>
     /// <returns></returns>
     IEnumerator TimerStart()
     {
-        slider.value = sm.currentTimes[_index] / sm.MaxTime(_index);
+        slider.value = 0;
         yield return null;
 
         while (true)
@@ -375,17 +375,17 @@ public class SupportItem : MonoBehaviour
 
             if (ListModel.Instance.supList[_index].isEnable == "TRUE")
             {
-                sm.currentTimes[_index] += Time.deltaTime;
+                //sm.currentTimes[_index] += Time.deltaTime;
 
                 slider.value = sm.currentTimes[_index] / sm.MaxTime(_index);
                 TimerBox.text = SiBunCho(Mathf.CeilToInt(sm.MaxTime(_index) - sm.currentTimes[_index]));
 
                 if (sm.currentTimes[_index] >= sm.MaxTime(_index))
                 {
-                    sm.currentTimes[_index] = 0;
-                    slider.value = sm.currentTimes[_index] / sm.MaxTime(_index);
+                    //sm.currentTimes[_index] = 0;
+                    slider.value = 0;
                     TimerBox.text = SiBunCho(0);
-
+                    
                     yield return new WaitForFixedUpdate();
                 }
             }
