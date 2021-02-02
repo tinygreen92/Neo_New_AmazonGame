@@ -75,10 +75,10 @@ public class AutoItem : MonoBehaviour
         thisStageCoin = _index + 1;
         miningCoin.text = PlayerPrefsManager.instance.DoubleToStringNumber(thisStageCoin);
         // 코루틴 타이머 관련 갱신
-        if (c_time != null) StopCoroutine(c_time);
-        if (d_time != null) StopCoroutine(d_time);
-        c_time = null;
-        d_time = null;
+        //if (c_time != null) StopCoroutine(c_time);
+        //if (d_time != null) StopCoroutine(d_time);
+        //c_time = null;
+        //d_time = null;
         // 글로우 숨김 델리게이트
         sm.chain += HideGrowEffect;
         HideGrowEffect();
@@ -93,26 +93,34 @@ public class AutoItem : MonoBehaviour
                 GrayImage.SetActive(false);
                 OnTargetImg(0);
                 slider.value = 0;
+                if (c_time != null) StopCoroutine(c_time);
+                c_time = null;
                 break;
             case "ING":
                 GrayImage.SetActive(false);
                 OnTargetImg(1);
-                if (!isInit)
+                /// 앱을 껐다키면 1번만 외부 코루틴 시작
+                sm.DieHardCoTimer(_index);
+
+                /// 이미지 슬라이더 움직이는 코루틴
+                if (c_time == null)
                 {
-                    /// 앱을 껐다키면 1번만 외부 코루틴 시작
-                    sm.DieHardCoTimer(_index);
+                    c_time = StartCoroutine(TimerStart());
                 }
-                if (c_time == null) c_time = StartCoroutine(TimerStart());
                 break;
             case "BUY":
                 GrayImage.SetActive(false);
                 OnTargetImg(2);
                 slider.value = 1f;
+                if (c_time != null) StopCoroutine(c_time);
+                c_time = null;
                 break;
             case "COMP":
                 GrayImage.SetActive(false);
                 OnTargetImg(3);
                 slider.value = 1f;
+                if (c_time != null) StopCoroutine(c_time);
+                c_time = null;
                 break;
             case "DIA":
                 GrayImage.SetActive(false);
@@ -151,28 +159,21 @@ public class AutoItem : MonoBehaviour
     IEnumerator TimerStart()
     {
         yield return null;
+        /// +가 되어서 이 수치가되면 채굴 끝.
         float MAX_HP = ListModel.Instance.mineCraft[_index].mine_hp;
+        slider.value = 0;
         while (true)
         {
-            /// Manager에서 체력 깎아줌
-            slider.value = sm.currentHPs[_index] / MAX_HP;
             yield return new WaitForFixedUpdate();
-            if (sm.currentHPs[_index] >= MAX_HP) break;
+            /// Manager에서 체력 깎아줌
+            slider.value = MineManager.currentHPs[_index] / MAX_HP;
+            /// 채굴 끝
+            if (MineManager.currentHPs[_index] >= MAX_HP)
+                break;
         }
+        /// 완료되면 1
         slider.value = 1f;
-    }
-
-    IEnumerator LoopTimerStart()
-    {
-        yield return null;
-        float MAX_HP = ListModel.Instance.mineCraft[_index].mine_hp;
-
-        while (true)
-        {
-            /// Manager에서 체력 깎아줌
-            slider.value = sm.currentHPs[_index] / MAX_HP;
-            yield return new WaitForFixedUpdate();
-        }
+        c_time = null;
     }
 
     /// <summary>

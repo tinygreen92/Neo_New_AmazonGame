@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class IdleManager : MonoBehaviour
 {
-
+    public GameObject DragHandle;
     [Header("방치모드시 챗 꺼주고")]
     public PhotonChatManager pcm;
     public EasyMoblieManager em;
@@ -22,16 +22,35 @@ public class IdleManager : MonoBehaviour
 
     public void IdleMode_On()
     {
-        ///
+        /// 배너 레이아웃이 올라온 상태가 아니면 광고 표시
+        if (!BannerAdPanelController.isOn)
+        {
+            /// 슈퍼유저가 아니면 광고 표시
+            if (PlayerInventory.isSuperUser != 0)
+            {
+                /// 슈퍼 유저다 
+            }
+            else
+            {
+                /// 일반 유저면 배너 올릴때 배너 광고 표시
+                em.ShowBanner();
+                Invoke(nameof(InvoHandleOn), 3f);
+            }
+        }
+        /// 스르륵 내려온다
         gameObject.SetActive(true);
         moveRoutine = StartCoroutine(Progress());
         /// 포톤 접속종료
         pcm.ExDisconnect();
     }
 
+    void InvoHandleOn()
+    {
+        DragHandle.SetActive(true);
+    }
+
     public void IdleMode_Off()
     {
-
         moveRoutine = StartCoroutine(ProgressReverse());
         Application.targetFrameRate = 59;
         
@@ -62,22 +81,6 @@ public class IdleManager : MonoBehaviour
             transform.position = new Vector2(AbledIdle_pos.position.x, moving);
 
             progress += rate * Time.deltaTime;
-        }
-
-        /// 배너 레이아웃이 올라온 상태가 아니면 광고 표시
-        if (!BannerAdPanelController.isOn)
-        {
-            /// 슈퍼유저가 아니면 광고 표시
-            if (PlayerInventory.isSuperUser != 0)
-            {
-                /// 슈퍼 유저다 
-            }
-            else
-            {
-                em.ShowBanner();
-            }
-
-
         }
 
         for (int i = 0; i < IdleForCanvas.Length; i++)
@@ -118,6 +121,7 @@ public class IdleManager : MonoBehaviour
         }
 
         PlayerPrefsManager.isIdleModeOn = false;
+        DragHandle.SetActive(false);
         gameObject.SetActive(false);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using EasyMobile;
 using Lean.Localization;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,7 +15,11 @@ public class MineManager : MonoBehaviour
     public ScrollScript autoView;
     public Scrollbar scb;
     public Image HP_FILL;
-    public float[] currentHPs;
+    /// <summary>
+    /// 채굴 남은 시간 
+    /// </summary>
+    public static float[] currentHPs;
+    //
     public GameObject[] middleMoney;
     [Header(" - 공수교대1")]
     public Transform UI_TopBotCanvas;
@@ -61,7 +64,6 @@ public class MineManager : MonoBehaviour
 
     Coroutine[] C_Routine;
     int[] HoBakCnt;
-
 
     /// <summary>
     /// true 이면 채굴 할래?
@@ -111,11 +113,17 @@ public class MineManager : MonoBehaviour
     {
         C_Routine = new Coroutine[100];
         HoBakCnt = new int[100];
+        currentHPs = new float[100];
+        for (int i = 0; i < currentHPs.Length; i++)
+        {
+            currentHPs[i] = 0;
+        }
     }
 
     public void DieHardCoTimer(int _id)
     {
-        C_Routine[_id] = StartCoroutine(OrignalWork(_id));
+        if(C_Routine[_id] == null)
+            C_Routine[_id] = StartCoroutine(OrignalWork(_id));
         /// 채굴시작 클릭시
         anim.Play("Player_Mine", -1, 0f);
     }
@@ -124,7 +132,12 @@ public class MineManager : MonoBehaviour
     /// </summary>
     public void CompForDia(int _index)
     {
-        if(C_Routine[_index] != null) StopCoroutine(C_Routine[_index]);
+        if (C_Routine[_index] != null)
+        {
+            StopCoroutine(C_Routine[_index]);
+            C_Routine[_index] = null;
+        }
+        /// mine_hp 는 상한선 -> 이 수치로  채우면 채굴이 끝난다. 
         currentHPs[_index] = ListModel.Instance.mineCraft[_index].mine_hp;
         /// 
         ListModel.Instance.Mine_Unlock(_index, "COMP");
@@ -134,10 +147,30 @@ public class MineManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 로컬에서 저장된 채굴 시간 불러올 때.
+    /// </summary>
+    public void InitTimeLoad()
+    {
+        for (int i = 0; i < ListModel.Instance.mineCraft.Count; i++)
+        {
+            if (ListModel.Instance.mineCraft[i].isEnable == "ING")
+            {
+                C_Routine[i] = StartCoroutine(OrignalWork(i));
+            }
+        }
+    }
+
+
     float MAX_HP;
     float fPower;
     float fSpeed;
 
+    /// <summary>
+    /// 채굴 시작
+    /// </summary>
+    /// <param name="_index"></param>
+    /// <returns></returns>
     IEnumerator OrignalWork(int _index)
     {
         yield return null;
@@ -146,7 +179,6 @@ public class MineManager : MonoBehaviour
         RefleshAllItem();
 
         MAX_HP = ListModel.Instance.mineCraft[_index].mine_hp;
-        currentHPs[_index] =0;
 
         while (true)
         {
@@ -155,6 +187,7 @@ public class MineManager : MonoBehaviour
             /// 속도 만큼 대기
             yield return new WaitForSeconds(60.0f / (60.0f + fSpeed));
             currentHPs[_index] += fPower;
+            /// 채굴 끝나면 브레이크
             if (currentHPs[_index] >= MAX_HP) break;
             /// 호박석 굴림
             HoBak(_index);
@@ -164,6 +197,9 @@ public class MineManager : MonoBehaviour
         RefleshAllItem();
         /// 빨간 점 띄우기
         RedDotManager.instance.RedDot[6].SetActive(true);
+        /// 초기화
+        currentHPs[_index] = 0;
+        C_Routine[_index] = null;
     }
 
     void HoBak(int _index)
@@ -191,6 +227,8 @@ public class MineManager : MonoBehaviour
         }
         RefreshStack();
     }
+
+
 
     /// <summary>
     /// TopView 전환 버튼
@@ -285,7 +323,7 @@ public class MineManager : MonoBehaviour
         for (int i = 0; i < ListModel.Instance.mineCraft.Count; i++)
         {
             /// 하나라도 채굴중 상태이면 채굴 애니메이션
-            if(ListModel.Instance.mineCraft[i].isEnable == "ING")
+            if (ListModel.Instance.mineCraft[i].isEnable == "ING")
             {
                 anim.Play("Player_Mine", -1, 0f);
                 return;
@@ -375,7 +413,7 @@ public class MineManager : MonoBehaviour
         /// 튜토리얼 노란 박스 싹다 클리어했으면 표시 안함
         if (PlayerPrefsManager.isTutoAllClear)
         {
-            UI_TopBotCanvas.GetChild(UI_TopBotCanvas.childCount-1).gameObject.SetActive(false);
+            UI_TopBotCanvas.GetChild(UI_TopBotCanvas.childCount - 1).gameObject.SetActive(false);
         }
 
         HP_FILL.fillAmount = 1.0f;
@@ -538,7 +576,7 @@ public class MineManager : MonoBehaviour
     void RefreshStack()
     {
         /// 받기 가능 ? 불가능 ? 버튼 색 바꿔줌
-        if(ListModel.Instance.axeDataList[0].Stack_EnStone < 1)
+        if (ListModel.Instance.axeDataList[0].Stack_EnStone < 1)
         {
             stackDesc[0].text = "0";
             BtnStackImage[0].sprite = BtnStackSprs[0];
@@ -602,7 +640,7 @@ public class MineManager : MonoBehaviour
         switch (adsIndex)
         {
             case 0:
-                if(is2X)
+                if (is2X)
                 {
                     PlayerInventory.Money_EnchantStone += (adsAmount * 2);
                     ///  강화석 업적 카운트 올리기
@@ -760,7 +798,7 @@ public class MineManager : MonoBehaviour
             /// 파워 - 능률 증가
             case 0:
                 thisLevel = (int)ListModel.Instance.axeDataList[0].Axe_Power;
-                if(PlayerInventory.amber < thisLevel) return;
+                if (PlayerInventory.amber < thisLevel) return;
                 PlayerInventory.SetTicketCount("amber", -thisLevel);
                 //
                 ListModel.Instance.axeDataList[0].Axe_Power++;

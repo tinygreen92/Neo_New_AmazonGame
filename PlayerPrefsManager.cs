@@ -133,8 +133,9 @@ public class PlayerPrefsManager : MonoBehaviour
 
 
 
+    public SupportManager sm;
     /// <summary>
-    /// 210119Update
+    /// ㄴㄴㄴ
     /// </summary>
     //public TextAsset pie;
     /// <summary>
@@ -266,7 +267,7 @@ public class PlayerPrefsManager : MonoBehaviour
     bool isPaused;
     private void OnApplicationPause(bool pause)
     {
-        if (!isLoadingComp) return;
+        if (!isJObjectLoad) return;
         /// 일시 정지 상태 진입
         if (pause)
         {
@@ -295,8 +296,6 @@ public class PlayerPrefsManager : MonoBehaviour
             currentTutoIndex.RandomizeCryptoKey();
             SwampyEnterCnt.RandomizeCryptoKey();
             SwampySkipCnt.RandomizeCryptoKey();
-            /// 로컬 저장
-            TEST_SaveJson();
         }
         else
         {
@@ -305,10 +304,19 @@ public class PlayerPrefsManager : MonoBehaviour
                 isPaused = false;
             }
         }
+    }
 
-
-
-
+    IEnumerator OnApplicationFocus(bool focus)
+    {
+        if (isJObjectLoad)
+        {
+            if (focus)
+            {
+                yield return null;
+                /// 로컬 저장
+                TEST_SaveJson();
+            }
+        }
     }
 
 
@@ -321,6 +329,7 @@ public class PlayerPrefsManager : MonoBehaviour
         /// SetPrefs 대신 새로운 저장 방식
         DataBoxCopy.instance.SaveBox();
         DataBoxCopy.instance.SaveSeverBox();
+        DataBoxCopy.instance.SaveDoctorWho();
         /// 디버그 모드일때만 로컬 버튼 감추기
         if (StartManager.instance.isDeerveloperMode)
             SafySaveBtn.SetActive(false);
@@ -627,36 +636,38 @@ public class PlayerPrefsManager : MonoBehaviour
         ListModel.Instance.nonSaveJsonMoney[0].mining = PlayerInventory.mining.ToString();
         ListModel.Instance.nonSaveJsonMoney[0].amber = PlayerInventory.amber.ToString();
         ///  인트 저장
-        ListModel.Instance.nonSaveJsonMoney[0].isTutoAllClear = PlayerPrefsManager.isTutoAllClear ? 525 : 0;
+        ListModel.Instance.nonSaveJsonMoney[0].isTutoAllClear = isTutoAllClear ? 525 : 0;
 
 
 
 
         ///[1].RecentDistance = DailyCount_Cheak (출석체크 일자 저장)
-        ListModel.Instance.nonSaveJsonMoney[1].RecentDistance = PlayerPrefsManager.DailyCount_Cheak.ToString();
+        ListModel.Instance.nonSaveJsonMoney[1].RecentDistance = DailyCount_Cheak.ToString();
         ///[1].Money_Gold 
-        ListModel.Instance.nonSaveJsonMoney[1].Money_Gold = PlayerPrefsManager.isDailyCheak == true ? "TRUE" : "FALSE";
+        ListModel.Instance.nonSaveJsonMoney[1].Money_Gold = isDailyCheak == true ? "TRUE" : "FALSE";
         ///[1].Money_Elixir
-        ListModel.Instance.nonSaveJsonMoney[1].Money_Elixir = PlayerPrefsManager.ZogarkMissionCnt.ToString();
+        ListModel.Instance.nonSaveJsonMoney[1].Money_Elixir = ZogarkMissionCnt.ToString();
         ///[1].Money_AmazonCoin
-        ListModel.Instance.nonSaveJsonMoney[1].Money_AmazonCoin = PlayerPrefsManager.AmaAdsTimer.ToString();
+        ListModel.Instance.nonSaveJsonMoney[1].Money_AmazonCoin = AmaAdsTimer.ToString();
         ///[1].AmazonStoneCount
-        ListModel.Instance.nonSaveJsonMoney[1].AmazonStoneCount = PlayerPrefsManager.FreeDiaCnt.ToString();
+        ListModel.Instance.nonSaveJsonMoney[1].AmazonStoneCount = FreeDiaCnt.ToString();
         ///[1].FreeWeaponCnt
-        ListModel.Instance.nonSaveJsonMoney[1].CurrentAmaLV = PlayerPrefsManager.FreeWeaponCnt.ToString();
+        ListModel.Instance.nonSaveJsonMoney[1].CurrentAmaLV = FreeWeaponCnt.ToString();
 
         /// 0117 추가 데이터
 
         ///[1].SwampyEnterCnt
-        ListModel.Instance.nonSaveJsonMoney[1].box_Coupon = PlayerPrefsManager.SwampyEnterCnt.ToString();
+        ListModel.Instance.nonSaveJsonMoney[1].box_Coupon = SwampyEnterCnt.ToString();
         ///[1].SwampySkipCnt
-        ListModel.Instance.nonSaveJsonMoney[1].box_E = PlayerPrefsManager.SwampySkipCnt.ToString();
-
+        ListModel.Instance.nonSaveJsonMoney[1].box_E = SwampySkipCnt.ToString();
+        /// [1] 다이아
+        ListModel.Instance.nonSaveJsonMoney[1].box_D = PlayerInventory.Money_Dia.ToString();
+        /// [1] 나뭇잎
+        ListModel.Instance.nonSaveJsonMoney[1].box_C = PlayerInventory.Money_Leaf.ToString();
+        /// [1] 강화석
+        ListModel.Instance.nonSaveJsonMoney[1].box_B = PlayerInventory.Money_EnchantStone.ToString();
 
         ///... [1] [2] 쭉쭉 저장 가능하게
-        //ListModel.Instance.nonSaveJsonMoney[1].box_D = "651";
-        //ListModel.Instance.nonSaveJsonMoney[1].box_C = PlayerInventory.box_C.ToString();
-        //ListModel.Instance.nonSaveJsonMoney[1].box_B = PlayerInventory.box_B.ToString();
         //ListModel.Instance.nonSaveJsonMoney[1].box_A = PlayerInventory.box_A.ToString();
         //ListModel.Instance.nonSaveJsonMoney[1].box_S = PlayerInventory.box_S.ToString();
         //ListModel.Instance.nonSaveJsonMoney[1].box_L = PlayerInventory.box_L.ToString();
@@ -746,7 +757,8 @@ public class PlayerPrefsManager : MonoBehaviour
     bool isSafySeverSave;
 
     /// <summary>
-    /// true 밖에 없다. 리스트를 Json으로 저장 하는건 무조건 서버 저장
+    /// 무조건 서버 저장 true 로만 호출한다.
+    /// 리스트를 Json으로 저장해서 업로드
     /// </summary>
     public void JObjectSave(bool _isSeverSave)
     {
@@ -764,14 +776,19 @@ public class PlayerPrefsManager : MonoBehaviour
             isSafySeverSave = true;
         }
 
-        /// 뉴 데이터 -
-        SeverDataBox data = DataBoxCopy.instance.LoadSeverBox();
+        SeverDataBox data;
         /// 뉴데이터 존재 안하면 생성하고 리턴
         if (!File.Exists(Application.persistentDataPath + "/GameData/_data_child_22"))
         {
             /// 저장 데이터 없음!
             DataBoxCopy.instance.SaveSeverBox();
             return;
+        }
+        /// 저장해논 뉴 데이터가 있으면
+        else
+        {
+            /// 뉴 데이터 - 이전에 서버 저장 _data_child_22 가져오면
+            data = DataBoxCopy.instance.LoadSeverBox();
         }
 
         string[] tunamayo = new string[7];
@@ -795,13 +812,18 @@ public class PlayerPrefsManager : MonoBehaviour
         //tunamayo[13] = JsonConvert.SerializeObject(ListModel.Instance.mineCraft);
         //tunamayo[15] = JsonConvert.SerializeObject(ListModel.Instance.swampCaveData);
         ///// 
-        ///// JObject를 Serialize하여 json string 생성 
+        /// JObject를 Serialize하여 json string 생성 
         string savestring = AESEncrypt128(JsonConvert.SerializeObject(tunamayo));
 
+        TimeLoadBox _107jsonString = new TimeLoadBox();
+        // 각기 데이터 데입
+        _107jsonString.currentHPs = MineManager.currentHPs;
+        _107jsonString.currentTimes = sm.currentTimes;
         //Debug.LogError("savestring : " + savestring);
         /// 플레이팹에 상태 저장
-        GameObject.FindWithTag("PFM").GetComponent<PlayFabManage>().SaveTunaMayo(JsonConvert.SerializeObject(data), savestring);
-
+        GameObject.FindWithTag("PFM").GetComponent<PlayFabManage>()
+            .SetUserData(JsonConvert.SerializeObject(data), savestring, JsonConvert.SerializeObject(_107jsonString));
+        /// 서버저장 최소 5.0초
         Invoke(nameof(SSeSvSer), 5.0f);
     }
 
@@ -1274,11 +1296,22 @@ public class PlayerPrefsManager : MonoBehaviour
     /// 1.0.6 이후에 json 파일 저정 서버에서 불러올때 바로 꽂아줌
     /// </summary>
     /// <param name="loadstring"></param>
-    public void NewSector5SaveJson(string loadstring)
+    public void NewSector5SaveJson(string loadstring, string _107jsonString)
     {
+        int tmpInt = -1;
         /// 배열 복구
         SeverDataBox data = JsonConvert.DeserializeObject<SeverDataBox>(loadstring);
-        ListModel.Instance.Sector5LoadBox(data);
+        ListModel.Instance.Sector5LoadBox(data, _107jsonString);
+
+        int.TryParse(_107jsonString, out tmpInt);
+        /// 숫자가 들어있다면 리턴
+        if (tmpInt != -1)
+            return;
+
+        /// 1.0.7 업데이트 이후 채굴시간 & 수집시간도 덮어쓰기
+        TimeLoadBox doctor = JsonConvert.DeserializeObject<TimeLoadBox>(_107jsonString);
+        MineManager.currentHPs = doctor.currentHPs;
+        sm.currentTimes = doctor.currentTimes;
 
         ///// 16개 짜리 실전 압축 데이터
         //string[] tunamayo = JsonConvert.DeserializeObject<string[]>(AESDecrypt128(loadstring));
@@ -1322,10 +1355,16 @@ public class PlayerPrefsManager : MonoBehaviour
         //ListModel.Instance.swampCaveData = JsonConvert.DeserializeObject<List<SwampCave>>(tunamayo[15]);
     }
 
+    public void SeverLoadMaser(string _bn)
+    {
+        _BulidNum = _bn;
+        Invoke(nameof(InvoSeverLoadMaser), 1.6f);
+    }
+    string _BulidNum;
     /// <summary>
     /// 얘는 특별히 서버에서 불러오기 할때만 해준다.
     /// </summary>
-    public void SeverLoadMaser(string _BulidNum)
+    void InvoSeverLoadMaser()
     {
         string loadstring = "";
         if (_BulidNum == "1.0.1" || _BulidNum == "1.0.2" || _BulidNum == "1.0.3" || _BulidNum == "1.0.4" || _BulidNum == "1.0.5")
@@ -1377,14 +1416,11 @@ public class PlayerPrefsManager : MonoBehaviour
         /// 거리는  result.Data["SECTOR_7"].Value 랑 비교해서 더 큰 것으로 교체
         if (PlayerInventory.RecentDistance < double.Parse(ListModel.Instance.nonSaveJsonMoney[0].RecentDistance))
             PlayerInventory.RecentDistance = double.Parse(ListModel.Instance.nonSaveJsonMoney[0].RecentDistance);
-
         PlayerInventory.Money_Gold = double.Parse(ListModel.Instance.nonSaveJsonMoney[0].Money_Gold);
         PlayerInventory.Money_Elixir = long.Parse(ListModel.Instance.nonSaveJsonMoney[0].Money_Elixir);
-
         PlayerInventory.Money_AmazonCoin = long.Parse(ListModel.Instance.nonSaveJsonMoney[0].Money_AmazonCoin);
         PlayerInventory.AmazonStoneCount = long.Parse(ListModel.Instance.nonSaveJsonMoney[0].AmazonStoneCount);
         PlayerInventory.CurrentAmaLV = int.Parse(ListModel.Instance.nonSaveJsonMoney[0].CurrentAmaLV);
-
         PlayerInventory.box_Coupon = int.Parse(ListModel.Instance.nonSaveJsonMoney[0].box_Coupon);
         PlayerInventory.box_E = int.Parse(ListModel.Instance.nonSaveJsonMoney[0].box_E);
         PlayerInventory.box_D = int.Parse(ListModel.Instance.nonSaveJsonMoney[0].box_D);
@@ -1423,16 +1459,21 @@ public class PlayerPrefsManager : MonoBehaviour
                 SwampySkipCnt = 5;
             else
                 SwampySkipCnt = int.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_E);
+
+            /// 1.0.7 업데이트 추가
+            /// 1.0.7 업데이트 추가
+            /// 1.0.7 업데이트 추가
+            PlayerInventory.Money_Dia = long.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_D);
+            PlayerInventory.Money_Leaf = double.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_C);
+            PlayerInventory.Money_EnchantStone = long.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_B);
+
         }
 
-        ///// 플래이팹 허락
-        //isLoadingComp = true;
-        ///// 로딩바 올려주는 걸 허락한다.
-        //isJObjectLoad = true;
         /// 리스트를 Prefs 로 저장 -> 뉴-타입으로 저장
         /// "/_data_child_21"
         /// SetPrefs 대신 새로운 저장 방식 -> 로컬에 저장
         DataBoxCopy.instance.SaveBox();
+        DataBoxCopy.instance.SaveDoctorWho();
         /// 오프라인 보상 체크 끝났다면 타이머 일괄적으로 저장
         string tmp = UnbiasedTime.Instance.Now().ToString("yyyyMMddHHmmss");
         ObscuredPrefs.SetString("DateTime", tmp);
@@ -1441,6 +1482,8 @@ public class PlayerPrefsManager : MonoBehaviour
         //ObscuredPrefs.SetString("FreeWeapon", tmp);
         //ObscuredPrefs.SetString("FreeDia", tmp);
         ObscuredPrefs.Save();
+        ///
+        SystemPopUp.instance.StopLoopLoading();
     }
 
 

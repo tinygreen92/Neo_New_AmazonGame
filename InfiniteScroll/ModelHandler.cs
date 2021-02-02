@@ -39,6 +39,7 @@ public class ModelHandler : MonoBehaviour
     //    }
     //}
 
+    public SupportManager sm;
 
     /// <summary>
     /// 게임 기초 공사
@@ -60,7 +61,6 @@ public class ModelHandler : MonoBehaviour
             /// 이전 데이터 다 적용
             ObscuredPrefs.SetInt("update210114", 214);
             ObscuredPrefs.SetInt("update210117", 956);
-            ObscuredPrefs.SetInt("update210128", 455);
             ObscuredPrefs.Save();
             /// 파일에서 데이터 불러와서 리스트에 대입
             PlayerPrefsManager.instance.JObjectLoad(true);
@@ -125,6 +125,12 @@ public class ModelHandler : MonoBehaviour
     {
         /// 파일에서 데이터 불러와서 리스트에 대입
         PlayerPrefsManager.instance.JObjectLoad(_isLocal);
+
+        /// 닥터후 뉴 시즌
+        TimeLoadBox doctor = DataBoxCopy.instance.LoadDoctorWho();
+        //
+        MineManager.currentHPs = doctor.currentHPs;
+        sm.currentTimes = doctor.currentTimes;
 
         /// 뉴 데이터 -
         GameDataBox data = DataBoxCopy.instance.LoadBox();

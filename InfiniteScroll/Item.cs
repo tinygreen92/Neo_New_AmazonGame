@@ -37,6 +37,8 @@ public class Item : MonoBehaviour
 
                 case "Sup_INFINI_Content":
                     GetComponent<SupportItem>().BoxInfoUpdate(count);
+                    /// 한번 싹 돌려주기
+                    GetComponent<SupportItem>().sm.InitTimeLoad();
                     break;
 
                 case "Rune_INFINI_Content":
@@ -53,6 +55,8 @@ public class Item : MonoBehaviour
 
                 case "Auto_INFINI_Content":
                     GetComponent<AutoItem>().BoxInfoUpdate(count);
+                    /// 한번 싹 돌려주기
+                    GetComponent<AutoItem>().sm.InitTimeLoad();
                     break;
 
                 default:

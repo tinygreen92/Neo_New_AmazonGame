@@ -248,6 +248,7 @@ public class NonJson                 /// 계속 추가 수정 가능한 돈
 
 public class ListModel : MonoBehaviour
 {
+
     [Header("- 최근 장착 무기 대미지 배율")]
     public double CurrentEquiped = 0;
 
@@ -1332,9 +1333,11 @@ public class ListModel : MonoBehaviour
 
 
 
-    ///--------------------------------  DataBopCopy 데이터 저장용   -------------------------------------///
-    ///
-    public void Sector5LoadBox(SeverDataBox data)
+    /// <summary>
+    ///-- 서버에서 불러온 다음  DataBopCopy 데이터 저장용   -------------------///
+    /// </summary>
+    /// <param name="data"></param>
+    public void Sector5LoadBox(SeverDataBox data, string _107jsonString)
     {
         // 펫  0 
         for (int i = 0; i < data.petLevel.Length; i++)
@@ -1381,7 +1384,6 @@ public class ListModel : MonoBehaviour
         {
             swampCaveData[i].killCount = data.killCount[i].ToString();
         }
-
 
         /// 로컬 파일로 저장
         PlayerPrefsManager.instance.NewNewSector5();
@@ -1497,9 +1499,10 @@ public class ListModel : MonoBehaviour
     {
         MineCraft sc;
         sc.isEnable = _string;
+        /// 1.0.7 추가 - 채굴 진행 시간 불러오기
+        sc.mine_hp = mineCraft[_index].mine_hp;
         // 주석 눈에 잘띄는 색
         sc.stage = mineCraft[_index].stage;
-        sc.mine_hp = mineCraft[_index].mine_hp;
         sc.reword_es = mineCraft[_index].reword_es;
         sc.reword_ama = mineCraft[_index].reword_ama;
         sc.unlockDia = mineCraft[_index].unlockDia;

@@ -173,18 +173,6 @@ public class SupportItem : MonoBehaviour
         /// 인덱스 설정 -> 이 스크립트 전체
         _index = cnt;
 
-        //for (int i = 0; i < sm.upgrageMutiple; i++)
-        //{
-        //    mutiple = i + 1;
-
-        //    // 돈 안 충분하다.
-        //    if (!IsPurchaseable())
-        //    {
-        //        if (mutiple == 1) break;
-        //        mutiple -= 1;
-        //        break;
-        //    }
-        //}
         mutiple = sm.upgrageMutiple;
 
         /// 만렙 예외 처리 1000레벨 고정
@@ -196,7 +184,8 @@ public class SupportItem : MonoBehaviour
         c_time = null;
 
         // 코루틴 도는 중에는 타이머 텍스트 표시 갱신 무시
-        if (sm.currentTimes[_index] == -1) TimerBox.text = SiBunCho((int)sm.MaxTime(_index));
+        if (sm.currentTimes[_index] == -1) 
+            TimerBox.text = SiBunCho((int)sm.MaxTime(_index));
 
         // 글로우 숨김 델리게이트
         sm.chain += HideGrowEffect;
@@ -236,7 +225,7 @@ public class SupportItem : MonoBehaviour
         else
         {
             GrayImage.SetActive(false);
-            // 레벨 0 이면 게이지 코루틴 멈추고 리턴
+           /// 레벨 0 이면 게이지 코루틴 멈추고 리턴
             if (thisLevel == 0)
             {
                 StopAllCoroutines();
@@ -246,13 +235,14 @@ public class SupportItem : MonoBehaviour
             }
 
             // 영구 타이머 미작동시 한번 실행
-            if (sm.currentTimes[_index] == -1)
-            {
-                // 골드획득 영구 타이머 작동 (0~19)
-                sm.DieHardCoTimer(_index);
-            }
+            ///  골드획득 영구 코루틴 작동 (0~29)
+            sm.DieHardCoTimer(_index);
             // 단일 타이머 미작동시 한번 실행
-            if (c_time == null && gameObject.activeSelf && int.Parse(name) == _index) c_time = StartCoroutine(TimerStart());
+            if (c_time == null && gameObject.activeSelf && int.Parse(name) == _index)
+            {
+                /// 슬라이더 코루틴
+                c_time = StartCoroutine(TimerStart());
+            }
 
         }
 
@@ -370,6 +360,10 @@ public class SupportItem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 슬라이더 코루틴
+    /// </summary>
+    /// <returns></returns>
     IEnumerator TimerStart()
     {
         slider.value = sm.currentTimes[_index] / sm.MaxTime(_index);

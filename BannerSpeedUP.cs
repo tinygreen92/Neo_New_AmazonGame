@@ -25,6 +25,7 @@ public class BannerSpeedUP : MonoBehaviour
             OnOffObject[1].SetActive(true);
             OnOffObject[2].SetActive(false);
             OnOffObject[3].SetActive(true);
+            /// 재확인 팝업
             gameObject.SetActive(true);
         }
         else
@@ -33,6 +34,7 @@ public class BannerSpeedUP : MonoBehaviour
             OnOffObject[1].SetActive(false);
             OnOffObject[2].SetActive(true);
             OnOffObject[3].SetActive(false);
+            /// 재확인 팝업
             gameObject.SetActive(true);
 
         }

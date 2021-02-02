@@ -27,7 +27,14 @@ public class EasyMoblieManager : MonoBehaviour
     public void ShowBanner()
     {
         Advertising.ShowBannerAd(BannerAdNetwork.MoPub, BannerAdPosition.Bottom, BannerAdSize.SmartBanner);
+        SystemPopUp.instance.LoopLoadingImg();
+        Invoke(nameof(InvoHideLoop), 3f);
     }
+    void InvoHideLoop()
+    {
+        SystemPopUp.instance.StopLoopLoading();
+    }
+
     public void HideBanner()
     {
         Advertising.HideBannerAd();
