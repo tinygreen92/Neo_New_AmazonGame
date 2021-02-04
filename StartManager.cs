@@ -17,7 +17,7 @@ public class StartManager : MonoBehaviour
     public Text headChatTxt;
     [Header("- 개발자용 빌드일 때 체크")]
     public bool isDeerveloperMode;
-    [Header("- 디버그 모드시 체크")]
+    [Header("- PC에서  실행시 체크")]
     public bool isDebugMode;
     [Header("- 미드 화면 자동 늘어남 체크")]
     public bool isGraphicMode;
@@ -30,8 +30,11 @@ public class StartManager : MonoBehaviour
         Application.targetFrameRate = 45;
         Application.runInBackground = true;
 
+        // 화면 꺼짐 방지
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
         /// ------------------------------------------------------------------ ///
-        
+
         /// 개발자 모드만 켜서 빌드했냐? 로그 보는 용도.
         if (isDeerveloperMode)
         {
@@ -39,10 +42,10 @@ public class StartManager : MonoBehaviour
             TestBtn.SetActive(true);
             return;
         }
+
+
         // 로그 비황성화
         Debug.unityLogger.logEnabled = false;
-        // 화면 꺼짐 방지
-        Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }
 
 

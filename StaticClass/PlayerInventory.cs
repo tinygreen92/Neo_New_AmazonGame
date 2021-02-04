@@ -1229,7 +1229,6 @@ public static class PlayerInventory
         }
         set 
         {
-            Debug.LogError("호출 어디야");
             amazonStoneCount = value;
             /// 유물 경험치 요구 유물 적용
             MaxGage = (int)Math.Truncate((CurrentAmaLV + 1) * 100d * AmazonPoint_Cost);
@@ -1249,7 +1248,7 @@ public static class PlayerInventory
                     return;
                 }
 
-                Debug.LogError("호출 어디야" + amazonStoneCount + " / " + MaxGage);
+                Debug.LogError("포션 호출 어디야" + amazonStoneCount + " / " + MaxGage);
 
                 CurrentAmaLV++;
                 amazonStoneCount -= MaxGage;

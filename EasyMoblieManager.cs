@@ -6,27 +6,41 @@ using UnityEngine;
 
 public class EasyMoblieManager : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
+        /// 이지모바일 로그인
+        StartCoroutine(initEM());
 
-        /// 이지모바일  init
-        if (!RuntimeManager.IsInitialized()) RuntimeManager.Init();
         /// 모펍 sdk init
         //if (!MoPub.IsSdkInitialized) MoPub.InitializeSdk(MopubAdRewardedId[0]);
-        DontDestroyOnLoad(gameObject);
-
-        Advertising.GrantDataPrivacyConsent();
         //Advertising.GrantDataPrivacyConsent(AdNetwork.MoPub);
-
         //MoPub.LoadRewardedVideoPluginsForAdUnits(MopubAdRewardedId);
         ///// 모펍 초기화 되었다면 비디오 하나 불러오기
         //Advertising.LoadRewardedAd();
     }
 
+    IEnumerator initEM()
+    {
+        /// 이지모바일  init
+        RuntimeManager.Init();
+
+        while (!RuntimeManager.IsInitialized())
+        {
+            yield return null;
+        }
+
+        // Grants the vendor-level consent for AdMob.
+        Advertising.GrantDataPrivacyConsent(AdNetwork.AdMob);
+        Advertising.GrantDataPrivacyConsent(AdNetwork.MoPub);
+        // Revokes the vendor-level consent of AdMob.
+        Advertising.RevokeDataPrivacyConsent(AdNetwork.AdMob);
+        Advertising.RevokeDataPrivacyConsent(AdNetwork.MoPub);
+    }
+
     public void ShowBanner()
     {
-        Advertising.ShowBannerAd(BannerAdNetwork.MoPub, BannerAdPosition.Bottom, BannerAdSize.SmartBanner);
+        Advertising.ShowBannerAd(BannerAdNetwork.AdMob, BannerAdPosition.Bottom, BannerAdSize.SmartBanner);
         SystemPopUp.instance.LoopLoadingImg();
         Invoke(nameof(InvoHideLoop), 3f);
     }

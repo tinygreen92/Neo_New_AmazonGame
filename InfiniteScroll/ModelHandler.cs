@@ -134,6 +134,9 @@ public class ModelHandler : MonoBehaviour
 
         /// 뉴 데이터 -
         GameDataBox data = DataBoxCopy.instance.LoadBox();
+        /// 최우선 호출
+        PlayerInventory.CurrentAmaLV = data.CurrentAmaLV;
+
         //
         PlayerInventory.RecentDistance = data.RecentDistance;
         PlayerInventory.Money_Gold = data.Money_Gold;
@@ -143,7 +146,6 @@ public class ModelHandler : MonoBehaviour
         PlayerInventory.Money_EnchantStone = data.Money_EnchantStone;
         PlayerInventory.Money_AmazonCoin = data.Money_AmazonCoin;
         PlayerInventory.AmazonStoneCount = data.AmazonStoneCount;
-        PlayerInventory.CurrentAmaLV = data.CurrentAmaLV;
         PlayerInventory.box_Coupon = data.box_Coupon;
         PlayerInventory.box_E = data.box_E;
         PlayerInventory.box_D = data.box_D;

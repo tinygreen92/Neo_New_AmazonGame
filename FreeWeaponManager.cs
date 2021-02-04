@@ -113,11 +113,11 @@ public class FreeWeaponManager : MonoBehaviour
         SystemPopUp.instance.LoopLoadingImg();
         Invoke(nameof(InvoStopLoop), 5.0f);
 
-        if (Advertising.IsRewardedAdReady(RewardedAdNetwork.MoPub, AdPlacement.Default))
+        if (Advertising.IsRewardedAdReady(RewardedAdNetwork.AdMob, AdPlacement.Default))
         {
             Advertising.RewardedAdCompleted += AdsCompleated;
             Advertising.RewardedAdSkipped += AdsSkipped;
-            Advertising.ShowRewardedAd(RewardedAdNetwork.MoPub, AdPlacement.Default);
+            Advertising.ShowRewardedAd(RewardedAdNetwork.AdMob, AdPlacement.Default);
         }
         else
         {

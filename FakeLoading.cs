@@ -200,10 +200,6 @@ public class FakeLoading : MonoBehaviour
 
         /// json 로딩 끝나면 착용한 룬 이미지 표기하기
         rm.InitShowIconFive();
-        /// 아마존 결정 게이지 표기
-        PlayerInventory.Money_AmazonCoin += 0;
-        PlayerInventory.AmazonStoneCount += 0;
-
         /// 나누 배너 보여주기
         om.InitNanooBanner();
 
