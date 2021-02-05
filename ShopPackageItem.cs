@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class ShopPackageItem : MonoBehaviour
 {
+    [Header("- 1.Limit_View 일때만 사용")]
     public GameObject BtnPuchased;
     public Text BtnText;
     [Header("- 매니저 ")]
@@ -36,9 +37,55 @@ public class ShopPackageItem : MonoBehaviour
     public void ItemInit()
     {
         _index = int.Parse(name);
+
+
+        /// ---------------------------------------------------------------------
+        /// ------------저려미 패키지 추가 210203-------------
+        /// ---------------------------------------------------------------------
+        if (_index >= 10)
+        {
+            switch (_index)
+            {
+                case 10:
+                    packMyDragonWater.text = ListModel.Instance.shopCheepPack[0].korTailDesc;
+                    packTitle.text = LeanLocalization.GetTranslationText("Shop_Ab_Pack11");
+                    break;
+
+                case 11:
+                    packMyDragonWater.text = ListModel.Instance.shopCheepPack[1].korTailDesc;
+                    packTitle.text = LeanLocalization.GetTranslationText("Shop_Ab_Pack12");
+                    break;
+
+                case 12:
+                    packMyDragonWater.text = ListModel.Instance.shopCheepPack[2].korTailDesc;
+                    packTitle.text = LeanLocalization.GetTranslationText("Shop_Ab_Pack13");
+                    break;
+            }
+            /// 가격표 붙이기
+            if (LeanLocalization.CurrentLanguage == "Korean")
+            {
+                System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("ko-KR", false).NumberFormat;
+                BtnText.text = System.Convert.ToInt64(ListModel.Instance.shopCheepPack[_index -10].korPrice).ToString("C", numberFormat);
+            }
+            else
+            {
+                System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
+                BtnText.text = System.Convert.ToInt64(ListModel.Instance.shopCheepPack[_index-10].engPrice).ToString("C", numberFormat);
+            }
+
+            ///
+            return;
+        }
+
+
+
+
+
+
         /// 무슨 말을 해야할까랑 / 내용물 채우기 / 버튼 가격
         //packDesc.text = ListModel.Instance.shopListPACK[_index].korTailDesc;
         packMyDragonWater.text = ListModel.Instance.shopListPACK[_index].korTailDesc;
+
         if (_index == 6)
         {
             packMyDragonWater.text = LeanLocalization.GetTranslationText("Shop_Pakage_0115_Spec");
@@ -94,6 +141,7 @@ public class ShopPackageItem : MonoBehaviour
                 front5Amount[4] = 150;
                 break;
             case 4:
+                /// AlternativeCnt = 1 이면 직접 인스펙터 수정하는 것
                 AlternativeCnt = 1;
                 packTitle.text = LeanLocalization.GetTranslationText("Shop_Ab_Pack05");
                 break;
@@ -166,6 +214,9 @@ public class ShopPackageItem : MonoBehaviour
             default:
                 break;
         }
+
+        /// AlternativeCnt = 1 일때는 인스펙터에서 그림/ 수량 수정해야함
+
         /// 5개짜리 자동 이미지 채우기
         if (AlternativeCnt < 1)
         {
@@ -196,7 +247,7 @@ public class ShopPackageItem : MonoBehaviour
         /// 이미지 있어야 체크
         if (BtnPuchased != null)
         {
-            /// 구매완료 버튼 활성화면 리턴
+            /// 완료 버튼 활성화면 리턴
             if (BtnPuchased.activeSelf) return;
         }
 
@@ -210,4 +261,31 @@ public class ShopPackageItem : MonoBehaviour
             IAPM.Purchase_Pakage(_index, back7Amount);
         }
     }
+
+
+
+
+
+
+
+
+    /// <summary>
+    /// 저려미 패키지 추가된거 구매 버튼
+    /// </summary>
+    /// <param name="_ind"></param>
+    public void PurchaseNewPack()
+    {
+        /// 이미지 있어야 체크
+        if (BtnPuchased != null)
+        {
+            /// 완료 버튼 활성화면 리턴
+            if (BtnPuchased.activeSelf) return;
+        }
+        // null 들어가면 새로 추가한 것
+        IAPM.Purchase_Pakage(_index, null);
+    }
+
+
+
+
 }

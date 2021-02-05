@@ -34,6 +34,7 @@ public class SupportItem : MonoBehaviour
 
     const string T_LV = "Lv. ";
     const string T_PLUS = "+";
+    const string MAX_LV = " / 1000";
 
     int _index;
 
@@ -195,7 +196,8 @@ public class SupportItem : MonoBehaviour
 
         NameBox.text = ListModel.Instance.supList[_index].supporterName;
         thisLevel = int.Parse(ListModel.Instance.supList[_index].supporterLevel);
-        LevelBox.text = T_LV + thisLevel;
+        /// 현재 레벨 / 맥스 레벨 
+        LevelBox.text = T_LV + thisLevel + MAX_LV;
 
         /// <다음_업그레이드비용> 배수 곱하기 해서 텍스트 뿌려주기.
         UpgradeBox.text = PlayerPrefsManager.instance.DoubleToStringNumber(PlayerInventory.Soozip_Powerup_Gold * GetMutipleUpgrade(mutiple, thisLevel));
@@ -366,7 +368,7 @@ public class SupportItem : MonoBehaviour
     /// <returns></returns>
     IEnumerator TimerStart()
     {
-        slider.value = 0;
+        slider.value = sm.currentTimes[_index] / sm.MaxTime(_index);
         yield return null;
 
         while (true)

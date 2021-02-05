@@ -27,6 +27,7 @@ public class IAPManager : MonoBehaviour
     public PackageData[] pdEng;                         // TODO : 글로벌 대응
     [Space]
     [Header("- 리얼리 팝업 세팅")]
+    public GameObject motherlPopup;
     public GameObject ComplPopup;
     public Image ComplGifteIcon;
     [Header("- 패키지 팝업 세팅")]
@@ -68,6 +69,44 @@ public class IAPManager : MonoBehaviour
 
     [HideInInspector]
     public int reqDia;                      // 패키지 떨거지에서 받아오는 다이아 갯수
+
+
+
+    /// <summary>
+    /// 리얼 구매 팝업에서 나가기 누르면 레드닷 복구 해주기
+    /// </summary>
+    public void ExitBtnRealCalls()
+    {
+        PopUpManager.instance.HidePopUP(30);
+
+        /// 무료 구매 몽땅하면 레드닷 꺼줌.
+        var tmpppmt = ListModel.Instance.mvpDataList[0];
+        /// 일간
+        if (tmpppmt.daily_10 == 0)
+        {
+            RedDotManager.instance.RedDot[9].SetActive(true);
+        }
+        /// 주간
+        if (tmpppmt.weekend_14 == 0)
+        {
+            RedDotManager.instance.RedDot[11].SetActive(true);
+        }
+        /// 월간
+        if (tmpppmt.mouth_18 == 0)
+        {
+            RedDotManager.instance.RedDot[13].SetActive(true);
+        }
+
+    }
+
+
+
+
+
+
+
+
+
 
     public void ClickedPakageShop()
     {
@@ -260,10 +299,21 @@ public class IAPManager : MonoBehaviour
     /// </summary>
     /// <param name="_indx"></param>
     /// <param name="_wonhwa"></param>
-    public void Purchase_Pakage(int _indx, int[] _amount)
+    public void Purchase_Pakage(int _indioxyz, int[] _amount)
     {
+        int _indx = _indioxyz;
         /// 어떤 버튼 보여줄까 숨겨.
         ShutUpSnepe();
+
+        /// ------------저려미 패키지 추가 210203-------------
+        /// ------------저려미 패키지 추가 210203-------------
+        /// ------------저려미 패키지 추가 210203-------------
+        if (_amount == null && _indx >= 10)
+        {
+            /// 새로 추가된 패키지는 인덱스 24 / 25 / 26 으로 만들어 줌
+            _indx += 14;
+        }
+
         if (_indx < 5)
         {
             front5Amount = _amount;
@@ -285,17 +335,25 @@ public class IAPManager : MonoBehaviour
         txRufundGo.SetActive(true);
         /// 현금 구매 버튼
         btnWonGo.SetActive(true);
+
         /// 버튼 가격 채우기
         if (LeanLocalization.CurrentLanguage == "Korean")
         {
             System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("ko-KR", false).NumberFormat;
-            btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].korPrice).ToString("C", numberFormat);
+            if(_indx < 24)
+                btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].korPrice).ToString("C", numberFormat);
+            else
+                btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopCheepPack[_indx-24].korPrice).ToString("C", numberFormat);
         }
         else
         {
             System.Globalization.NumberFormatInfo numberFormat = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
-            btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].engPrice).ToString("C", numberFormat);
+            if(_indx < 24)  
+                btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopListPACK[_indx].engPrice).ToString("C", numberFormat);
+            else
+                btnPackText.text = System.Convert.ToInt64(ListModel.Instance.shopCheepPack[_indx - 24].engPrice).ToString("C", numberFormat);
         }
+
         /// 진짜 구매? 팝업 버튼 띄우기
         PackGiftPop.SetActive(true);
     }
@@ -491,6 +549,25 @@ public class IAPManager : MonoBehaviour
             case 23:
                 Purchase_Product_month_03();
                 break;
+
+
+            ///update210204
+            ///--------------------------------------update210204 ----------------------------------------------
+            ///update210204
+            /// 1.0.7 에서 저려미 패키지 추가
+            case 24:
+                Purchase_Product_pack_11();
+                break;
+
+            case 25:
+                Purchase_Product_pack_12();
+                break;
+
+            case 26:
+                Purchase_Product_pack_13();
+                break;
+
+
         }
 
         CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
@@ -1139,6 +1216,34 @@ public class IAPManager : MonoBehaviour
                 break;
 
 
+
+            ///update210204
+            ///--------------------------------------update210204 ----------------------------------------------
+            ///update210204
+            /// 1.0.7 에서 저려미 패키지 추가
+            case EM_IAPConstants.Product_pack_11:
+                StartCoroutine(Notouch(2));
+                ComplPopup.SetActive(true);
+                break;
+
+            case EM_IAPConstants.Product_pack_12:
+                StartCoroutine(Notouch(3));
+                ComplPopup.SetActive(true);
+                break;
+
+            case EM_IAPConstants.Product_pack_13:
+                StartCoroutine(Notouch(4));
+                ComplPopup.SetActive(true);
+                break;
+
+
+
+
+
+
+
+
+
             default:
                 break;
         }
@@ -1152,34 +1257,82 @@ public class IAPManager : MonoBehaviour
 
     IEnumerator Notouch(int _index)
     {
-        if (_index == 0)
+        switch (_index)
         {
-            yield return null;
-            nm.PostboxItemSend("weapon_coupon", 100, "");
-            yield return null;
-            nm.PostboxItemSend("reinforce", 10000, "");
-            yield return null;
-            nm.PostboxItemSend("mining", 50, "");
-            yield return null;
-            nm.PostboxItemSend("amber", 100, "");
-            yield return null;
-            nm.PostboxItemSend("stone", 150, "");
-            yield return null;
+            case 0 :
+                yield return null;
+                nm.PostboxItemSend("weapon_coupon", 100, "");
+                yield return null;
+                nm.PostboxItemSend("reinforce", 10000, "");
+                yield return null;
+                nm.PostboxItemSend("mining", 50, "");
+                yield return null;
+                nm.PostboxItemSend("amber", 100, "");
+                yield return null;
+                nm.PostboxItemSend("stone", 150, "");
+                yield return null;
+                break;
+
+            case 1:
+                yield return null;
+                nm.PostboxItemSend("diamond", 1000, "");
+                yield return null;
+                nm.PostboxItemSend("elixr", 5, "");
+                yield return null;
+                nm.PostboxItemSend("leaf", 5000, "");
+                yield return null;
+                nm.PostboxItemSend("reinforce", 2500, "");
+                yield return null;
+                nm.PostboxItemSend("stone", 5, "");
+                yield return null;
+                break;
+
+
+                ///update210204
+                ///--------------------------------------update210204 ----------------------------------------------
+                ///update210204
+
+
+            case 2:
+                yield return null;
+                nm.PostboxItemSend("diamond", 300, "");
+                yield return null;
+                nm.PostboxItemSend("weapon_coupon", 5, "");
+                yield return null;
+                nm.PostboxItemSend("reinforce_box", 5, "");
+                yield return null;
+                nm.PostboxItemSend("stone", 1, "");
+                yield return null;
+                break;
+
+            case 3:
+                yield return null;
+                nm.PostboxItemSend("diamond", 500, "");
+                yield return null;
+                nm.PostboxItemSend("weapon_coupon", 10, "");
+                yield return null;
+                nm.PostboxItemSend("reinforce_box", 10, "");
+                yield return null;
+                nm.PostboxItemSend("stone", 3, "");
+                yield return null;
+                break;
+
+            case 4:
+                yield return null;
+                nm.PostboxItemSend("weapon_coupon", 20, "");
+                yield return null;
+                nm.PostboxItemSend("reinforce_box", 20, "");
+                yield return null;
+                nm.PostboxItemSend("cave", 2, "");
+                yield return null;
+                nm.PostboxItemSend("mining", 2, "");
+                yield return null;
+                nm.PostboxItemSend("stone", 5, "");
+                yield return null;
+                break;
+
         }
-        else
-        {
-            yield return null;
-            nm.PostboxItemSend("diamond", 1000, "");
-            yield return null;
-            nm.PostboxItemSend("elixr", 5, "");
-            yield return null;
-            nm.PostboxItemSend("leaf", 5000, "");
-            yield return null;
-            nm.PostboxItemSend("reinforce", 2500, "");
-            yield return null;
-            nm.PostboxItemSend("stone", 5, "");
-            yield return null;
-        }
+
         CodeStage.AntiCheat.Storage.ObscuredPrefs.Save();
     }
 
@@ -1470,6 +1623,31 @@ public class IAPManager : MonoBehaviour
     void Purchase_Product_month_03()
     {
         InAppPurchasing.Purchase(EM_IAPConstants.Product_month_03);
+        // 핸들러 등록
+        InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
+        InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
+    }
+
+
+    void Purchase_Product_pack_11()
+    {
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_pack_11);
+        // 핸들러 등록
+        InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
+        InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
+    }
+
+    void Purchase_Product_pack_12()
+    {
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_pack_12);
+        // 핸들러 등록
+        InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
+        InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
+    }
+
+    void Purchase_Product_pack_13()
+    {
+        InAppPurchasing.Purchase(EM_IAPConstants.Product_pack_13);
         // 핸들러 등록
         InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
         InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;

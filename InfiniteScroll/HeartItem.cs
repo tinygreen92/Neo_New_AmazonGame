@@ -39,6 +39,7 @@ public class HeartItem : MonoBehaviour
 
     const string T_LV = "Lv. ";
     const string T_PLUS = "+";
+    const string MAX_LV = " / ";
 
     int _index = 0;
 
@@ -175,7 +176,7 @@ public class HeartItem : MonoBehaviour
         DescBox[0].text = ListModel.Instance.heartList[_index - 1].descHead + " " + ListModel.Instance.heartList[_index - 1].descTail;
 
         thisLevel = int.Parse(ListModel.Instance.heartList[_index - 1].heartLevel);
-        LevelBox.text = T_LV + thisLevel;
+        LevelBox.text = T_LV + thisLevel + MAX_LV + ListModel.Instance.heartList[_index - 1].maxLevel;
 
 
         /// <현재_증가_스탯량> 레벨 곱해서 표기

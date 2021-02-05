@@ -28,6 +28,7 @@ public class PresentItem : MonoBehaviour
                 case "weapon_coupon": tmpHead = "무기상자 뽑기권 "; tmpTail = " 개."; break;
                 case "reinforce_box": tmpHead = "강화석 묶음 "; tmpTail = " 개."; break;
                 case "leaf_box": tmpHead = "나뭇잎 묶음 "; tmpTail = " 개."; break;
+                //
                 case "E_box": tmpHead = "E 등급 무기 상자 "; tmpTail = " 개."; break;
                 case "D_box": tmpHead = "D 등급 무기 상자 "; tmpTail = " 개."; break;
                 case "C_box": tmpHead = "C 등급 무기 상자 "; tmpTail = " 개."; break;
@@ -35,13 +36,12 @@ public class PresentItem : MonoBehaviour
                 case "A_box": tmpHead = "A 등급 무기 상자 "; tmpTail = " 개."; break;
                 case "S_box": tmpHead = "S 등급 무기 상자 "; tmpTail = " 개."; break;
                 case "L_box": tmpHead = "L 등급 무기 상자 "; tmpTail = " 개."; break;
+                //
                 case "pvp": tmpHead = "결투장 입장권 "; tmpTail = " 개."; break;
                 case "cave": tmpHead = "숨겨진 늪지 입장권 "; tmpTail = " 개."; break;
-
-
+                ///
                 case "crystal": tmpHead = "아마존 포션 "; tmpTail = " 개."; break;
-
-
+                ///
                 case "stone": tmpHead = "아마존 결정 "; tmpTail = " 개."; break;
                 case "reinforce": tmpHead = "강화석 "; tmpTail = " 개."; break;
                 case "gold": tmpHead = "골드 "; tmpTail = " 개."; break;
@@ -49,13 +49,13 @@ public class PresentItem : MonoBehaviour
                 case "diamond": tmpHead = "다이아몬드 "; tmpTail = " 개."; break;
                 case "cave_clear": tmpHead = "숨겨진 늪지 소탕권 "; tmpTail = " 개."; break;
                 case "elixr": tmpHead = "엘릭서 "; tmpTail = " 개."; break;
-                //
+                ///
                 case "S_leaf_box": tmpHead = "아마존 포션 "; tmpTail = " 개."; break;
-
+                ///
                 case "S_reinforce_box": tmpHead = "대박 강화석 묶음 "; tmpTail = " 개."; break;
                 case "mining": tmpHead = "수정동굴 채굴권 "; tmpTail = " 개."; break;
                 case "amber": tmpHead = "호박석 "; tmpTail = " 개."; break;
-                //
+                // 미구현
                 case "Crazy_dia": tmpHead = "대박 다이아  "; tmpTail = " 개."; break;
                 case "Crazy_elixr": tmpHead = "대박 엘릭서  "; tmpTail = " 개."; break;
 

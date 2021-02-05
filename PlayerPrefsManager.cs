@@ -152,6 +152,8 @@ public class PlayerPrefsManager : MonoBehaviour
     [Header("- 매니저들")]
     public TutoManager tm;
     public BuffManager bm;
+    public ModelHandler mh;
+
     /// <summary>
     /// 오디오 올 뮤트
     /// </summary>
@@ -1194,6 +1196,16 @@ public class PlayerPrefsManager : MonoBehaviour
         /// 210126 수정 invisibleheartList[28] 오프라인 보상 5% -> 1%
         ListModel.Instance.Heart_invisNeaf(28, 1f);
 
+
+
+        ///update210204
+        ///--------------------------------------update210204 ----------------------------------------------
+        ///update210204
+        /// 1.0.7 에서 저려미 패키지 추가
+        mh.CreateCheepPack();
+
+
+
         /// 초창기 초기화 후 호출할때만 데이터 세이브
         if (_isInit)
         {
@@ -1264,6 +1276,7 @@ public class PlayerPrefsManager : MonoBehaviour
                 ObscuredPrefs.SetInt("update210117", 956);
                 ObscuredPrefs.Save();
             }
+
             /// 로딩바 올려주는 걸 허락한다.
             isJObjectLoad = true;
         }

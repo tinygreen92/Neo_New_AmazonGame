@@ -344,11 +344,12 @@ public class NanooManager : MonoBehaviour
                         case "pvp": IconImg.sprite = pm.IconSprs[10]; break;
                         case "cave": IconImg.sprite = pm.IconSprs[11]; break;
 
-                        /// 아마존 결정 조각 crystal
+                        /// 아마존 포션 crystal / S_leaf_box
 
                         case "crystal": IconImg.sprite = pm.IconSprs[12]; break;
-
+                        /// 얘는 아마존 결정
                         case "stone": IconImg.sprite = pm.IconSprs[13]; break;
+                        
                         case "reinforce": IconImg.sprite = pm.IconSprs[14]; break;
                         case "gold": IconImg.sprite = pm.IconSprs[15]; break;
                         case "leaf": IconImg.sprite = pm.IconSprs[16]; break;

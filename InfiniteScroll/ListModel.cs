@@ -993,6 +993,12 @@ public class ListModel : MonoBehaviour
     public List<ShopPrice> shopListPACK = new List<ShopPrice>();
     public List<ShopPrice> shopListAMA = new List<ShopPrice>();
 
+    /// <summary>
+    ///  저려미 패키지 추가
+    /// </summary>
+    public List<ShopPrice> shopCheepPack = new List<ShopPrice>();
+
+
 
     /// 튜토리얼이요 MissonSchool
     public List<MissonSchool> missionDAYlist = new List<MissonSchool>();

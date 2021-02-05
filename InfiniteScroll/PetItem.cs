@@ -40,6 +40,7 @@ public class PetItem : MonoBehaviour
     public GameObject[] glowEffect;
 
     const string T_LV = "Lv. ";
+    const string MAX_LV = " / 100";
     const string T_PLUS = "+";
     const string T_DESC = " 증가량";
     const string T_DESC2 = " 버프";
@@ -69,7 +70,8 @@ public class PetItem : MonoBehaviour
         /// 기본 내용물 채워주기
         spriteBox.sprite = sm.icons[_index];
         thisLevel = int.Parse(ListModel.Instance.petList[_index].petLevel);
-        LevelBox.text = T_LV + thisLevel;
+        /// 현재레벨  / 맥스레벨
+        LevelBox.text = T_LV + thisLevel + MAX_LV;
 
         /// 0 번 인덱스는 골드로 강화하는 캐릭터 레벨
         switch (_index)

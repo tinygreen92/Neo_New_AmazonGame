@@ -14,30 +14,37 @@ public class ModelHandler : MonoBehaviour
     //public TextAsset ta;            /// 수집 텍스트 파일
     //public TextAsset _Rune;            /// 룬 텍스트 파일
     //public TextAsset _PET;            /// 펫 텍스트 파일
-    //public TextAsset SHPSHPSHOP;            /// 상점 텍스트 파일
     //public TextAsset Misson;            /// 미션 텍스트 파일
     //public TextAsset _mine;            /// 광산 텍스트 파일
     //public TextAsset _Swamp;            /// 숨겨진 늪지 텍스트 파일
+    public TextAsset SHPSHPSHOP;            /// 상점 텍스트 파일
+    /// <summary>
+    /// 1.0.7 패치에 추가되는 저려미 패키지들
+    /// ListModel.Instance.shopCheepPack 따로 관리 -> 게임 실행시마다 불러와줌
+    /// </summary>
+    public void CreateCheepPack()
+    {
+        string[] line = SHPSHPSHOP.text.Substring(0, SHPSHPSHOP.text.Length).Split('\n');
+        for (int i = 0; i < line.Length; i++)
+        {
+            string[] row = line[i].Split('\t');
 
-    //public void zTA_Parser_Swamp()
-    //{
-    //    ListModel.Instance.swampCaveData.Clear();
+            if (row[0] == "pack")
+            {
+                ListModel.Instance.shopCheepPack.Add(new ShopPrice
+                {
+                    category = row[0],
+                    korDesc = row[1],
+                    korPrice = row[2],
+                    engDesc = row[3],
+                    engPrice = row[4],
+                    korTailDesc = row[5],
+                    engTailDesc = row[6],
+                });
+            }
+        }
+    }
 
-    //    string[] line = _Swamp.text.Substring(0, _Swamp.text.Length).Split('\n');
-    //    for (int i = 0; i < line.Length; i++)
-    //    {
-    //        string[] row = line[i].Split('\t');
-
-    //        ListModel.Instance.swampCaveData.Add(new SwampCave
-    //        {
-    //            stageLevel = float.Parse(row[0]),
-    //            monsterHP = float.Parse(row[1]),
-    //            rewordLeaf = float.Parse(row[2]),
-    //            rewordEnchant = float.Parse(row[3]),
-    //            killCount = row[4],
-    //        });
-    //    }
-    //}
 
     public SupportManager sm;
 
@@ -174,21 +181,7 @@ public class ModelHandler : MonoBehaviour
         //
     }
 
-    ///// <summary>
-    ///// 인보크로 불러와줄것
-    ///// </summary>
-    //void InvoFirstWeapon()
-    //{
-    //    ///기본무기 장착 Weapon_Add
-    //    ListModel.Instance.Weapon_Add(0);
-    //    ListModel.Instance.Weapon_Equip(0, true);
-
-    //    /// 스트링[] 몽땅 저장
-    //    PlayerPrefsManager.instance.TEST_SaveJson();
-    //}
-
-
-    /// <summary>
+     /// <summary>
     /// 테스트 버튼에 붙이자 -> json 리셋후 종료
     /// </summary>
     public void TEST_RESTE_JSON()
