@@ -1162,8 +1162,9 @@ public class PlayerPrefsManager : MonoBehaviour
         }
         /// 장착 룬 스탯 새로고침
         ListModel.Instance.SetEquipedRuneEffect();
-        /// 광고 제거 로드
+        /// 광고 제거 로드 525
         PlayerInventory.isSuperUser = ListModel.Instance.mvpDataList[0].SuperUser;
+
         /// TODO : 영구적인 버프 효과 아이콘 활성화
         PlayerInventory.isbuff_power_up = ListModel.Instance.mvpDataList[0].buff_power_up != 0 ? true : false;
         if (PlayerInventory.isbuff_power_up) bm.MoneyLoveBuff(0);

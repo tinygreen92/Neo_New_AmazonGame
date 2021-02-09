@@ -174,7 +174,7 @@ public class DistanceManager : MonoBehaviour
                 Enemy_DropGold *= 1.03d;
             }
 
-            Debug.LogWarning("Enemy_Hp_Full : " + Enemy_Hp_Full + " Enemy_DropGold : " + Enemy_DropGold);
+            //Debug.LogWarning("Enemy_Hp_Full : " + Enemy_Hp_Full + " Enemy_DropGold : " + Enemy_DropGold);
 
             /// 1~9 스테이지 일반몹 or 박스
             /// 황금 상자 등장 확률 

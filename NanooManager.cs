@@ -14,6 +14,13 @@ public class NanooManager : MonoBehaviour
     private static string userID = "Unknown"; // 유저 ID 저장하라.
     private static string userNickname = "Unranked"; // 닉네임 랭킹에 표기
 
+
+
+    [Header("- 나누 재화 테스트")]
+    public Text text1;
+    public Text text2;
+    public Text text3;
+
     [Header("- 플레이어 닉네임 표기")]
     public Text outterNameText;
     public Text innerNameText;
@@ -37,6 +44,151 @@ public class NanooManager : MonoBehaviour
     {
         StartCoroutine(NickUpd());
     }
+
+
+    public void CurrencyAll()
+    {
+        plugin.CurrencyAll((status, errorMessage, jsonString, values) =>
+        {
+            if (status.Equals(Configure.PN_API_STATE_SUCCESS))
+            {
+                string textitem = "";
+                foreach (Dictionary<string, object> item in (ArrayList)values["items"])
+                {
+                    textitem += item["currency"] + " : " + item["amount"] + System.Environment.NewLine;
+                    Debug.LogWarning(item["currency"] + " : " + item["amount"]);
+                }
+                /// 테스트 텍스트 표기
+                text1.text = textitem;
+            }
+            else
+            {
+                Debug.LogWarning("CurrencyAll Fail");
+            }
+        });
+    }
+
+    /// <summary>
+    /// 재화 조회
+    /// </summary>
+    /// <param name="_code"></param>
+    public void CurrencyGet(string _code)
+    {
+        plugin.CurrencyGet(_code, (status, errorMessage, jsonString, values) => {
+            if (status.Equals(Configure.PN_API_STATE_SUCCESS))
+            {
+                Debug.LogWarning(values["amount"]);
+            }
+            else
+            {
+                Debug.LogWarning("Fail");
+            }
+        });
+    }
+
+    public void CurrencySet()
+    {
+        CurrencySet("ES", 1);
+        CurrencySet("LF", 1);
+        CurrencySet("DM", 1);
+        // 갱신
+        Invoke(nameof(CurrencyAll), 0.6f);
+    }
+
+    /// <summary>
+    /// 재화 등록
+    /// </summary>
+    /// <param name="_code"></param>
+    /// <param name="_amount"></param>
+    public void CurrencySet(string _code, long _amount)
+    {
+        plugin.CurrencySet(_code, _amount, (status, errorMessage, jsonString, values) => {
+            if (status.Equals(Configure.PN_API_STATE_SUCCESS))
+            {
+                Debug.LogWarning(values["amount"]);
+                CurrencySubtract(_code, 1);
+            }
+            else
+            {
+                Debug.LogWarning("Fail");
+                text1.text = "Fail";
+            }
+        });
+    }
+
+    public void CurrencyCharge(string _code)
+    {
+        CurrencyCharge(_code, 10);
+    }
+    /// <summary>
+    /// 재화 충전
+    /// </summary>
+    /// <param name="_code"></param>
+    /// <param name="_amount"></param>
+    public void CurrencyCharge(string _code, long _amount)
+    {
+        plugin.CurrencyCharge(_code, _amount, (status, errorMessage, jsonString, values) => {
+            if (status.Equals(Configure.PN_API_STATE_SUCCESS))
+            {
+                Debug.LogWarning(values["amount"]);
+                //text2.text = _code + " : " + values["amount"];
+                CurrencyAll();
+            }
+            else
+            {
+                Debug.LogWarning("Fail");
+                text1.text = "Fail";
+            }
+        });
+    }
+
+
+    public void CurrencySubtract(string _code)
+    {
+        CurrencySubtract(_code, 10);
+    }
+    /// <summary>
+    /// 재화 차감
+    /// </summary>
+    /// <param name="_code"></param>
+    /// <param name="_amount"></param>
+    public void CurrencySubtract(string _code, long _amount)
+    {
+        plugin.CurrencySubtract(_code, _amount, (status, errorMessage, jsonString, values) => {
+            if (status.Equals(Configure.PN_API_STATE_SUCCESS))
+            {
+                Debug.LogWarning(values["amount"]);
+                //text3.text = _code + " : " + values["amount"];
+                CurrencyAll();
+            }
+            else
+            {
+                Debug.LogWarning("Fail");
+                text1.text = "Fail";
+            }
+        });
+    }
+
+    
+    /// <summary>
+    /// 이벤트 로그 작성
+    /// </summary>
+    public void LogWrite()
+    {
+        var messages = new PlayNANOO.Monitor.LogMessages();
+        messages.Add(Configure.PN_LOG_DEBUG, "Message PN_LOG_DEBUG");
+        //messages.Add(Configure.PN_LOG_INFO, "Message PN_LOG_INFO");
+        //messages.Add(Configure.PN_LOG_ERROR, "Message PN_LOG_ERROR");
+
+        plugin.LogWrite(new PlayNANOO.Monitor.LogWrite()
+        {
+            EventCode = "EVENT_TEST_CODE",
+            EventMessages = messages
+        });
+    }
+
+
+
 
     /// <summary>
     /// 구글 로그인 되면 바로 닉네임 설정하게
@@ -149,6 +301,11 @@ public class NanooManager : MonoBehaviour
         plugin.OpenBanner();
         /// 서버타임
         ServerTime();
+
+        /// 나누 재화 set
+        //CurrencySet("DM", 100);
+
+        CurrencyAll();
     }
 
 

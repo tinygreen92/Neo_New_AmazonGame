@@ -70,7 +70,7 @@ public class ModelHandler : MonoBehaviour
             ObscuredPrefs.SetInt("update210117", 956);
             ObscuredPrefs.Save();
             /// 파일에서 데이터 불러와서 리스트에 대입
-            PlayerPrefsManager.instance.JObjectLoad(true);
+            InitMoHa(true);
             return;
         }
 

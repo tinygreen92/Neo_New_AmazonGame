@@ -9,6 +9,7 @@ using Lean.Localization;
 
 public class PopUpManager : MonoBehaviour
 {
+    public FreeWeaponManager fwm;
     [Header("- 글로벌 획득 팝업")]
     public AutoDisposePopUp adp;
     public NanooManager nm;
@@ -202,7 +203,13 @@ public class PopUpManager : MonoBehaviour
         {
             _AdsComp = false;
             //AdsDesc.text = LeanLocalization.GetTranslationText("Config_Ads_Nope");
-            Invoke(nameof(AdsInvo), 0.5f);
+            // Invoke(nameof(AdsInvo), 0.5f);
+            /// 광고 없으면 안돼
+            SystemPopUp.instance.StopLoopLoading();
+            /// 프리 다이아 팝업 꺼주기
+            HidePopUP(2);
+            /// 15초 타이머
+            fwm.AdsHolding20s();
         }
 
     }

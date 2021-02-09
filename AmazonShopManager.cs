@@ -312,9 +312,13 @@ public class AmazonShopManager : MonoBehaviour
         else
         {
             _AdsComp = false;
-            /// 광고 없어도 ㅇㅋ
-            //AdsDesc.text = LeanLocalization.GetTranslationText("Config_Ads_Nope");
-            Invoke(nameof(AdsInvo), 0.5f);
+            /// 광고 없으면 안돼
+            //Invoke(nameof(AdsInvo), 0.5f);
+            SystemPopUp.instance.StopLoopLoading();
+            /// 프리 아마존 팝업 꺼주기
+            PopUpManager.instance.HidePopUP(26);
+            /// 15초 타이머
+            PopUpManager.instance.fwm.AdsHolding20s();
         }
 
     }

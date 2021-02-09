@@ -25,6 +25,8 @@ public class IdleManager : MonoBehaviour
         /// 배너 레이아웃이 올라온 상태가 아니면 광고 표시
         if (!BannerAdPanelController.isOn)
         {
+            /// 3초뒤 핸들 나타나
+            Invoke(nameof(InvoHandleOn), 3f);
             /// 슈퍼유저가 아니면 광고 표시
             if (PlayerInventory.isSuperUser != 0)
             {
@@ -34,11 +36,11 @@ public class IdleManager : MonoBehaviour
             {
                 /// 일반 유저면 배너 올릴때 배너 광고 표시
                 em.ShowBanner();
-                Invoke(nameof(InvoHandleOn), 3f);
             }
         }
         /// 스르륵 내려온다
         gameObject.SetActive(true);
+        /// 화면 가리기
         moveRoutine = StartCoroutine(Progress());
         /// 포톤 접속종료
         pcm.ExDisconnect();

@@ -121,9 +121,13 @@ public class FreeWeaponManager : MonoBehaviour
         }
         else
         {
-            /// 광고 없어도 ㅇㅋ
-            //AdsDesc.text = LeanLocalization.GetTranslationText("Config_Ads_Nope");
-            Invoke(nameof(AdsInvo), 0.5f);
+            /// 광고 없으면 안돼
+            //Invoke(nameof(AdsInvo), 0.5f);
+            SystemPopUp.instance.StopLoopLoading();
+            /// 프리 웨폰 팝업 꺼주기
+            PopUpManager.instance.HidePopUP(27);
+            /// 15초 타이머
+            AdsHolding20s();
         }
 
     }
