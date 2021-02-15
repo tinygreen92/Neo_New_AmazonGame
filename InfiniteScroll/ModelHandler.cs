@@ -11,12 +11,33 @@ public class ModelHandler : MonoBehaviour
     //public TextAsset _char;            /// 캐릭터 텍스트 파일
     //public TextAsset _weapon;            /// 무기 텍스트 파일
     //public TextAsset _Heart;            /// 유물 텍스트 파일
-    //public TextAsset ta;            /// 수집 텍스트 파일
     //public TextAsset _Rune;            /// 룬 텍스트 파일
     //public TextAsset _PET;            /// 펫 텍스트 파일
     //public TextAsset Misson;            /// 미션 텍스트 파일
     //public TextAsset _mine;            /// 광산 텍스트 파일
     //public TextAsset _Swamp;            /// 숨겨진 늪지 텍스트 파일
+    public TextAsset ta;            /// 수집 텍스트 파일
+    public void Suppoter_Parser()
+    {
+        string[] line = ta.text.Substring(0, ta.text.Length).Split('\n');
+        for (int i = 0; i < line.Length; i++)
+        {
+            string[] row = line[i].Split('\t');
+
+            ListModel.Instance.supList.Add(new SupContent
+            {
+                index = row[0],
+                supporterLevel = row[1],
+                supporterName = row[2],
+                maxTime = float.Parse(row[3]),
+                currentEarnGold = double.Parse(row[4]),
+                nextUpgradeNeed = double.Parse(row[5]),
+                isEnable = row[6],
+            });
+        }
+    }
+
+
     public TextAsset SHPSHPSHOP;            /// 상점 텍스트 파일
     /// <summary>
     /// 1.0.7 패치에 추가되는 저려미 패키지들
@@ -132,12 +153,6 @@ public class ModelHandler : MonoBehaviour
     {
         /// 파일에서 데이터 불러와서 리스트에 대입
         PlayerPrefsManager.instance.JObjectLoad(_isLocal);
-
-        /// 닥터후 뉴 시즌
-        TimeLoadBox doctor = DataBoxCopy.instance.LoadDoctorWho();
-        //
-        MineManager.currentHPs = doctor.currentHPs;
-        sm.currentTimes = doctor.currentTimes;
 
         /// 뉴 데이터 -
         GameDataBox data = DataBoxCopy.instance.LoadBox();

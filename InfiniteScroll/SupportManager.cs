@@ -45,7 +45,7 @@ public class SupportManager : MonoBehaviour
 
     private void Awake()
     {
-        C_Routine = new Coroutine[30];
+        C_Routine = new Coroutine[40];
 
     }
 
@@ -130,7 +130,6 @@ public class SupportManager : MonoBehaviour
     {
         /// 1. 골드 창 [하단] 에 + 수집 골드 그래픽 표기
 
-
         /// 2. 표기 사라지면 실제 플레이어 골드에 더해줌 
         earnGold = ListModel.Instance.supList[_id].currentEarnGold * 0.5d;
         earnGold *= (double.Parse(ListModel.Instance.supList[_id].supporterLevel) + 1d);
@@ -169,7 +168,7 @@ public class SupportManager : MonoBehaviour
     {
         if (name != "SupportManager") return;
         // 마지막 해금이면 리턴
-        if (_id == 30) return;
+        if (_id == 40) return;
 
         /// 원본 _id 는 +1 한 값 -> 처음 실행시 회색블록 삭제
         InfiContents.Find((_id).ToString()).GetComponent<SupportItem>().Clicked_LvUP();

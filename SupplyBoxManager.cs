@@ -123,6 +123,32 @@ public class SupplyBoxManager : MonoBehaviour
 
 
 
+
+    /// <summary>
+    /// 수집 최대 레벨 알아내서 골드 적용
+    /// </summary>
+    double GetSupGold()
+    {
+        int supMaxCnt = ListModel.Instance.supList.Count - 1;
+        double result = 0;
+        /// 역으로 포문 돌리기
+        for (int i = supMaxCnt; i > 0; i--)
+        {
+            if (ListModel.Instance.supList[i].isEnable == "TRUE")
+            {
+                /// 해당 index 바탕으로 습득 골드 계산
+                result = ListModel.Instance.supList[i-1].currentEarnGold * 0.025d;
+                result *= (double.Parse(ListModel.Instance.supList[i-1].supporterLevel) + 1d);
+                Debug.LogWarning($"보급상자 계산 {i} 번째 수집 골드 {result} 이다.");
+                break;
+            }
+        }
+        return result;
+    }
+
+
+
+
     /// <summary>
     /// 공통 메인 팝업에 붙일 것
     /// </summary>
@@ -150,7 +176,8 @@ public class SupplyBoxManager : MonoBehaviour
         ListModel.Instance.ALLlist_Update(9, 1);
         //
         isSuperBox = false;
-        tmpGold = 5d * (3d * 1.15d * PlayerInventory.RecentDistance);
+        //tmpGold = 5d * (3d * 1.15d * PlayerInventory.RecentDistance);
+        tmpGold = 1d * GetSupGold();
         Normal.gameObject.SetActive(false);
         System.Random seedRnd = new System.Random();
         int startIndex = seedRnd.Next();
@@ -261,7 +288,8 @@ public class SupplyBoxManager : MonoBehaviour
         ListModel.Instance.ALLlist_Update(9, 1);
         //
         isSuperBox = true;
-        tmpGold = 10d * (3d * 1.15d * PlayerInventory.RecentDistance);
+        //tmpGold = 10d * (3d * 1.15d * PlayerInventory.RecentDistance);
+        tmpGold = 2d * GetSupGold();
         Super.gameObject.SetActive(false);
         System.Random seedRnd = new System.Random();
         int startIndex = seedRnd.Next();

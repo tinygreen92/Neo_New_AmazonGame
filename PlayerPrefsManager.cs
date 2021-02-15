@@ -1191,6 +1191,8 @@ public class PlayerPrefsManager : MonoBehaviour
 
 
         /// -------------------------- 불러온 JSON 들 수치 패치 해줌
+        /// -------------------------- 불러온 JSON 들 수치 패치 해줌
+        /// -------------------------- 불러온 JSON 들 수치 패치 해줌
 
         /// 210126 수정 charatorList[5] 스탯 치명타 대미지 5% -> 2.5%로 조정
         ListModel.Instance.Chara_NerfThis(5, 2.5f);
@@ -1200,10 +1202,60 @@ public class PlayerPrefsManager : MonoBehaviour
 
 
         ///update210204
-        ///--------------------------------------update210204 ----------------------------------------------
+        ///--------------------------------------1.0.7 에서 저려미 패키지 추가 ----------------------------------------------
         ///update210204
+        
         /// 1.0.7 에서 저려미 패키지 추가
         mh.CreateCheepPack();
+
+        ///update210204
+        ///--------------------------------------1.0.7 에서 저려미 패키지 추가 ----------------------------------------------
+        ///update210204
+        ///
+
+
+
+
+        ///update210209
+        ///--------------------------------------1.1.0 펫 초기값 수치 변경 ----------------------------------------------
+        ///update210209
+
+        /// 0 1 2 3 4
+        ListModel.Instance.Pet_NeafThis(0, 300);
+        ListModel.Instance.Pet_NeafThis(1, 500);
+        ListModel.Instance.Pet_NeafThis(2, 700);
+        ListModel.Instance.Pet_NeafThis(3, 600);
+        ListModel.Instance.Pet_NeafThis(4, 400);
+
+        /// 수집단계 30 -> 40으로 확장
+        if (ListModel.Instance.supList.Count < 35)
+            mh.Suppoter_Parser();
+
+
+
+        ///update210209
+        ///--------------------------------------1.1.0 펫 수치 변경 ----------------------------------------------
+        ///update210209
+
+
+        /// 닥터후 뉴 시즌
+        TimeLoadBox doctor = DataBoxCopy.instance.LoadDoctorWho();
+        //
+        MineManager.currentHPs = doctor.currentHPs;
+
+        /// 30 -> 40 늘리기 전 이라면 10개 늘려줌.
+        if (doctor.currentTimes.Length < 35)
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                sm.currentTimes[i] = doctor.currentTimes[i];
+            }
+        }
+        /// 이미 40개로 늘어난 상태라면 걍 해.
+        else
+        {
+            sm.currentTimes = doctor.currentTimes;
+        }
 
 
 

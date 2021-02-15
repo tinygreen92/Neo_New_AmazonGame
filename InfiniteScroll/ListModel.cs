@@ -65,7 +65,7 @@ public struct PetContent
 {
     public string index;                   // 인덱스
     public string petLevel;                   // 현재 레벨
-    public float needUpgrade;                   /// 레벨업 필요한 나뭇잎(레벨 비례) / 다이아 (고정)
+    public float needUpgrade;                   /// 레벨업 필요한 나뭇잎 초기값 (1.1.0 이후 사용 X)
     public float usingTimeDam;                   // 대미지 /. 지속시간
     public float percentDam;                   // 대미지 증가량
     public float coolTime;                   // 쿨 - 타임
@@ -314,6 +314,24 @@ public class ListModel : MonoBehaviour
 
 
 
+    public void Pet_NeafThis(int _index, int _Neaf)
+    {
+        PetContent sc;
+        sc.needUpgrade = _Neaf;
+        // 주석 눈에 잘띄는 색
+        sc.index = petList[_index].index;
+        sc.petLevel = petList[_index].petLevel;
+        sc.usingTimeDam = petList[_index].usingTimeDam;
+        sc.percentDam = petList[_index].percentDam;
+        sc.coolTime = petList[_index].coolTime;
+        sc.Desc = petList[_index].Desc;
+        sc.isEnable = petList[_index].isEnable;
+
+        petList[_index] = sc;
+    }
+
+
+
     ///--------------------------------  캐릭터  관련  -------------------------------------/// 
 
 
@@ -336,7 +354,11 @@ public class ListModel : MonoBehaviour
         charatorList[_index] = sc;
     }
 
-
+    /// <summary>
+    /// 210126 수정 charatorList[5] 스탯 치명타 대미지 5% -> 2.5%로 조정
+    /// </summary>
+    /// <param name="_index"></param>
+    /// <param name="_level"></param>
     public void Chara_NerfThis(int _index, float _level)
     {
         CharatorContent sc;
@@ -896,7 +918,11 @@ public class ListModel : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// 210126 수정 invisibleheartList[28] 오프라인 보상 5% -> 1%
+    /// </summary>
+    /// <param name="_index"></param>
+    /// <param name="_value"></param>
     public void Heart_invisNeaf(int _index, float _value)
     {
         /// 추적하기
@@ -912,6 +938,12 @@ public class ListModel : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    ///  210126 유물 보상 5% -> 1% 너프
+    /// </summary>
+    /// <param name="_index"></param>
+    /// <param name="_value"></param>
     public void Heart_myNeaf(int _index, float _value)
     {
         HeartContent sc = heartList[_index];

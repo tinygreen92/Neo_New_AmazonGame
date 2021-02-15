@@ -116,19 +116,13 @@ public class PetItem : MonoBehaviour
             {
                 UpgradeBox.text = (PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade).ToString("N0");
             }
-            else if (_index == 1)
-            {
-                UpgradeBox.text = PlayerPrefsManager.instance.DoubleToStringNumber(Mathf.CeilToInt((float)(PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.15f)));
-            }
-            else if (_index == 4)
-            {
-                UpgradeBox.text = PlayerPrefsManager.instance.DoubleToStringNumber(Mathf.CeilToInt((float)(PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.3f)));
-            }
             else
             {
-                UpgradeBox.text = PlayerPrefsManager.instance.DoubleToStringNumber(Mathf.CeilToInt((float)(PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.2f)));
-            }
+                double tmpResult = PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * 1.1d;
+                tmpResult = System.Math.Pow(tmpResult, (thisLevel - 1));
 
+                UpgradeBox.text = PlayerPrefsManager.instance.DoubleToStringNumber(System.Math.Truncate(tmpResult));
+            }
         }
         /// <다이아>로 강화 할때
         else
