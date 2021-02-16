@@ -3,8 +3,9 @@ using UnityEngine.UI;
 
 public class AmazonItem : MonoBehaviour
 {
+    [Header("- 아이템 구매시 우편으로 들어가")]
     public AmazonShopManager asm;
-
+    [Header("- 아마존 상점 설명들")]
     public Image iconImg;
     public Image BtnImg;
     public Text headText;
@@ -44,12 +45,10 @@ public class AmazonItem : MonoBehaviour
     /// </summary>
     public void ClickedThisItem()
     {
-        if (PlayerInventory.Money_AmazonCoin < _Cost) return;
-        PlayerInventory.Money_AmazonCoin -= _Cost;
-        /// 아마존 상점에서 룬 구매하기
-        if (_index == 6 && PlayerPrefsManager.currentTutoIndex == 32) ListModel.Instance.TUTO_Update(32);
-        /// 팝업 호출 + 우편함으로 보내기
-        asm.SetGiftBoxDesc(_index, 1);
+        /// 팝업 호출 
+        asm.cbm.ShowPopUp(_index, _Cost);
+        /// 우편함으로 보내기
+        //asm.SetGiftBoxDesc(_index, 1);
     }
 
 

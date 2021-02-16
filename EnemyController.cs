@@ -8,7 +8,7 @@ public class EnemyController : MonoBehaviour
     [Header("-  대미지 폰트")]
     public Transform normalFont;
     public Transform criFont;
-
+    //
     private HpBarManager HBM;
     private Animator anim;
 
@@ -223,6 +223,8 @@ public class EnemyController : MonoBehaviour
         PlayerInventory.Money_Gold += dEnemy_DropGold;
         ///  업적 카운트 올리기
         ListModel.Instance.ALLlist_Update(3, dEnemy_DropGold);
+        /// 골드 텍스트 올리기
+        HBM.goldText.ShowGoldText(dEnemy_DropGold);
         /// 몬스터 5회 처치
         if (!PlayerPrefsManager.isTutoAllClear)
         {

@@ -238,6 +238,8 @@ public class FakeLoading : MonoBehaviour
 
 
 
+        /// TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
+        SystemPopUp.instance.RandomTweenDoPath();
 
 
 

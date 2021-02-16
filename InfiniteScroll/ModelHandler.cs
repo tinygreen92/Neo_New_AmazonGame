@@ -158,7 +158,6 @@ public class ModelHandler : MonoBehaviour
         GameDataBox data = DataBoxCopy.instance.LoadBox();
         /// 최우선 호출
         PlayerInventory.CurrentAmaLV = data.CurrentAmaLV;
-
         //
         PlayerInventory.RecentDistance = data.RecentDistance;
         PlayerInventory.Money_Gold = data.Money_Gold;

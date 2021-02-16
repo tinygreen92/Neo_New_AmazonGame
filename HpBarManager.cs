@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class HpBarManager : MonoBehaviour
 {
+    public GoldTextPool goldText;
     public GameObject GoldDropPos;
     public CaveManager cm;
     public FeverManager fm;

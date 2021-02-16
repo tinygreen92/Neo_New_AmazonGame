@@ -9,6 +9,10 @@ using CodeStage.AntiCheat.Storage;
 
 public class AmazonShopManager : MonoBehaviour
 {
+    [Header("- 갯수 조정 팝업 매니저")]
+    public CountBuyManager cbm;
+
+    [Header("-나누 랑 룬")]
     public NanooManager nm;
     public RuneManager rm;
     [Header( "아이템 스프라이트")]
@@ -223,6 +227,8 @@ public class AmazonShopManager : MonoBehaviour
     }
 
 
+
+
     /// <summary>
     /// 룬 상점에서 아이템 구입시 우편함으로 들어가
     /// </summary>
@@ -238,8 +244,8 @@ public class AmazonShopManager : MonoBehaviour
             //case 0: nm.PostboxDailySend("L_box", 1); break;
             //case 1: nm.PostboxDailySend("S_box", 1); break;.
 
-            case 0: nm.CouponCheak("L_box", "1"); break;
-            case 1: nm.CouponCheak("S_box", "1"); break;
+            case 0: nm.CouponCheak("L_box", _Amount.ToString()) ; break;
+            case 1: nm.CouponCheak("S_box", _Amount.ToString()); break;
 
             //case 2: nm.PostboxDailySend("Crazy_dia", 1); break;
             //case 3: nm.PostboxDailySend("S_reinforce_box", 1); break;
@@ -247,7 +253,15 @@ public class AmazonShopManager : MonoBehaviour
             //case 5: nm.PostboxDailySend("S_leaf_box", 1); break;
 
             /// 룬 뽑기 실행하면 리턴
-            case 6: rm.GatchaRune(); gameObject.SetActive(false); return;
+            case 6:
+                /// 아마존 상점에서 룬 구매하기시 튜토리얼 통과
+                if (PlayerPrefsManager.currentTutoIndex == 32) 
+                    ListModel.Instance.TUTO_Update(32);
+                /// 룬가챠
+                rm.GatchaRune(); 
+                gameObject.SetActive(false); 
+
+                return;
             default: return;
         }
         /// 
