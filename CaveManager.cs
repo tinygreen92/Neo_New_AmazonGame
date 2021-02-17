@@ -590,16 +590,16 @@ public class CaveManager : MonoBehaviour
     public void GetClearReword(bool _isAdsWatch)
     {
         double tmpLeaf = Math.Truncate(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordLeaf * (_KC * PlayerInventory.Player_Leaf_Earned));
-        long tmpES = Mathf.RoundToInt(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordEnchant * (_KC * (float)PlayerInventory.EnchantStone_Earned));
+        double tmpES = Math.Truncate(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordEnchant * (_KC * PlayerInventory.EnchantStone_Earned));
         //
         if (_isAdsWatch)
         {
             PlayerInventory.Money_Leaf += tmpLeaf  * 2d ;
-            PlayerInventory.Money_EnchantStone += tmpES * 2;
+            PlayerInventory.Money_EnchantStone += tmpES * 2d;
             /// 나뭇잎 획득량 업적 올리기
             ListModel.Instance.ALLlist_Update(4, tmpLeaf * 2d);
             ///  강화석 업적 카운트 올리기
-            ListModel.Instance.ALLlist_Update(5, tmpES * 2);
+            ListModel.Instance.ALLlist_Update(5, tmpES * 2d);
         }
         else
         {
@@ -623,17 +623,17 @@ public class CaveManager : MonoBehaviour
         float _KC = float.Parse(ListModel.Instance.swampCaveData[currentMyDan - 1].killCount);
         //
         double tmpLeaf = Math.Truncate(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordLeaf * (_KC * PlayerInventory.Player_Leaf_Earned));
-        var tmpES = Mathf.RoundToInt(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordEnchant * (_KC * (float)PlayerInventory.EnchantStone_Earned));
+        double tmpES = Math.Truncate(ListModel.Instance.swampCaveData[currentMyDan - 1].rewordEnchant * (_KC * PlayerInventory.EnchantStone_Earned));
 
         //
         if (_isAdsWatch)
         {
             PlayerInventory.Money_Leaf += tmpLeaf * 2d;
-            PlayerInventory.Money_EnchantStone += tmpES * 2;
+            PlayerInventory.Money_EnchantStone += tmpES * 2d;
             /// 나뭇잎 획득량 업적 올리기
             ListModel.Instance.ALLlist_Update(4, tmpLeaf * 2d);
             ///  강화석 업적 카운트 올리기
-            ListModel.Instance.ALLlist_Update(5, tmpES * 2);
+            ListModel.Instance.ALLlist_Update(5, tmpES * 2d);
 
         }
         else

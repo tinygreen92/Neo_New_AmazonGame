@@ -11,7 +11,6 @@ public class AmazonShopManager : MonoBehaviour
 {
     [Header("- 갯수 조정 팝업 매니저")]
     public CountBuyManager cbm;
-
     [Header("-나누 랑 룬")]
     public NanooManager nm;
     public RuneManager rm;

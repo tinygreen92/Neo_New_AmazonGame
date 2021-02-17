@@ -164,7 +164,7 @@ public class OfflineManager : MonoBehaviour
     double rainbowDash = 0;
     long applejack = 0;
     double ltimeBae1 = 0;
-    long ltimeBae2 = 0;
+    double ltimeBae2 = 0;
     long ltimeBae3 = 0;
 
 
@@ -278,7 +278,7 @@ public class OfflineManager : MonoBehaviour
 
         //강화석
         ltimeBae2 = _input / 600;
-        ltimeBae2 = (long)(ltimeBae2 * PlayerInventory.Offline_Earned);
+        ltimeBae2 = (ltimeBae2 * PlayerInventory.Offline_Earned);
         PlayerInventory.SetTicketCount("reinforce_box", (int)ltimeBae2);
 
         // 아마존 결정 조각
@@ -353,6 +353,9 @@ public class OfflineManager : MonoBehaviour
     /// </summary>
     void AdsOfflineReword()
     {
+        ///
+        /// 이미 팝업때 1 번 더하고 광고보면 1더 더하는 거니까 1+1 = 2배 맞음 수정 X
+        ///
         PlayerInventory.Money_Gold += dtimeBae;
         rewordText[0].text = PlayerPrefsManager.instance.DoubleToStringNumber(dtimeBae * 2.0d);
         ///  골드 업적 카운트 올리기
@@ -366,7 +369,7 @@ public class OfflineManager : MonoBehaviour
         PlayerInventory.Money_EnchantStone += ltimeBae2;
         ///  강화석 업적 카운트 올리기
         ListModel.Instance.ALLlist_Update(5, ltimeBae2);
-        rewordText[2].text = (ltimeBae2 * 2).ToString("N0");
+        rewordText[2].text = (ltimeBae2 * 2d).ToString("N0");
 
         //PlayerInventory.AmazonStoneCount += ltimeBae3;
         ///// 결정조각  업적  카운트

@@ -1068,7 +1068,7 @@ public static class PlayerInventory
 
     static ObscuredLong money_Dia;                // 다이아
     static ObscuredDouble money_Leaf;               // 나뭇잎
-    static ObscuredLong money_EnchantStone;            // 강화석
+    static ObscuredDouble money_EnchantStone;            // 강화석
     static ObscuredLong money_AmazonStone;            // 아마존 결정
 
 
@@ -1166,14 +1166,18 @@ public static class PlayerInventory
         }
 
     }
-    public static ObscuredLong Money_EnchantStone {
+
+    /// <summary>
+    /// 강화석 상한 해제
+    /// </summary>
+    public static ObscuredDouble Money_EnchantStone {
         get { if (money_EnchantStone > 0) return money_EnchantStone; else return 0; }
         set
-        { 
-            money_EnchantStone = value; 
-            if (money_EnchantStone > 2000000000) money_EnchantStone = 2000000000;
+        {
+            money_EnchantStone = Math.Truncate(value);
+            if (money_EnchantStone > 9.99E+300) money_EnchantStone = 9.99E+300;
             MoneyManager.instance.DisplayEnchantStone();
-        } 
+        }
     }
     public static ObscuredLong Money_AmazonCoin
     {

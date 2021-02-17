@@ -872,7 +872,7 @@ public class PlayerPrefsManager : MonoBehaviour
         else PlayerInventory.Money_Elixir = 0;
         if (long.TryParse(ObscuredPrefs.GetString("Money_Dia"), out lTryResult)) PlayerInventory.Money_Dia = lTryResult;
         else PlayerInventory.Money_Dia = 0;
-        if (long.TryParse(ObscuredPrefs.GetString("Money_EnchantStone"), out lTryResult)) PlayerInventory.Money_EnchantStone = lTryResult;
+        if (double.TryParse(ObscuredPrefs.GetString("Money_EnchantStone"), out dTryResult)) PlayerInventory.Money_EnchantStone = dTryResult;
         else PlayerInventory.Money_EnchantStone = 0;
         if (long.TryParse(ObscuredPrefs.GetString("Money_AmazonCoin"), out lTryResult)) PlayerInventory.Money_AmazonCoin = lTryResult;
         else PlayerInventory.Money_AmazonCoin = 0;
@@ -1531,7 +1531,7 @@ public class PlayerPrefsManager : MonoBehaviour
             /// 1.0.7 업데이트 추가
             PlayerInventory.Money_Dia = long.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_D);
             PlayerInventory.Money_Leaf = double.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_C);
-            PlayerInventory.Money_EnchantStone = long.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_B);
+            PlayerInventory.Money_EnchantStone = double.Parse(ListModel.Instance.nonSaveJsonMoney[1].box_B);
 
         }
 

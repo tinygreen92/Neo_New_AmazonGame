@@ -104,7 +104,7 @@ public class PopInventory : MonoBehaviour
                             }
                             continue;
                         case 3:
-                            if(PlayerInventory.Money_EnchantStone < 1)
+                            if(PlayerInventory.Money_EnchantStone < 1d)
                             {
                                 moneyGOgroup[i].SetActive(false);
                                 emptyGOgroup[i].SetActive(true);
@@ -292,7 +292,7 @@ public class PopInventory : MonoBehaviour
                             }
                             continue;
                         case 3:
-                            if (PlayerInventory.Money_EnchantStone < 1)
+                            if (PlayerInventory.Money_EnchantStone < 1d)
                             {
                                 moneyGOgroup[i].SetActive(false);
                                 emptyGOgroup[i].SetActive(true);
@@ -612,7 +612,7 @@ public class PopInventory : MonoBehaviour
                     random = UnityEngine.Random.Range(100 * tmpAllamont, (300* tmpAllamont) +1);
                     PlayerInventory.Money_EnchantStone += random;
                     ///  강화석 업적 카운트 올리기
-                    ListModel.Instance.ALLlist_Update(5, random);
+                    ListModel.Instance.ALLlist_Update(5, random*1d);
                     /// 미니팝업 세팅
                     miniIcon.sprite = miniSprs[0];
                     miniAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(random);
@@ -625,7 +625,7 @@ public class PopInventory : MonoBehaviour
                     random = UnityEngine.Random.Range(100, 301);
                     PlayerInventory.Money_EnchantStone += random;
                     ///  강화석 업적 카운트 올리기
-                    ListModel.Instance.ALLlist_Update(5, random);
+                    ListModel.Instance.ALLlist_Update(5, random * 1d);
                     /// 미니팝업 세팅
                     miniIcon.sprite = miniSprs[0];
                     miniAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(random);
@@ -681,7 +681,7 @@ public class PopInventory : MonoBehaviour
                     random = UnityEngine.Random.Range(1000 * tmpAllamont, (3000 * tmpAllamont) +1);
                     PlayerInventory.Money_EnchantStone += random;
                     ///  강화석 업적 카운트 올리기
-                    ListModel.Instance.ALLlist_Update(5, random);
+                    ListModel.Instance.ALLlist_Update(5, random *1d);
                     /// 미니팝업 세팅
                     miniIcon.sprite = miniSprs[0];
                     miniAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(random);
@@ -694,7 +694,7 @@ public class PopInventory : MonoBehaviour
                     random = UnityEngine.Random.Range(1000, 3001);
                     PlayerInventory.Money_EnchantStone += random;
                     ///  강화석 업적 카운트 올리기
-                    ListModel.Instance.ALLlist_Update(5, random);
+                    ListModel.Instance.ALLlist_Update(5, random * 1d);
                     /// 미니팝업 세팅
                     miniIcon.sprite = miniSprs[0];
                     miniAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(random);
@@ -944,7 +944,7 @@ public class PopInventory : MonoBehaviour
         //PlayerInventory.Money_Dia++;
         PlayerInventory.Money_AmazonCoin+=10;
         //PlayerInventory.Money_Elixir++;
-        PlayerInventory.Money_EnchantStone+=10;
+        PlayerInventory.Money_EnchantStone+=10.0d;
         PlayerInventory.Money_Gold+=10;
         PlayerInventory.Money_Leaf+=10.0d;
         //

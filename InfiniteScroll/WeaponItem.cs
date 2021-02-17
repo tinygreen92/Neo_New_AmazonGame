@@ -283,7 +283,7 @@ public class WeaponItem : MonoBehaviour
             if (DisableImage.sprite == BtnSprite[0] || MaxButton.activeSelf) return;
 
             /// 소숫점 아래 버림
-            PlayerInventory.Money_EnchantStone -= Mathf.CeilToInt((float)(PlayerInventory.EnchantStone_Cost * GetUpgradeNeed()));
+            PlayerInventory.Money_EnchantStone -= Math.Truncate(PlayerInventory.EnchantStone_Cost * GetUpgradeNeed());
 
             thisLevel++;
             
@@ -319,7 +319,7 @@ public class WeaponItem : MonoBehaviour
             /// 돈 없으면 강화 안되게 막는 역할 || 맥스버튼이면 리턴
             if (DisableImage.sprite == BtnSprite[0] || MaxButton.activeSelf) return;
             /// 강화석 소모 소숫점 아래 버림
-            PlayerInventory.Money_EnchantStone -= Mathf.CeilToInt((float)(PlayerInventory.EnchantStone_Cost * GetUpgradeNeed()));
+            PlayerInventory.Money_EnchantStone -= Math.Truncate(PlayerInventory.EnchantStone_Cost * GetUpgradeNeed());
             /// 강화 성공/실패 계산
             float temp = Time.time * 525f;
             UnityEngine.Random.InitState((int)temp);

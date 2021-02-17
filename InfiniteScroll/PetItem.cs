@@ -408,17 +408,17 @@ public class PetItem : MonoBehaviour
             }
             else if (_index == 1)
             {
-                if (PlayerInventory.Money_Leaf >= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.15f) return true;
+                if (PlayerInventory.Money_Leaf >= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.15d) return true;
                 else return false;
             }
             else if (_index == 4)
             {
-                if (PlayerInventory.Money_Leaf >= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.3f) return true;
+                if (PlayerInventory.Money_Leaf >= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.3d) return true;
                 else return false;
             }
             else
             {
-                if (PlayerInventory.Money_Leaf >= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.2f) return true;
+                if (PlayerInventory.Money_Leaf >= PlayerInventory.Leaf_Cost * ListModel.Instance.petList[_index].needUpgrade * thisLevel * 1.2d) return true;
                 else return false;
             }
 

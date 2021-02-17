@@ -46,7 +46,7 @@ public class AmazonItem : MonoBehaviour
     public void ClickedThisItem()
     {
         /// 팝업 호출 
-        asm.cbm.ShowPopUp(_index, _Cost);
+        asm.cbm.ShowPopUp(_index, _Cost, ShopType.AmazonShop);
         /// 우편함으로 보내기
         //asm.SetGiftBoxDesc(_index, 1);
     }

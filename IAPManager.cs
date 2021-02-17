@@ -16,6 +16,9 @@ public class PackageData
 
 public class IAPManager : MonoBehaviour
 {
+    [Header("- 갯수 조정 팝업 매니저")]
+    public CountBuyManager cbm;
+    [Space]
     public GameObject TextPaakge;
     [Header("- 패키지 내용물 숫자 ")]
     public int[] front5Amount;
@@ -280,7 +283,17 @@ public class IAPManager : MonoBehaviour
         /// TODO : 아이콘과 메세지 출력
         TextPaakge.SetActive(true);
     }
-    public void Purchase_Nor(int _indx)
+
+    /// <summary>
+    /// 수량 카운트 팝업에서 사용할 것
+    /// </summary>
+    private int co_Amount;
+    /// <summary>
+    /// 일반상점 -> 다이아로 구매가능한 상점 
+    /// 수량 팝업 호출하고 이거 호출
+    /// </summary>
+    /// <param name="_indx"></param>
+    public void Purchase_Nor(int _indx, int _Amount)
     {
         ShutUpMalpoi();
         /// 청약철회 오브젝트 가려줌
@@ -288,11 +301,17 @@ public class IAPManager : MonoBehaviour
         IconImg.sprite = sim.NoriCons[_indx];
         IconDesc.text = "";
         /// 다이아 가격
-        purcBtns[2].GetComponentInChildren<Text>().text = ListModel.Instance.shopListNOR[_indx].korPrice;
+        purcBtns[2].GetComponentInChildren<Text>().text = PlayerPrefsManager.instance.DoubleToStringNumber(100 * _Amount);
+        //purcBtns[2].GetComponentInChildren<Text>().text = ListModel.Instance.shopListNOR[_indx].korPrice;
+        /// 상품 인덱스 & 상품 갯수
         purchaseIndex[2] = _indx;
+        co_Amount = _Amount;
+        //
         purcBtns[2].gameObject.SetActive(true);
         PopUpManager.instance.ShowPopUP(13);
     }
+
+
 
     /// <summary>
     /// 인덱스와 해당 상품 가격까지 같이 받아옴 진짜 구입
@@ -818,7 +837,9 @@ public class IAPManager : MonoBehaviour
         {
             /// 인벤토리 레드닷 켜주기
             RedDotManager.instance.RedDot[3].SetActive(true);
-            ///
+            /// 0개 구입시 리턴
+            if (co_Amount < 1) 
+                return;
             switch (purchaseIndex[2])
             {
                 case 0:
@@ -850,10 +871,10 @@ public class IAPManager : MonoBehaviour
                     break;
 
                 case 4:
-                    if (PlayerInventory.Money_Dia < 100) return;
-                    PlayerInventory.Money_Dia -= 100;
+                    if (PlayerInventory.Money_Dia < co_Amount * 100) return;
+                    PlayerInventory.Money_Dia -= co_Amount * 100;
 
-                    dtimeBae = 100d * (3d * 1.15d * PlayerInventory.RecentDistance) * PlayerInventory.Player_Gold_Earned;
+                    dtimeBae = co_Amount * 100d * (3d * 1.15d * PlayerInventory.RecentDistance) * PlayerInventory.Player_Gold_Earned;
                     /// 계산한 값 더해줌.
                     SetPopContents(sim.NoriCons[4], -1, 0, 2);
                     PlayerInventory.Money_Gold += dtimeBae;
@@ -862,66 +883,66 @@ public class IAPManager : MonoBehaviour
                     break;
 
                 case 5:
-                    if (PlayerInventory.Money_Dia < 100) return;
-                    PlayerInventory.Money_Dia -= 100;
-                    SetPopContents(sim.NoriCons[5], 1, 0, 2);
-                    PlayerInventory.SetTicketCount("cave_enter", 1);
+                    if (PlayerInventory.Money_Dia < co_Amount * 100) return;
+                    PlayerInventory.Money_Dia -= co_Amount * 100;
+                    SetPopContents(sim.NoriCons[5], co_Amount, 0, 2);
+                    PlayerInventory.SetTicketCount("cave_enter", co_Amount);
                     break;
 
                 case 6:
-                    if (PlayerInventory.Money_Dia < 100) return;
-                    PlayerInventory.Money_Dia -= 100;
-                    SetPopContents(sim.NoriCons[6], 1, 0, 2);
-                    PlayerInventory.SetTicketCount("cave_clear", 1);
+                    if (PlayerInventory.Money_Dia < co_Amount * 100) return;
+                    PlayerInventory.Money_Dia -= co_Amount * 100;
+                    SetPopContents(sim.NoriCons[6], co_Amount, 0, 2);
+                    PlayerInventory.SetTicketCount("cave_clear", co_Amount);
                     break;
 
                 case 7:
-                    if (PlayerInventory.Money_Dia < 100) return;
-                    PlayerInventory.Money_Dia -= 100;
-                    SetPopContents(sim.NoriCons[7], 1, 0, 2);
-                    PlayerInventory.SetTicketCount("mining", 1);
+                    if (PlayerInventory.Money_Dia < co_Amount * 100) return;
+                    PlayerInventory.Money_Dia -= co_Amount * 100;
+                    SetPopContents(sim.NoriCons[7], co_Amount, 0, 2);
+                    PlayerInventory.SetTicketCount("mining", co_Amount);
                     break;
 
                 case 8:
-                    if (PlayerInventory.Money_Dia < 100) return;
-                    PlayerInventory.Money_Dia -= 100;
-                    SetPopContents(sim.NoriCons[8], 1, 0, 2);
-                    PlayerInventory.SetTicketCount("amber", 1);
+                    if (PlayerInventory.Money_Dia < co_Amount * 100) return;
+                    PlayerInventory.Money_Dia -= co_Amount * 100;
+                    SetPopContents(sim.NoriCons[8], co_Amount, 0, 2);
+                    PlayerInventory.SetTicketCount("amber", co_Amount);
                     break;
 
                 case 9:
-                    if (PlayerInventory.Money_Dia < 100) return;
-                    PlayerInventory.Money_Dia -= 100;
-                    SetPopContents(sim.NoriCons[9], 1, 0, 2);
-                    PlayerInventory.SetBoxsCount("weapon_coupon", 1);
+                    if (PlayerInventory.Money_Dia < co_Amount * 100) return;
+                    PlayerInventory.Money_Dia -= co_Amount * 100;
+                    SetPopContents(sim.NoriCons[9], co_Amount, 0, 2);
+                    PlayerInventory.SetBoxsCount("weapon_coupon", co_Amount);
                     break;
 
                 case 10:
-                    if (PlayerInventory.Money_Dia < 100) return;
-                    PlayerInventory.Money_Dia -= 100;
+                    if (PlayerInventory.Money_Dia < co_Amount * 100) return;
+                    PlayerInventory.Money_Dia -= co_Amount * 100;
                     SetPopContents(sim.NoriCons[10], 1, 0, 2);
                     PlayerInventory.SetTicketCount("pvp", 1);
                     break;
 
                 case 11:
-                    if (PlayerInventory.Money_Dia < 100) return;
-                    PlayerInventory.Money_Dia -= 100;
-                    SetPopContents(sim.NoriCons[11], 1, 0, 2);
-                    PlayerInventory.SetTicketCount("reinforce_box", 1);
+                    if (PlayerInventory.Money_Dia < co_Amount * 100) return;
+                    PlayerInventory.Money_Dia -= co_Amount * 100;
+                    SetPopContents(sim.NoriCons[11], co_Amount, 0, 2);
+                    PlayerInventory.SetTicketCount("reinforce_box", co_Amount);
                     break;
 
                 case 12:
-                    if (PlayerInventory.Money_Dia < 100) return;
-                    PlayerInventory.Money_Dia -= 100;
-                    SetPopContents(sim.NoriCons[12], 1, 0, 2);
-                    PlayerInventory.SetTicketCount("leaf_box", 1);
+                    if (PlayerInventory.Money_Dia < co_Amount * 100) return;
+                    PlayerInventory.Money_Dia -= co_Amount * 100;
+                    SetPopContents(sim.NoriCons[12], co_Amount, 0, 2);
+                    PlayerInventory.SetTicketCount("leaf_box", co_Amount);
                     break;
 
                 case 13:
-                    if (PlayerInventory.Money_Dia < 100) return;
-                    PlayerInventory.Money_Dia -= 100;
-                    SetPopContents(sim.NoriCons[13], 1, 0, 2);
-                    PlayerInventory.Money_Elixir++;
+                    if (PlayerInventory.Money_Dia < co_Amount * 100) return;
+                    PlayerInventory.Money_Dia -= co_Amount * 100;
+                    SetPopContents(sim.NoriCons[13], co_Amount, 0, 2);
+                    PlayerInventory.Money_Elixir+= co_Amount;
                     break;
 
                 default:

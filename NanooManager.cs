@@ -662,9 +662,9 @@ public class NanooManager : MonoBehaviour
                 PlayerInventory.Money_AmazonCoin += long.Parse(_count);
                 break;
             case "reinforce":
-                PlayerInventory.Money_EnchantStone += long.Parse(_count);
+                PlayerInventory.Money_EnchantStone += double.Parse(_count);
                 ///  강화석 업적 카운트 올리기
-                ListModel.Instance.ALLlist_Update(5, long.Parse(_count));
+                ListModel.Instance.ALLlist_Update(5, double.Parse(_count));
                 break;
             case "gold":
                 PlayerInventory.Money_Gold += double.Parse(_count);

@@ -445,7 +445,7 @@ public class MineManager : MonoBehaviour
     }
 
     private int adsIndex;
-    private long adsAmount;
+    private double adsAmount;
 
     /// <summary>
     /// 이지선다 팝업 이미지/텍스트 세팅
@@ -659,9 +659,9 @@ public class MineManager : MonoBehaviour
             case 0:
                 if (is2X)
                 {
-                    PlayerInventory.Money_EnchantStone += (adsAmount * 2);
+                    PlayerInventory.Money_EnchantStone += (adsAmount * 2d);
                     ///  강화석 업적 카운트 올리기
-                    ListModel.Instance.ALLlist_Update(5, adsAmount * 2);
+                    ListModel.Instance.ALLlist_Update(5, adsAmount * 2d);
                     popAmount.text = "x" + PlayerPrefsManager.instance.DoubleToStringNumber(adsAmount * 2.0d);
                 }
                 else
@@ -688,7 +688,7 @@ public class MineManager : MonoBehaviour
                     ///// 결정조각  업적  카운트
                     //ListModel.Instance.ALLlist_Update(2, adsAmount);
                     /// 아마존 포션 추가
-                    PlayerInventory.SetTicketCount("S_leaf_box", (int)(adsAmount));
+                    PlayerInventory.SetTicketCount("S_leaf_box", (int)adsAmount);
                 }
                 ListModel.Instance.axeDataList[0].Stack_AmaCystal = 0;
                 break;

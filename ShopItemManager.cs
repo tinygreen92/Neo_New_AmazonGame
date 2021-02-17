@@ -10,7 +10,7 @@ public class ShopItemManager : MonoBehaviour
     public GameObject popUp;
     public Image popUpIcon;
     public Text popUpIconDesc;
-
+    [Header("- 실제 결제 관련 ")]
     public IAPManager IAPM;
     public NestedScrollManager NSM;
     [Header("- 아이콘")]
@@ -206,23 +206,24 @@ public class ShopItemManager : MonoBehaviour
     public  void PurchaseThisItem()
     {
         /// 구매완료 버튼이면 리턴
-        if (Btns[2].gameObject.activeSelf) return;
+        if (Btns[2].gameObject.activeSelf) 
+            return;
+
         /// _index 사용해서
         if (PlayerPrefsManager.storeIndex == 10)                       /// 특별 상점 (현금)
-        {
             IAPM.Purchase_Spec(_index);
-        }
-        else if(PlayerPrefsManager.storeIndex == 100)                    /// 일반 상점  (다이아)
+        else if (PlayerPrefsManager.storeIndex == 100)                    /// 일반 상점  (다이아)
         {
-            IAPM.Purchase_Nor(_index);
+            /// 수량 팝업 연결
+            //IAPM.Purchase_Nor(_index);
+            IAPM.cbm.ShowPopUp(_index, 100, ShopType.NormalShop);
         }
         else                                 /// 다이아 상점 (현금)
-        {
             IAPM.Purchase_Dia(_index);
-        }
+
     }
 
-    
+
     /// <summary>
     /// 상점 카테고리 바꿔주기 위해서 아이템 싹 밀어버리기
     /// </summary>
