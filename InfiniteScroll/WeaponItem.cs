@@ -233,7 +233,7 @@ public class WeaponItem : MonoBehaviour
 
             SetEQUIP_BTN_OJ(3, true);
             /// 만렙 찍으면 맥스버튼 활성화.
-            MaxButton.SetActive(thisLevel >= 150);
+            MaxButton.SetActive(thisLevel >= 200);
         }
 
     }

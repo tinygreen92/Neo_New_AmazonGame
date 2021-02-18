@@ -45,6 +45,9 @@ public class AmazonItem : MonoBehaviour
     /// </summary>
     public void ClickedThisItem()
     {
+        /// 돈 없으면 버튼 클릭 X
+        if (PlayerInventory.Money_AmazonCoin < _Cost) 
+            return;
         /// 팝업 호출 
         asm.cbm.ShowPopUp(_index, _Cost, ShopType.AmazonShop);
         /// 우편함으로 보내기

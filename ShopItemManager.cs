@@ -214,9 +214,11 @@ public class ShopItemManager : MonoBehaviour
             IAPM.Purchase_Spec(_index);
         else if (PlayerPrefsManager.storeIndex == 100)                    /// 일반 상점  (다이아)
         {
-            /// 수량 팝업 연결
-            //IAPM.Purchase_Nor(_index);
-            IAPM.cbm.ShowPopUp(_index, 100, ShopType.NormalShop);
+            /// 버프 4종은 그냥 구매할래 버튼 표기
+            if (_index < 4)
+                IAPM.Purchase_Nor(_index, 1);
+            else
+                IAPM.cbm.ShowPopUp(_index, 100, ShopType.NormalShop);
         }
         else                                 /// 다이아 상점 (현금)
             IAPM.Purchase_Dia(_index);

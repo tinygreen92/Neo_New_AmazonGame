@@ -257,7 +257,11 @@ public class AmazonShopManager : MonoBehaviour
                 if (PlayerPrefsManager.currentTutoIndex == 32) 
                     ListModel.Instance.TUTO_Update(32);
                 /// 룬가챠
-                rm.GatchaRune(); 
+                //rm.GatchaRune(); 
+                for (int i = 0; i < _Amount; i++)
+                {
+                    rm.GatchaRune(i);
+                }
                 gameObject.SetActive(false); 
 
                 return;

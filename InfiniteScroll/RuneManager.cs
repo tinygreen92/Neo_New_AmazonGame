@@ -390,7 +390,7 @@ public class RuneManager : MonoBehaviour
         /// 위로 올리기 + 오브젝트 싹 지우기
         NSM.RefreshForRune();
         ///   확률 보정하고 뽑아1개 생성 -> list에 추가
-        GenerateRadomRune();
+        GenerateRadomRune(0);
         ///  업적  완료 카운트
         ListModel.Instance.ALLlist_Update(16, 1);
         ///  5개 다 모였다면5개 제거해주고
@@ -405,9 +405,9 @@ public class RuneManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 아이템 가챠 하나 추가해주기 -> 버튼에서 호출
+    /// 아이템 가챠 하나 추가해주기 실제 로직
     /// </summary>
-    public void GatchaRune()
+    public void GatchaRune(float _Ran)
     {
         isRefussion = false;
         /// 룬페이지 커버 씌우고
@@ -415,7 +415,7 @@ public class RuneManager : MonoBehaviour
         /// 룬 페이지 띄우고
         TVP.SwichPetRune(0);
         /// 확률에 따라 룬생성 / 룬조합
-        GenerateRadomRune();
+        GenerateRadomRune(_Ran);
         /// 팝업 표시
         ShowGatchaRunePop(true);
         /// 인피니티 뷰에 추가 + 제일 위로 올라가
@@ -833,7 +833,7 @@ public class RuneManager : MonoBehaviour
         /// 위로 올리기 + 오브젝트 싹 지우기
         NSM.RefreshForRune();
         ///   확률 보정하고 뽑아1개 생성 -> list에 추가
-        GenerateRadomRune();
+        GenerateRadomRune(0);
         ///  업적  완료 카운트
         ListModel.Instance.ALLlist_Update(16, 1);
         /// 오브젝트 재생성
@@ -866,9 +866,9 @@ public class RuneManager : MonoBehaviour
     /// <summary>
     /// 룬 등급 정해주고 1개 생성
     /// </summary>
-    void GenerateRadomRune()
+    void GenerateRadomRune(float _Ran)
     {
-        float temp = Time.time * 525f;
+        float temp = Time.time * (525f + _Ran) ;
         Random.InitState((int)temp);
         float random = Random.Range(0, 100f);
 
